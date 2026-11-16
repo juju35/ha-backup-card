@@ -128,13 +128,15 @@ test("rows: the last backup, the size and the next one, and the age", async () =
   assert.match(html(), /Proxmox VE/);
 });
 
-test("summary: the newest backup, the next one and the total size", async () => {
+test("summary: time since the newest good backup, the failed and late ones, the next one and the total size", async () => {
   const { html } = await mount();
-  assert.match(html(), /Last backup<\/div><div class="v num">3 hr\. ago/);
-  assert.match(html(), /Next backup<\/div><div class="v num">in 19 hr\./);
-  assert.match(html(), /Total size<\/div><div class="v num">25 GB/);
+  assert.match(html(), /class="hero"/);
+  assert.match(html(), /<b>3h<\/b><span>since the last good backup<\/span>/);
+  assert.match(html(), /class="line crit">.*?<span>Documents failed today 2:00 AM<\/span>/s);
+  assert.match(html(), /class="line warn">.*?<span>Node pve older than 26h<\/span>/s);
+  assert.match(html(), /<span>Next tomorrow 4:45 AM · 25 GB<\/span>/);
   const off = await mount({ show_stats: false, show_size: false, show_next: false });
-  assert.doesNotMatch(off.html(), /class="stats"|GB|Next tomorrow/);
+  assert.doesNotMatch(off.html(), /class="hero"|GB|Next tomorrow/);
 });
 
 test("back up now: Home Assistant's service, Backrest's button; then shown running", async () => {
@@ -220,7 +222,7 @@ test("mini card: the worst first with their age, a back up now button; the detai
   ]);
   assert.match(html(), /data-action="run"/);
   click(card, { action: "zoom" });
-  assert.match(html(), /class="stats"/);
+  assert.match(html(), /class="hero"/);
   card._unzoom.tap({ composedPath: () => [] });
   assert.match(html(), /content mini/);
 });
@@ -287,4 +289,191 @@ test("every clickable element can be reached and used from the keyboard", async 
     assert.match(m[0], /role="button"/, m[0]);
     assert.match(m[0], /tabindex="0"/, m[0]);
   }
+});
+
+// A hass of its own for the integration cases below: entities given as [entity_id, state, attributes, registry].
+const hassOf = (rows, devices = {}) => {
+  const states = {};
+  const entities = {};
+  for (const [entity_id, state, attributes = {}, reg] of rows) {
+    states[entity_id] = { entity_id, state: String(state), attributes, last_changed: new Date(NOW - H).toISOString(), last_updated: new Date(NOW - H).toISOString() };
+    if (reg) entities[entity_id] = { entity_id, device_id: null, translation_key: null, ...reg };
+  }
+  return { states, entities, devices, areas: {}, language: "en", locale: { language: "en" }, callService() {} };
+};
+const iso = (ms) => new Date(ms).toISOString();
+
+test("Proxmox VE: only the node's backup entities count, never its status, health, guests or power buttons", () => {
+  const core = { platform: "proxmoxve", device_id: "node" };
+  const vm = { platform: "proxmoxve", device_id: "vm" };
+  const custom = { platform: "proxmoxve", device_id: "node2" };
+  const hass = hassOf(
+    [
+      // Core: a node up (status running), unhealthy (problem), with a good last backup.
+      ["binary_sensor.pve_status", "on", { device_class: "running", friendly_name: "pve Status" }, { ...core, translation_key: "status" }],
+      ["binary_sensor.pve_health", "on", { device_class: "problem", friendly_name: "pve Health" }, { ...core, translation_key: "health" }],
+      ["binary_sensor.pve_backup_status", "off", { device_class: "problem", friendly_name: "pve Backup status" }, { ...core, translation_key: "node_backup_status" }],
+      ["sensor.pve_last_backup", iso(NOW - 5 * H), { device_class: "timestamp", friendly_name: "pve Last backup" }, { ...core, translation_key: "node_backup_last_backup" }],
+      ["sensor.pve_backup_duration", "600", { device_class: "duration", unit_of_measurement: "s" }, { ...core, translation_key: "node_backup_duration" }],
+      ["button.pve_reboot", "unknown", { friendly_name: "pve Reboot" }, { ...core, translation_key: "reboot" }],
+      ["button.pve_start_all", "unknown", { friendly_name: "pve Start all" }, { ...core, translation_key: "start_all" }],
+      // A guest: running, with a status sensor, but no backup entity.
+      ["binary_sensor.vm_status", "on", { device_class: "running", friendly_name: "web Status" }, { ...vm, translation_key: "status" }],
+      ["sensor.vm_status", "running", { friendly_name: "web Status" }, { ...vm, translation_key: "vm_status" }],
+      ["button.vm_start", "unknown", { friendly_name: "web Start" }, { ...vm, translation_key: "start" }],
+      // Custom integration: backup running / status / last, and a back-up button next to a start button.
+      ["binary_sensor.pbs_status", "on", { device_class: "running", friendly_name: "node2 Status" }, { ...custom, translation_key: "status" }],
+      ["binary_sensor.pbs_backup_running", "off", { device_class: "running", friendly_name: "node2 Backup running" }, { ...custom, translation_key: "backup_running" }],
+      ["binary_sensor.pbs_backup_status", "off", { device_class: "problem", friendly_name: "node2 Backup status" }, { ...custom, translation_key: "backup_status" }],
+      ["sensor.pbs_backup_last", iso(NOW - 2 * H), { device_class: "timestamp", friendly_name: "node2 Last backup" }, { ...custom, translation_key: "backup_last" }],
+      ["button.pbs_start", "unknown", { friendly_name: "node2 Start" }, { ...custom, translation_key: "start" }],
+      ["button.pbs_backup_all", "unknown", { friendly_name: "node2 Back up all" }, { ...custom, translation_key: "backup_all" }],
+    ],
+    { node: { id: "node", name: "Node pve" }, vm: { id: "vm", name: "web" }, node2: { id: "node2", name: "Node pve2" } },
+  );
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => x.name),
+    ["Node pve", "Node pve2"],
+  );
+  const [a, b] = m.map((src) => bk.sourceState(hass, src, { now: NOW }));
+  assert.equal(a.status, "ok");
+  assert.equal(a.running, false);
+  assert.equal(a.failed, false);
+  assert.equal(m[0].parts.last, "sensor.pve_last_backup");
+  assert.equal(m[0].button, null);
+  assert.equal(b.status, "ok");
+  assert.equal(m[1].parts.last, "sensor.pbs_backup_last");
+  assert.equal(m[1].parts.running, "binary_sensor.pbs_backup_running");
+  assert.equal(m[1].button, "button.pbs_backup_all");
+  // The backup itself failing is a failure.
+  hass.states["binary_sensor.pve_backup_status"].state = "on";
+  assert.equal(bk.sourceState(hass, bk.resolve(hass, {})[0], { now: NOW }).status, "failed");
+});
+
+test("Proxmox VE: a node or a guest named after backups is still not a backup", () => {
+  const node = { platform: "proxmoxve", device_id: "node" };
+  const vm = { platform: "proxmoxve", device_id: "vm" };
+  const hass = hassOf(
+    [
+      // A node named "pve-backup": up (status running), with power buttons, and its real backup sensors.
+      ["binary_sensor.pve_backup_status", "on", { device_class: "running", friendly_name: "pve-backup Status" }, { ...node, translation_key: "status" }],
+      ["binary_sensor.pve_backup_health", "on", { device_class: "problem", friendly_name: "pve-backup Health" }, { ...node, translation_key: "health" }],
+      ["button.pve_backup_shutdown", "unknown", { friendly_name: "pve-backup Shutdown" }, { ...node, translation_key: "shutdown" }],
+      ["button.pve_backup_start_all", "unknown", { friendly_name: "pve-backup Start all" }, { ...node, translation_key: "start_all" }],
+      ["sensor.pve_backup_last_backup", iso(NOW - 5 * H), { device_class: "timestamp", friendly_name: "pve-backup Last backup" }, { ...node, translation_key: "node_backup_last_backup" }],
+      // A guest named "backup" (Proxmox Backup Server in a VM), with no backup entity of its own.
+      ["sensor.backup_status", "running", { friendly_name: "backup Status" }, { ...vm, translation_key: "vm_status" }],
+      ["binary_sensor.backup_status", "on", { device_class: "running", friendly_name: "backup Status" }, { ...vm, translation_key: "status" }],
+      ["button.backup_start", "unknown", { friendly_name: "backup Start" }, { ...vm, translation_key: "start" }],
+      ["button.backup_shutdown", "unknown", { friendly_name: "backup Shutdown" }, { ...vm, translation_key: "shutdown" }],
+    ],
+    { node: { id: "node", name: "pve-backup" }, vm: { id: "vm", name: "backup" } },
+  );
+  check(hass);
+  // Renamed in Home Assistant: the entity ids keep the original names.
+  hass.devices.node.name_by_user = "Main server";
+  hass.devices.vm.name_by_user = "Archive";
+  // Their friendly names follow the new device names, as in Home Assistant.
+  for (const st of Object.values(hass.states)) {
+    const f = st.attributes.friendly_name;
+    st.attributes = { ...st.attributes, friendly_name: f.replace(/^pve-backup /, "Main server ").replace(/^backup /, "Archive ") };
+  }
+  check({ ...hass, entities: { ...hass.entities } });
+});
+
+function check(hass) {
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => x.name),
+    [hass.devices.node.name_by_user || "pve-backup"],
+  );
+  const st = bk.sourceState(hass, m[0], { now: NOW });
+  assert.equal(st.status, "ok");
+  assert.equal(st.running, false);
+  assert.equal(st.failed, false);
+  assert.equal(m[0].parts.running ?? null, null);
+  assert.equal(m[0].parts.failed ?? null, null);
+  assert.equal(m[0].button, null);
+}
+
+test("Auto Backup next to Home Assistant's backups: Home Assistant's backups are listed once", () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const rows = [
+    ["sensor.backup_last", iso(NOW - 5 * H), { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ];
+  same(
+    bk.resolve(hassOf(rows), {}).map((x) => x.platform),
+    ["backup"],
+  );
+  same(
+    bk.resolve(hassOf([rows[1]]), {}).map((x) => x.platform),
+    ["auto_backup"],
+  );  // Home Assistant's backups set up but unused (no backup yet): Auto Backup, which makes them, is kept.
+  const unused = [["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }], rows[1]];
+  same(
+    bk.resolve(hassOf(unused), {}).map((x) => x.platform),
+    ["backup", "auto_backup"],
+  );
+});
+
+test("Samba Backup and OneDrive Backup add-ons: found by their sensors, states read", () => {
+  const samba = (state) => ["sensor.samba_backup", state, { friendly_name: "Samba Backup", backups_local: "3", backups_remote: "5", total_backups_succeeded: "12", total_backups_failed: "1", last_backup: "2026-11-16 04:00" }];
+  const one = (state, last) => ["sensor.onedrivebackup", state, { "Last Local backup date": last, "Last OneDrive backup date": last, "Backups in Home Assistant": "2", "Backups in OneDrive": "4" }];
+  const hass = hassOf([samba("IDLE"), one("Backed_Up", "2026-11-16 03:00:00")]);
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => [x.platform, x.name]),
+    [
+      ["samba_backup", "Samba Backup"],
+      ["onedrive_backup", "OneDrive Backup"],
+    ],
+  );
+  const st = (h) => bk.resolve(h, {}).map((src) => bk.sourceState(h, src, { now: NOW }));
+  const [s, o] = st(hass);
+  assert.equal(s.status, "ok");
+  assert.equal(s.last, Date.parse("2026-11-16T04:00"));
+  assert.equal(o.status, "ok");
+  assert.equal(o.last, Date.parse("2026-11-16T03:00:00"));
+  same(
+    st(hassOf([samba("RUNNING"), one("Syncing", "2026-11-16 03:00:00")])).map((x) => x.status),
+    ["running", "running"],
+  );
+  same(
+    st(hassOf([samba("FAILED"), one("Stale", "2026-11-16 03:00:00")])).map((x) => x.status),
+    ["failed", "late"],
+  );
+  // Samba Backup started through the add-on's input, when its slug is given.
+  const [src] = bk.resolve(hass, { backups: [{ entity: "sensor.samba_backup", addon: "15d21743_samba_backup" }] });
+  same(src.run, ["hassio", "addon_stdin", { addon: "15d21743_samba_backup", input: "trigger" }]);
+  assert.equal(bk.resolve(hass, { backups: ["sensor.samba_backup"] })[0].run, null);
+});
+
+test("the hero's shield is green only when every backup is up to date; an unavailable button is disabled", async () => {
+  const { html } = await mount();
+  assert.match(html(), /class="big idle">/);
+  const hass = makeHass();
+  hass.states["button.photos_lancer"] = { ...hass.states["button.photos_lancer"], state: "unavailable" };
+  const card = new BackupCard();
+  card.setConfig({});
+  card.hass = hass;
+  const btn = /<button[^>]*data-action="run"[^>]*aria-label="[^"]*Photos"[^>]*>/.exec(card.shadowRoot.innerHTML)?.[0] || "";
+  assert.match(btn, / disabled/);
+});
+
+test("Auto Backup is dropped once Home Assistant's own backups have a last backup, without a reload", () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const hass = hassOf([
+    ["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ]);
+  assert.equal(bk.resolve(hass, {}).length, 2);
+  hass.states["sensor.backup_last"] = { ...hass.states["sensor.backup_last"], state: iso(NOW - H) };
+  same(
+    bk.resolve(hass, {}).map((x) => x.platform),
+    ["backup"],
+  );
 });

@@ -17,10 +17,12 @@
   <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/duplicati.png" alt="Duplicati" width="64">&nbsp;&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/duplicati_monitor.png" alt="Duplicati Monitor" width="64">&nbsp;&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/backrest.png" alt="Backrest" width="64">&nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/veeam_br.png" alt="Veeam" width="64">
+  <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/veeam_br.png" alt="Veeam" width="64">&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/samba_backup.png" alt="Samba Backup" width="64">&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/onedrive_backup.png" alt="OneDrive Backup" width="64">
 </p>
 
-Lovelace cards for Home Assistant for your **backups**: the **age of the last good backup** of each source against its limit, a **status** (up to date, late, failed, running), its **size**, the **next scheduled** one and a button that **backs up now**, from [Home Assistant's own backups](https://www.home-assistant.io/integrations/backup/), the [Google Drive Backup](https://github.com/sabeechen/hassio-google-drive-backup) add-on, [Proxmox VE](https://www.home-assistant.io/integrations/proxmoxve/), [Auto Backup](https://github.com/jcwillox/hass-auto-backup), [Duplicati](https://github.com/txxa/hass-duplicati), [Duplicati Monitor](https://github.com/andlo/ha-duplicati-monitor), [Backrest](https://github.com/vakhariaheet/backrest-hacs) and Veeam, or any other "last backup" sensor.
+Lovelace cards for Home Assistant for your **backups**: the **age of the last good backup** of each source against its limit, a **status** (up to date, late, failed, running), its **size**, the **next scheduled** one and a button that **backs up now**, from [Home Assistant's own backups](https://www.home-assistant.io/integrations/backup/), the [Google Drive Backup](https://github.com/sabeechen/hassio-google-drive-backup), [Samba Backup](https://github.com/thomasmauerer/hassio-addons/tree/master/samba-backup) and [OneDrive Backup](https://github.com/lavinir/hassio-onedrive-backup) add-ons, [Proxmox VE](https://www.home-assistant.io/integrations/proxmoxve/), [Auto Backup](https://github.com/jcwillox/hass-auto-backup), [Duplicati](https://github.com/txxa/hass-duplicati), [Duplicati Monitor](https://github.com/andlo/ha-duplicati-monitor), [Backrest](https://github.com/vakhariaheet/backrest-hacs) and Veeam, or any other "last backup" sensor.
 
 The sources are **discovered automatically** from the Home Assistant entity and device registries: an empty configuration already shows your backups, whatever your Home Assistant language or entity ids. Any "last backup" sensor can also be set in the configuration, with its own limit.
 
@@ -35,9 +37,9 @@ The sources are **discovered automatically** from the Home Assistant entity and 
 - Two cards: a full **Backup Card** (`custom:backup-card`) and a compact **Backup Mini Card** (`custom:backup-mini-card`)
 - One row per source: a **ring** that empties as the last good backup gets older (full just after a backup, empty at the limit), the source's icon and a status badge
 - **Status** of each source: **Up to date**, **Late** (older than `max_age`, 26 hours by default, or a scheduled backup missed by an hour), **Failed** (an attempt or a failure after the last good backup, an error status, a failed sensor), **Running**
-- When the last backup was made, its **size**, the **next scheduled** one, and the age in large
-- **Summary** above the list: the newest backup, the next one and the total size
-- **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, an arc turns round its source (see [Animations](#animations))
+- When the last backup was made, its **size** and the **next scheduled** one; its age as a ring round its icon, against its limit
+- **Summary** above the list, as on the other cards: an illustration with the worst status, the time since the newest good backup, the failed and late sources, the next backup and the total size
+- **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, the arrow goes into the cloud and an arc turns round its source (see [Animations](#animations))
 - Status chip on the title's line: the worst status of all the sources; the subtitle counts the failed, late and running ones
 - Header icon in a tinted round badge, in the colour of the worst status
 - Collapsible list, folded back to its default by a click elsewhere on the page
@@ -53,8 +55,10 @@ The sources are **discovered automatically** from the Home Assistant entity and 
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/homeassistant.png" alt="" width="16"> [Backup](https://www.home-assistant.io/integrations/backup/) (core) | Last successful and last attempted automatic backups, next scheduled one, size, backup manager state; backs up with `backup.create_automatic` |
 | [Google Drive Backup](https://github.com/sabeechen/hassio-google-drive-backup) (add-on) | `sensor.backup_state`: its state (`error` is a failure), `last_backup`, `next_backup`, `size_in_google_drive` |
-| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/proxmoxve.png" alt="" width="16"> [Proxmox VE](https://www.home-assistant.io/integrations/proxmoxve/) (core, or the custom integration) | The last backup of each node |
-| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/auto_backup.png" alt="" width="16"> [Auto Backup](https://github.com/jcwillox/hass-auto-backup) (custom, `auto_backup`) | Last success and last failure; backs up with `auto_backup.backup_full` |
+| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/samba_backup.png" alt="" width="16"> [Samba Backup](https://github.com/thomasmauerer/hassio-addons/tree/master/samba-backup) (add-on) | `sensor.samba_backup`: its state (`RUNNING`, `FAILED`) and `last_backup`; backs up through the add-on's input when `addon` is set |
+| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/onedrive_backup.png" alt="" width="16"> [OneDrive Backup](https://github.com/lavinir/hassio-onedrive-backup) (add-on) | `sensor.onedrivebackup`: its state (`Syncing` runs, `Stale` is late) and its last OneDrive (or local) backup date |
+| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/proxmoxve.png" alt="" width="16"> [Proxmox VE](https://www.home-assistant.io/integrations/proxmoxve/) (core, or the custom integration) | The backups of each node: last backup, backup status (a failure) and, with the custom integration, backup running and its *Back up all* button. Only entities about backups are read: the node's status, health and power buttons and the guests are left out (the backup entities of the custom integration are disabled by default: enable them) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/auto_backup.png" alt="" width="16"> [Auto Backup](https://github.com/jcwillox/hass-auto-backup) (custom, `auto_backup`) | Last success and last failure; backs up with `auto_backup.backup_full`. Home Assistant's backups being made by it, it is not listed a second time once Home Assistant's own backups report one |
 | <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/duplicati.png" alt="" width="16"> [Duplicati](https://github.com/txxa/hass-duplicati) (custom, `duplicati`) | Each backup job: last backup, status, size, next run; backs up with its button |
 | <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/duplicati_monitor.png" alt="" width="16"> [Duplicati Monitor](https://github.com/andlo/ha-duplicati-monitor) (custom, `duplicati_monitor`) | Each job: status, last backup, backup size |
 | <img src="https://raw.githubusercontent.com/juju35/ha-backup-card/main/images/backrest.png" alt="" width="16"> [Backrest](https://github.com/vakhariaheet/backrest-hacs) (custom, `backrest`) | Each plan: last backup, running and failed sensors; backs up with its trigger button |
@@ -153,9 +157,9 @@ zoom: true
 | `title` | both | Backups | Card title |
 | `show_title` | both | `true` | Show the title in the header |
 | `show_subtitle` | full | `true` | Show the subtitle (the failed, late and running counts) |
-| `backups` | both | Automatic | Sources: their "last backup" sensor (or the add-on's `sensor.backup_state`), or `{ entity, name, max_age, button }`; the other parts are found on its device |
+| `backups` | both | Automatic | Sources: their "last backup" sensor (or an add-on's sensor: `sensor.backup_state`, `sensor.samba_backup`, `sensor.onedrivebackup`), or `{ entity, name, max_age, button, addon }` (`addon`: the slug of the Samba Backup add-on, such as `15d21743_samba_backup`, to back up through its input); the other parts are found on its device |
 | `max_age` | both | `26` | Maximum age of the last good backup, in hours: older, a source is late |
-| `show_stats` | both | `true` | Summary of the newest backup, the next one and the total size |
+| `show_stats` | both | `true` | Summary: time since the newest good backup, failed and late sources, next backup and total size |
 | `show_size` | both | `true` | Size of each backup |
 | `show_next` | both | `true` | Next scheduled backup |
 | `show_run` | both | `true` | Back up now buttons |
@@ -170,7 +174,9 @@ zoom: true
 | Home Assistant | `backup.create_automatic` (a backup with the settings of the automatic backups) |
 | Auto Backup | `auto_backup.backup_full` |
 | Duplicati, Backrest, Veeam, any source with `button` | `button.press` on the device's button that runs a backup |
-| Proxmox VE, Google Drive Backup, Duplicati Monitor | No button: they are backed up on their own schedule |
+| Samba Backup with `addon` | `hassio.addon_stdin` with `input: trigger` |
+| Proxmox VE (custom) | `button.press` on the node's *Back up all* button, when enabled |
+| Proxmox VE (core), Google Drive Backup, OneDrive Backup, Duplicati Monitor | No button: they are backed up on their own schedule |
 
 The card shows *Running* until the source reports a newer backup (two minutes at most), or as long as the source itself says a backup runs.
 
@@ -178,7 +184,7 @@ The card shows *Running* until the source reports a newer backup (two minutes at
 
 ### Animations
 
-While a backup runs, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
+While a backup runs, the arrow goes into the cloud, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
 
 | Light | Dark |
 |---|---|
@@ -213,7 +219,7 @@ The detail button (top right) shows the full card's content:
 
 ### Narrow cards
 
-The full card at 6 columns of a phone's Sections view (the summary in a column) and the mini card at its minimum width:
+The full card at 6 columns of a phone's Sections view (the summary with a smaller illustration) and the mini card at its minimum width:
 
 | Light | Dark |
 |---|---|
@@ -222,7 +228,7 @@ The full card at 6 columns of a phone's Sections view (the summary in a column) 
 
 ## How it works
 
-The cards read the Home Assistant entity and device registries instead of relying on entity ids: the parts of a source are the entities of its device, recognised by their translation key or name (*last successful* / *last backup*, *last attempt*, *last failure*, *status* / *state* / *result*, *next*, *size* — not the total nor the free space —, a *running* and a *failed* binary sensor, a *backup* / *run* / *trigger* button). Entity ids can therefore be in any language or renamed.
+The cards read the Home Assistant entity and device registries instead of relying on entity ids: the parts of a source are the entities of its device, recognised by their translation key or name (*last successful* / *last backup*, *last attempt*, *last failure*, *status* / *state* / *result*, *next*, *size* — not the total nor the free space —, a *running* and a *failed* binary sensor, a *backup* / *run* / *trigger* button). Entity ids can therefore be in any language or renamed. For Proxmox VE, only the entities about backups are read, so that a node's status, health and power buttons never pass for its backups.
 
 - **Age**: from the last good backup to now, against `max_age` (the card's, or the source's own).
 - **Failed**: an attempt or a failure later than the last good backup, a status with *error* or *fail*, or a failed binary sensor that is on.
@@ -280,7 +286,7 @@ English is in the card's file; every other language is in its own small file (`b
 
 ## Credits
 
-Proxmox is a trademark of Proxmox Server Solutions GmbH; Duplicati, Backrest and Veeam are trademarks of their owners; Google Drive is a trademark of Google LLC. This project is not affiliated with any of them. Icons from [Material Design Icons](https://pictogrammers.com/library/mdi/).
+Proxmox is a trademark of Proxmox Server Solutions GmbH; Duplicati, Backrest and Veeam are trademarks of their owners; Google Drive is a trademark of Google LLC; OneDrive is a trademark of Microsoft Corporation. This project is not affiliated with any of them. Icons from [Material Design Icons](https://pictogrammers.com/library/mdi/).
 
 ## License
 

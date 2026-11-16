@@ -4,7 +4,7 @@
  *
  * Lovelace cards for your backups: the age of the last good backup of each source against its limit, a status (up
  * to date, late, failed, running), its size, the next scheduled one, and a button that starts one. The sources come
- * from Home Assistant's own backups, the Google Drive Backup add-on, Proxmox VE, Auto Backup, Duplicati, Duplicati
+ * from Home Assistant's own backups, the Google Drive Backup, Samba Backup and OneDrive Backup add-ons, Proxmox VE, Auto Backup, Duplicati, Duplicati
  * Monitor, Backrest and Veeam, found through the entity and device registries; any "last backup" sensor can also be
  * set in the configuration.
  */
@@ -21,6 +21,7 @@ const CARD_ICONS = {
   archive: "M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z",
   database: "M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z",
   calendar: "M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z",
+  shield: "M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9",
   sync: "M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z",
 };
 
@@ -30,6 +31,8 @@ const CARD_ICONS = {
 const PLATFORMS = {
   backup: { name: "Home Assistant", icon: "home", run: ["backup", "create_automatic", {}] },
   google_drive_backup: { name: "Google Drive Backup", icon: "cloud", run: null },
+  samba_backup: { name: "Samba Backup", icon: "server", run: null },
+  onedrive_backup: { name: "OneDrive Backup", icon: "cloud", run: null },
   proxmoxve: { name: "Proxmox VE", icon: "server", run: null },
   auto_backup: { name: "Auto Backup", icon: "home", run: ["auto_backup", "backup_full", {}] },
   duplicati: { name: "Duplicati", icon: "archive", run: "button" },
@@ -50,7 +53,6 @@ const STRINGS = {
     running: "Running",
     unknown: "No backup",
     never: "Never",
-    age: "age",
     all_ok: "All up to date",
     n_failed: "{n} failed",
     n_late: "{n} late",
@@ -59,9 +61,6 @@ const STRINGS = {
     late_limit: "Older than {limit}",
     last_at: "Last {when}",
     next: "Next {when}",
-    newest: "Last backup",
-    next_short: "Next backup",
-    total_size: "Total size",
     run_backup: "Back up now",
     no_data: "Nothing to show: no backup found.",
     backups_field: "Backups (their last backup sensors; empty: automatic)",
@@ -71,6 +70,10 @@ const STRINGS = {
     show_size: "Show the sizes",
     show_next: "Show the next backups",
     show_run: "Show the back up now buttons",
+    back_up: "Back up",
+    since_good: "since the last good backup",
+    src_failed: "{name} failed {when}",
+    src_late: "{name} older than {limit}",
     cancel: "Cancel",
     left: "{time} left",
     today_at: "today {time}",
@@ -97,7 +100,6 @@ const STRINGS = {
     running: "En cours",
     unknown: "Aucune sauvegarde",
     never: "Jamais",
-    age: "âge",
     all_ok: "Toutes à jour",
     n_failed: "{n} en échec",
     n_late: "{n} en retard",
@@ -106,9 +108,6 @@ const STRINGS = {
     late_limit: "Plus vieille que {limit}",
     last_at: "Dernière {when}",
     next: "Prochaine {when}",
-    newest: "Dernière sauvegarde",
-    next_short: "Prochaine sauvegarde",
-    total_size: "Taille totale",
     run_backup: "Sauvegarder maintenant",
     no_data: "Rien à afficher : aucune sauvegarde trouvée.",
     backups_field: "Sauvegardes (leurs capteurs de dernière sauvegarde ; vide : automatique)",
@@ -118,6 +117,10 @@ const STRINGS = {
     show_size: "Afficher les tailles",
     show_next: "Afficher les prochaines sauvegardes",
     show_run: "Afficher les boutons Sauvegarder maintenant",
+    back_up: "Sauvegarder",
+    since_good: "depuis la dernière sauvegarde réussie",
+    src_failed: "{name} en échec {when}",
+    src_late: "{name} plus vieille que {limit}",
     cancel: "Annuler",
     left: "{time} restantes",
     today_at: "aujourd'hui {time}",
@@ -144,7 +147,6 @@ const STRINGS = {
     running: "Läuft",
     unknown: "Kein Backup",
     never: "Nie",
-    age: "Alter",
     all_ok: "Alle aktuell",
     n_failed: "{n} fehlgeschlagen",
     n_late: "{n} verspätet",
@@ -153,9 +155,6 @@ const STRINGS = {
     late_limit: "Älter als {limit}",
     last_at: "Zuletzt {when}",
     next: "Nächstes {when}",
-    newest: "Letztes Backup",
-    next_short: "Nächstes Backup",
-    total_size: "Gesamtgröße",
     run_backup: "Jetzt sichern",
     no_data: "Nichts anzuzeigen: kein Backup gefunden.",
     backups_field: "Backups (ihre Sensoren des letzten Backups; leer: automatisch)",
@@ -165,6 +164,10 @@ const STRINGS = {
     show_size: "Größen anzeigen",
     show_next: "Nächste Backups anzeigen",
     show_run: "Schaltflächen „Jetzt sichern“ anzeigen",
+    back_up: "Sichern",
+    since_good: "seit dem letzten erfolgreichen Backup",
+    src_failed: "{name} fehlgeschlagen {when}",
+    src_late: "{name} älter als {limit}",
     cancel: "Abbrechen",
     left: "Noch {time}",
     today_at: "heute {time}",
@@ -191,7 +194,6 @@ const STRINGS = {
     running: "En curso",
     unknown: "Sin copia",
     never: "Nunca",
-    age: "edad",
     all_ok: "Todas al día",
     n_failed: "{n} fallidas",
     n_late: "{n} atrasadas",
@@ -200,9 +202,6 @@ const STRINGS = {
     late_limit: "Más antigua que {limit}",
     last_at: "Última {when}",
     next: "Próxima {when}",
-    newest: "Última copia",
-    next_short: "Próxima copia",
-    total_size: "Tamaño total",
     run_backup: "Copiar ahora",
     no_data: "Nada que mostrar: no se encontró ninguna copia de seguridad.",
     backups_field: "Copias (sus sensores de última copia; vacío: automático)",
@@ -212,6 +211,10 @@ const STRINGS = {
     show_size: "Mostrar los tamaños",
     show_next: "Mostrar las próximas copias",
     show_run: "Mostrar los botones Copiar ahora",
+    back_up: "Copiar",
+    since_good: "desde la última copia correcta",
+    src_failed: "{name} fallida {when}",
+    src_late: "{name} más antigua que {limit}",
     cancel: "Cancelar",
     left: "Quedan {time}",
     today_at: "hoy {time}",
@@ -238,7 +241,6 @@ const STRINGS = {
     running: "In corso",
     unknown: "Nessun backup",
     never: "Mai",
-    age: "età",
     all_ok: "Tutti aggiornati",
     n_failed: "{n} falliti",
     n_late: "{n} in ritardo",
@@ -247,9 +249,6 @@ const STRINGS = {
     late_limit: "Più vecchio di {limit}",
     last_at: "Ultimo {when}",
     next: "Prossimo {when}",
-    newest: "Ultimo backup",
-    next_short: "Prossimo backup",
-    total_size: "Dimensione totale",
     run_backup: "Esegui backup ora",
     no_data: "Niente da mostrare: nessun backup trovato.",
     backups_field: "Backup (i loro sensori dell'ultimo backup; vuoto: automatico)",
@@ -259,6 +258,10 @@ const STRINGS = {
     show_size: "Mostra le dimensioni",
     show_next: "Mostra i prossimi backup",
     show_run: "Mostra i pulsanti Esegui backup ora",
+    back_up: "Esegui backup",
+    since_good: "dall'ultimo backup riuscito",
+    src_failed: "{name} fallito {when}",
+    src_late: "{name} più vecchio di {limit}",
     cancel: "Annulla",
     left: "{time} rimanenti",
     today_at: "oggi {time}",
@@ -285,7 +288,6 @@ const STRINGS = {
     running: "Bezig",
     unknown: "Geen back-up",
     never: "Nooit",
-    age: "leeftijd",
     all_ok: "Alles actueel",
     n_failed: "{n} mislukt",
     n_late: "{n} te laat",
@@ -294,9 +296,6 @@ const STRINGS = {
     late_limit: "Ouder dan {limit}",
     last_at: "Laatste {when}",
     next: "Volgende {when}",
-    newest: "Laatste back-up",
-    next_short: "Volgende back-up",
-    total_size: "Totale grootte",
     run_backup: "Nu back-uppen",
     no_data: "Niets te tonen: geen back-up gevonden.",
     backups_field: "Back-ups (hun sensoren van de laatste back-up; leeg: automatisch)",
@@ -306,6 +305,10 @@ const STRINGS = {
     show_size: "Groottes tonen",
     show_next: "Volgende back-ups tonen",
     show_run: "Knoppen Nu back-uppen tonen",
+    back_up: "Back-up maken",
+    since_good: "sinds de laatste geslaagde back-up",
+    src_failed: "{name} mislukt {when}",
+    src_late: "{name} ouder dan {limit}",
     cancel: "Annuleren",
     left: "Nog {time}",
     today_at: "vandaag {time}",
@@ -332,7 +335,6 @@ const STRINGS = {
     running: "Em curso",
     unknown: "Sem cópia",
     never: "Nunca",
-    age: "idade",
     all_ok: "Todas em dia",
     n_failed: "{n} falharam",
     n_late: "{n} atrasadas",
@@ -341,9 +343,6 @@ const STRINGS = {
     late_limit: "Mais antiga que {limit}",
     last_at: "Última {when}",
     next: "Próxima {when}",
-    newest: "Última cópia",
-    next_short: "Próxima cópia",
-    total_size: "Tamanho total",
     run_backup: "Copiar agora",
     no_data: "Nada a mostrar: nenhuma cópia de segurança encontrada.",
     backups_field: "Cópias (os seus sensores da última cópia; vazio: automático)",
@@ -353,6 +352,10 @@ const STRINGS = {
     show_size: "Mostrar os tamanhos",
     show_next: "Mostrar as próximas cópias",
     show_run: "Mostrar os botões Copiar agora",
+    back_up: "Copiar",
+    since_good: "desde a última cópia bem-sucedida",
+    src_failed: "{name} falhou {when}",
+    src_late: "{name} mais antiga que {limit}",
     cancel: "Cancelar",
     left: "Faltam {time}",
     today_at: "hoje {time}",
@@ -379,7 +382,6 @@ const STRINGS = {
     running: "W toku",
     unknown: "Brak kopii",
     never: "Nigdy",
-    age: "wiek",
     all_ok: "Wszystkie aktualne",
     n_failed: "Nieudane: {n}",
     n_late: "Opóźnione: {n}",
@@ -388,9 +390,6 @@ const STRINGS = {
     late_limit: "Starsza niż {limit}",
     last_at: "Ostatnia {when}",
     next: "Następna {when}",
-    newest: "Ostatnia kopia",
-    next_short: "Następna kopia",
-    total_size: "Łączny rozmiar",
     run_backup: "Utwórz kopię teraz",
     no_data: "Brak danych: nie znaleziono kopii zapasowej.",
     backups_field: "Kopie (ich czujniki ostatniej kopii; puste: automatycznie)",
@@ -400,6 +399,10 @@ const STRINGS = {
     show_size: "Pokaż rozmiary",
     show_next: "Pokaż następne kopie",
     show_run: "Pokaż przyciski Utwórz kopię teraz",
+    back_up: "Utwórz kopię",
+    since_good: "od ostatniej udanej kopii",
+    src_failed: "{name}: błąd {when}",
+    src_late: "{name} starsza niż {limit}",
     cancel: "Anuluj",
     left: "Pozostało {time}",
     today_at: "dziś {time}",
@@ -426,7 +429,6 @@ const STRINGS = {
     running: "У току",
     unknown: "Нема копије",
     never: "Никад",
-    age: "старост",
     all_ok: "Све ажурне",
     n_failed: "Неуспешне: {n}",
     n_late: "Касне: {n}",
@@ -435,9 +437,6 @@ const STRINGS = {
     late_limit: "Старија од {limit}",
     last_at: "Последња {when}",
     next: "Следећа {when}",
-    newest: "Последња копија",
-    next_short: "Следећа копија",
-    total_size: "Укупна величина",
     run_backup: "Направи копију сада",
     no_data: "Нема шта да се прикаже: није пронађена резервна копија.",
     backups_field: "Копије (њихови сензори последње копије; празно: аутоматски)",
@@ -447,6 +446,10 @@ const STRINGS = {
     show_size: "Прикажи величине",
     show_next: "Прикажи следеће копије",
     show_run: "Прикажи дугмад Направи копију сада",
+    back_up: "Направи копију",
+    since_good: "од последње успешне копије",
+    src_failed: "{name} није успела {when}",
+    src_late: "{name} старија од {limit}",
     cancel: "Откажи",
     left: "Преостало {time}",
     today_at: "данас {time}",
@@ -473,7 +476,6 @@ const STRINGS = {
     running: "U toku",
     unknown: "Nema kopije",
     never: "Nikad",
-    age: "starost",
     all_ok: "Sve ažurne",
     n_failed: "Neuspešne: {n}",
     n_late: "Kasne: {n}",
@@ -482,9 +484,6 @@ const STRINGS = {
     late_limit: "Starija od {limit}",
     last_at: "Poslednja {when}",
     next: "Sledeća {when}",
-    newest: "Poslednja kopija",
-    next_short: "Sledeća kopija",
-    total_size: "Ukupna veličina",
     run_backup: "Napravi kopiju sada",
     no_data: "Nema šta da se prikaže: nije pronađena rezervna kopija.",
     backups_field: "Kopije (njihovi senzori poslednje kopije; prazno: automatski)",
@@ -494,6 +493,10 @@ const STRINGS = {
     show_size: "Prikaži veličine",
     show_next: "Prikaži sledeće kopije",
     show_run: "Prikaži dugmad Napravi kopiju sada",
+    back_up: "Napravi kopiju",
+    since_good: "od poslednje uspešne kopije",
+    src_failed: "{name} nije uspela {when}",
+    src_late: "{name} starija od {limit}",
     cancel: "Otkaži",
     left: "Preostalo {time}",
     today_at: "danas {time}",
@@ -520,7 +523,6 @@ const STRINGS = {
     running: "În curs",
     unknown: "Nicio copie",
     never: "Niciodată",
-    age: "vechime",
     all_ok: "Toate la zi",
     n_failed: "{n} eșuate",
     n_late: "{n} întârziate",
@@ -529,9 +531,6 @@ const STRINGS = {
     late_limit: "Mai veche de {limit}",
     last_at: "Ultima {when}",
     next: "Următoarea {when}",
-    newest: "Ultima copie",
-    next_short: "Următoarea copie",
-    total_size: "Dimensiune totală",
     run_backup: "Copiază acum",
     no_data: "Nimic de afișat: nu s-a găsit nicio copie de rezervă.",
     backups_field: "Copii (senzorii lor de ultimă copie; gol: automat)",
@@ -541,6 +540,10 @@ const STRINGS = {
     show_size: "Afișează dimensiunile",
     show_next: "Afișează următoarele copii",
     show_run: "Afișează butoanele Copiază acum",
+    back_up: "Salvează",
+    since_good: "de la ultima copie reușită",
+    src_failed: "{name} a eșuat {when}",
+    src_late: "{name} mai veche de {limit}",
     cancel: "Anulează",
     left: "Mai sunt {time}",
     today_at: "azi {time}",
@@ -567,7 +570,6 @@ const STRINGS = {
     running: "I gang",
     unknown: "Ingen kopi",
     never: "Aldrig",
-    age: "alder",
     all_ok: "Alle opdaterede",
     n_failed: "{n} mislykkede",
     n_late: "{n} forsinkede",
@@ -576,9 +578,6 @@ const STRINGS = {
     late_limit: "Ældre end {limit}",
     last_at: "Seneste {when}",
     next: "Næste {when}",
-    newest: "Seneste kopi",
-    next_short: "Næste kopi",
-    total_size: "Samlet størrelse",
     run_backup: "Tag kopi nu",
     no_data: "Intet at vise: ingen sikkerhedskopi fundet.",
     backups_field: "Sikkerhedskopier (deres sensorer for seneste kopi; tom: automatisk)",
@@ -588,6 +587,10 @@ const STRINGS = {
     show_size: "Vis størrelserne",
     show_next: "Vis de næste kopier",
     show_run: "Vis knapperne Tag kopi nu",
+    back_up: "Sikkerhedskopiér",
+    since_good: "siden den sidste vellykkede backup",
+    src_failed: "{name} mislykkedes {when}",
+    src_late: "{name} ældre end {limit}",
     cancel: "Annuller",
     left: "{time} tilbage",
     today_at: "i dag {time}",
@@ -614,7 +617,6 @@ const STRINGS = {
     running: "Pågår",
     unknown: "Ingen kopia",
     never: "Aldrig",
-    age: "ålder",
     all_ok: "Alla aktuella",
     n_failed: "{n} misslyckade",
     n_late: "{n} försenade",
@@ -623,9 +625,6 @@ const STRINGS = {
     late_limit: "Äldre än {limit}",
     last_at: "Senaste {when}",
     next: "Nästa {when}",
-    newest: "Senaste kopia",
-    next_short: "Nästa kopia",
-    total_size: "Total storlek",
     run_backup: "Säkerhetskopiera nu",
     no_data: "Inget att visa: ingen säkerhetskopia hittades.",
     backups_field: "Säkerhetskopior (deras sensorer för senaste kopia; tomt: automatiskt)",
@@ -635,6 +634,10 @@ const STRINGS = {
     show_size: "Visa storlekarna",
     show_next: "Visa nästa kopior",
     show_run: "Visa knapparna Säkerhetskopiera nu",
+    back_up: "Säkerhetskopiera",
+    since_good: "sedan den senaste lyckade säkerhetskopian",
+    src_failed: "{name} misslyckades {when}",
+    src_late: "{name} äldre än {limit}",
     cancel: "Avbryt",
     left: "{time} kvar",
     today_at: "i dag {time}",
@@ -661,7 +664,6 @@ const STRINGS = {
     running: "В ход",
     unknown: "Няма копие",
     never: "Никога",
-    age: "възраст",
     all_ok: "Всички актуални",
     n_failed: "Неуспешни: {n}",
     n_late: "Закъснели: {n}",
@@ -670,9 +672,6 @@ const STRINGS = {
     late_limit: "По-старо от {limit}",
     last_at: "Последно {when}",
     next: "Следващо {when}",
-    newest: "Последно копие",
-    next_short: "Следващо копие",
-    total_size: "Общ размер",
     run_backup: "Създай копие сега",
     no_data: "Няма какво да се покаже: не е намерено резервно копие.",
     backups_field: "Копия (техните сензори за последно копие; празно: автоматично)",
@@ -682,6 +681,10 @@ const STRINGS = {
     show_size: "Показване на размерите",
     show_next: "Показване на следващите копия",
     show_run: "Показване на бутоните Създай копие сега",
+    back_up: "Архивирай",
+    since_good: "от последното успешно копие",
+    src_failed: "{name} неуспешно {when}",
+    src_late: "{name} по-старо от {limit}",
     cancel: "Отказ",
     left: "Остават {time}",
     today_at: "днес {time}",
@@ -708,7 +711,6 @@ const STRINGS = {
     running: "Выполняется",
     unknown: "Нет копии",
     never: "Никогда",
-    age: "возраст",
     all_ok: "Все актуальны",
     n_failed: "С ошибкой: {n}",
     n_late: "Просрочено: {n}",
@@ -717,9 +719,6 @@ const STRINGS = {
     late_limit: "Старше {limit}",
     last_at: "Последняя {when}",
     next: "Следующая {when}",
-    newest: "Последняя копия",
-    next_short: "Следующая копия",
-    total_size: "Общий размер",
     run_backup: "Создать копию сейчас",
     no_data: "Нечего показать: резервные копии не найдены.",
     backups_field: "Копии (их датчики последней копии; пусто: автоматически)",
@@ -729,6 +728,10 @@ const STRINGS = {
     show_size: "Показывать размеры",
     show_next: "Показывать следующие копии",
     show_run: "Показывать кнопки «Создать копию сейчас»",
+    back_up: "Создать копию",
+    since_good: "с последней успешной копии",
+    src_failed: "{name}: ошибка {when}",
+    src_late: "{name} старше {limit}",
     cancel: "Отмена",
     left: "Осталось {time}",
     today_at: "сегодня {time}",
@@ -755,7 +758,6 @@ const STRINGS = {
     running: "Виконується",
     unknown: "Немає копії",
     never: "Ніколи",
-    age: "вік",
     all_ok: "Усі актуальні",
     n_failed: "З помилкою: {n}",
     n_late: "Прострочено: {n}",
@@ -764,9 +766,6 @@ const STRINGS = {
     late_limit: "Старша за {limit}",
     last_at: "Остання {when}",
     next: "Наступна {when}",
-    newest: "Остання копія",
-    next_short: "Наступна копія",
-    total_size: "Загальний розмір",
     run_backup: "Створити копію зараз",
     no_data: "Нічого показати: резервні копії не знайдено.",
     backups_field: "Копії (їхні датчики останньої копії; порожньо: автоматично)",
@@ -776,6 +775,10 @@ const STRINGS = {
     show_size: "Показувати розміри",
     show_next: "Показувати наступні копії",
     show_run: "Показувати кнопки «Створити копію зараз»",
+    back_up: "Створити копію",
+    since_good: "з останньої успішної копії",
+    src_failed: "{name}: помилка {when}",
+    src_late: "{name} старша за {limit}",
     cancel: "Скасувати",
     left: "Залишилось {time}",
     today_at: "сьогодні {time}",
@@ -802,7 +805,6 @@ const STRINGS = {
     running: "Folyamatban",
     unknown: "Nincs mentés",
     never: "Soha",
-    age: "kor",
     all_ok: "Mind naprakész",
     n_failed: "{n} sikertelen",
     n_late: "{n} késésben",
@@ -811,9 +813,6 @@ const STRINGS = {
     late_limit: "Régebbi, mint {limit}",
     last_at: "Utolsó {when}",
     next: "Következő {when}",
-    newest: "Utolsó mentés",
-    next_short: "Következő mentés",
-    total_size: "Teljes méret",
     run_backup: "Mentés most",
     no_data: "Nincs mit megjeleníteni: nem található biztonsági mentés.",
     backups_field: "Mentések (utolsó mentés érzékelőik; üres: automatikus)",
@@ -823,6 +822,10 @@ const STRINGS = {
     show_size: "Méretek megjelenítése",
     show_next: "Következő mentések megjelenítése",
     show_run: "Mentés most gombok megjelenítése",
+    back_up: "Mentés",
+    since_good: "az utolsó sikeres mentés óta",
+    src_failed: "{name} sikertelen {when}",
+    src_late: "{name} régebbi, mint {limit}",
     cancel: "Mégse",
     left: "Még {time}",
     today_at: "ma {time}",
@@ -849,7 +852,6 @@ const STRINGS = {
     running: "Prebieha",
     unknown: "Žiadna záloha",
     never: "Nikdy",
-    age: "vek",
     all_ok: "Všetky aktuálne",
     n_failed: "Zlyhané: {n}",
     n_late: "Oneskorené: {n}",
@@ -858,9 +860,6 @@ const STRINGS = {
     late_limit: "Staršia ako {limit}",
     last_at: "Posledná {when}",
     next: "Ďalšia {when}",
-    newest: "Posledná záloha",
-    next_short: "Ďalšia záloha",
-    total_size: "Celková veľkosť",
     run_backup: "Zálohovať teraz",
     no_data: "Nie je čo zobraziť: nenašla sa žiadna záloha.",
     backups_field: "Zálohy (ich senzory poslednej zálohy; prázdne: automaticky)",
@@ -870,6 +869,10 @@ const STRINGS = {
     show_size: "Zobraziť veľkosti",
     show_next: "Zobraziť ďalšie zálohy",
     show_run: "Zobraziť tlačidlá Zálohovať teraz",
+    back_up: "Zálohovať",
+    since_good: "od poslednej úspešnej zálohy",
+    src_failed: "{name} zlyhala {when}",
+    src_late: "{name} staršia ako {limit}",
     cancel: "Zrušiť",
     left: "Zostáva {time}",
     today_at: "dnes {time}",
@@ -896,7 +899,6 @@ const STRINGS = {
     running: "Probíhá",
     unknown: "Žádná záloha",
     never: "Nikdy",
-    age: "stáří",
     all_ok: "Všechny aktuální",
     n_failed: "Selhalo: {n}",
     n_late: "Opožděné: {n}",
@@ -905,9 +907,6 @@ const STRINGS = {
     late_limit: "Starší než {limit}",
     last_at: "Poslední {when}",
     next: "Další {when}",
-    newest: "Poslední záloha",
-    next_short: "Další záloha",
-    total_size: "Celková velikost",
     run_backup: "Zálohovat nyní",
     no_data: "Není co zobrazit: nebyla nalezena žádná záloha.",
     backups_field: "Zálohy (jejich senzory poslední zálohy; prázdné: automaticky)",
@@ -917,6 +916,10 @@ const STRINGS = {
     show_size: "Zobrazit velikosti",
     show_next: "Zobrazit další zálohy",
     show_run: "Zobrazit tlačítka Zálohovat nyní",
+    back_up: "Zálohovat",
+    since_good: "od poslední úspěšné zálohy",
+    src_failed: "{name} selhala {when}",
+    src_late: "{name} starší než {limit}",
     cancel: "Zrušit",
     left: "Zbývá {time}",
     today_at: "dnes {time}",
@@ -943,7 +946,6 @@ const STRINGS = {
     running: "V teku",
     unknown: "Ni kopije",
     never: "Nikoli",
-    age: "starost",
     all_ok: "Vse posodobljene",
     n_failed: "Neuspešne: {n}",
     n_late: "Zamujajo: {n}",
@@ -952,9 +954,6 @@ const STRINGS = {
     late_limit: "Starejša od {limit}",
     last_at: "Zadnja {when}",
     next: "Naslednja {when}",
-    newest: "Zadnja kopija",
-    next_short: "Naslednja kopija",
-    total_size: "Skupna velikost",
     run_backup: "Varnostno kopiraj zdaj",
     no_data: "Ni kaj prikazati: ni najdene varnostne kopije.",
     backups_field: "Kopije (njihovi senzorji zadnje kopije; prazno: samodejno)",
@@ -964,6 +963,10 @@ const STRINGS = {
     show_size: "Prikaži velikosti",
     show_next: "Prikaži naslednje kopije",
     show_run: "Prikaži gumbe Varnostno kopiraj zdaj",
+    back_up: "Varnostno kopiraj",
+    since_good: "od zadnje uspešne varnostne kopije",
+    src_failed: "{name} ni uspela {when}",
+    src_late: "{name} starejša od {limit}",
     cancel: "Prekliči",
     left: "Še {time}",
     today_at: "danes {time}",
@@ -990,7 +993,6 @@ const STRINGS = {
     running: "Notiek",
     unknown: "Nav kopijas",
     never: "Nekad",
-    age: "vecums",
     all_ok: "Visas aktuālas",
     n_failed: "Neizdevās: {n}",
     n_late: "Kavējas: {n}",
@@ -999,9 +1001,6 @@ const STRINGS = {
     late_limit: "Vecāka par {limit}",
     last_at: "Pēdējā {when}",
     next: "Nākamā {when}",
-    newest: "Pēdējā kopija",
-    next_short: "Nākamā kopija",
-    total_size: "Kopējais izmērs",
     run_backup: "Dublēt tagad",
     no_data: "Nav ko rādīt: nav atrasta neviena rezerves kopija.",
     backups_field: "Kopijas (to pēdējās kopijas sensori; tukšs: automātiski)",
@@ -1011,6 +1010,10 @@ const STRINGS = {
     show_size: "Rādīt izmērus",
     show_next: "Rādīt nākamās kopijas",
     show_run: "Rādīt pogas Dublēt tagad",
+    back_up: "Dublēt",
+    since_good: "kopš pēdējās veiksmīgās dublēšanas",
+    src_failed: "{name} neizdevās {when}",
+    src_late: "{name} vecāka par {limit}",
     cancel: "Atcelt",
     left: "Atlikušas {time}",
     today_at: "šodien {time}",
@@ -1037,7 +1040,6 @@ const STRINGS = {
     running: "Σε εξέλιξη",
     unknown: "Κανένα αντίγραφο",
     never: "Ποτέ",
-    age: "ηλικία",
     all_ok: "Όλα ενημερωμένα",
     n_failed: "Απέτυχαν: {n}",
     n_late: "Καθυστερούν: {n}",
@@ -1046,9 +1048,6 @@ const STRINGS = {
     late_limit: "Παλαιότερο από {limit}",
     last_at: "Τελευταίο {when}",
     next: "Επόμενο {when}",
-    newest: "Τελευταίο αντίγραφο",
-    next_short: "Επόμενο αντίγραφο",
-    total_size: "Συνολικό μέγεθος",
     run_backup: "Αντίγραφο τώρα",
     no_data: "Τίποτα για εμφάνιση: δεν βρέθηκε αντίγραφο ασφαλείας.",
     backups_field: "Αντίγραφα (οι αισθητήρες τελευταίου αντιγράφου τους· κενό: αυτόματα)",
@@ -1058,6 +1057,10 @@ const STRINGS = {
     show_size: "Εμφάνιση των μεγεθών",
     show_next: "Εμφάνιση των επόμενων αντιγράφων",
     show_run: "Εμφάνιση των κουμπιών Αντίγραφο τώρα",
+    back_up: "Αντίγραφο",
+    since_good: "από το τελευταίο επιτυχές αντίγραφο",
+    src_failed: "{name}: αποτυχία {when}",
+    src_late: "{name} παλαιότερο από {limit}",
     cancel: "Ακύρωση",
     left: "Απομένουν {time}",
     today_at: "σήμερα {time}",
@@ -1168,16 +1171,6 @@ const fmtWhen = (hass, config, ms) => {
   return new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(ms));
 };
 
-// "12 min ago", "in 3 h", "2 days ago": the largest unit that fits, rounded.
-const fmtRelative = (hass, config, ms) => {
-  const diff = ms - Date.now();
-  const abs = Math.abs(diff);
-  const rtf = new Intl.RelativeTimeFormat(intlLocale(hass, config), { numeric: "auto", style: "short" });
-  if (abs < 6e4) return rtf.format(0, "minute");
-  if (abs < 3.6e6) return rtf.format(Math.round(diff / 6e4), "minute");
-  if (abs < DAY_MS) return rtf.format(Math.round(diff / 3.6e6), "hour");
-  return rtf.format(Math.round(diff / DAY_MS), "day");
-};
 
 // A length of time in its largest unit: "45 min", "7 h", "3 d" (the unit names from Intl).
 const fmtSpan = (hass, config, ms) => {
@@ -1212,8 +1205,12 @@ const keyText = (e, hass) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "_");
 const deviceClass = (hass, id) => hass.states[id]?.attributes?.device_class;
-// The entity of a device whose domain and text match (and that passes `test`).
-const pick = (hass, list, domain, re, test = () => true) => list.find((e) => domainOf(e.entity_id) === domain && re.test(keyText(e, hass)) && test(e))?.entity_id;
+// Name of an entity without its device's name in front ("Kitchen Pasta" on the device "Kitchen" → "Pasta").
+const shortName = (hass, id) => {
+  const name = nameOf(hass, id);
+  const dev = devName(hass.devices?.[hass.entities?.[id]?.device_id]);
+  return dev && name.startsWith(`${dev} `) && name.length > dev.length + 1 ? name.slice(dev.length + 1) : name;
+};
 
 // ---------------------------------------------------------------------------
 // Styles
@@ -1292,6 +1289,45 @@ const BASE_STYLE = `
   .ring-svg circle { fill: none; }
   .ring-svg .track { stroke: color-mix(in srgb, var(--c, var(--bk-accent)) 18%, transparent); }
   .ring-svg .prog { stroke: var(--c, var(--bk-accent)); stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+  /* Hero, as on the garden and tempo cards: a flat illustration on the left, a big value and a few colored lines on the right. */
+  .hero { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .hero-art { flex: none; width: 120px; display: grid; place-items: center; }
+  .hero-art svg { width: 100%; height: auto; display: block; }
+  .hero-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .hero-kick { font-size: 12px; color: var(--secondary-text-color); }
+  .big { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+  .big .icon { width: 24px; height: 24px; align-self: center; color: var(--c, var(--bk-accent)); }
+  .big b { font-size: 30px; font-weight: 400; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .big span { font-size: 14px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero .line { font-size: 12.5px; }
+  /* Rows, as the watering zones: a round icon (grey at rest, tinted otherwise, a ring while it runs), name, colored state, a button. */
+  .row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .row-icon { position: relative; width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center;
+              --t: var(--c, var(--bk-idle)); background: color-mix(in srgb, var(--t) 18%, transparent); color: color-mix(in srgb, var(--t) 70%, var(--primary-text-color)); }
+  .row-icon.idle { background: color-mix(in srgb, var(--primary-text-color) 8%, transparent); color: var(--secondary-text-color); }
+  .row-icon > .icon, .row-icon > ha-icon { width: 22px; height: 22px; --mdc-icon-size: 22px; }
+  .row-icon .ring-svg { inset: -2px; width: 44px; height: 44px; }
+  .badge { position: absolute; right: -3px; bottom: -3px; width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center;
+           background: var(--b, var(--bk-ok)); color: #fff; box-shadow: 0 0 0 2px var(--ha-card-background, var(--card-background-color, #fff)); }
+  .badge .icon { width: 11px; height: 11px; }
+  .row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .row-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-state { font-size: 12.5px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-state.ok, .row-state.warn, .row-state.crit, .row-state.active, .row-state.accent { color: color-mix(in srgb, var(--c) 60%, var(--primary-text-color)); }
+  .rows { display: flex; flex-direction: column; gap: 8px; }
+  /* Tiles, as on room overview: grey, tinted with a border when they need a look; small badges below. */
+  .tiles { display: grid; gap: 8px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
+  .tile { min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 10px; box-sizing: border-box;
+          background: var(--secondary-background-color, rgba(127,127,127,.12)); border: 1px solid transparent; }
+  .tile.tint { background: color-mix(in srgb, var(--c) 13%, var(--secondary-background-color, rgba(127,127,127,.12)));
+               border-color: color-mix(in srgb, var(--c) 30%, transparent); }
+  .tile-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .tile .row-icon { width: 30px; height: 30px; } .tile .row-icon > .icon { width: 18px; height: 18px; }
+  .tile .row-state { font-size: 12px; }
+  .badges { display: flex; gap: 4px; flex-wrap: wrap; }
+  .pill { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; padding: 1px 7px; border-radius: 10px;
+          color: color-mix(in srgb, var(--c, var(--bk-idle)) 60%, var(--primary-text-color)); background: color-mix(in srgb, var(--c, var(--bk-idle)) 14%, transparent); }
+  .pill .icon { width: 14px; height: 14px; color: var(--c, var(--bk-idle)); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   @container (max-width: 230px) {
     .chip { padding: 4px; flex: none; }
@@ -2012,35 +2048,77 @@ const toBytes = (v, unit) => {
 // Buttons of other tasks than a backup (Backrest's prune, check, forget…).
 const OTHER_TASK = /prune|check|forget|refresh|unlock|stats|purge|restore|cancel/;
 const NOT_LAST = /attempt|fail|size|duration|result|status|next|count|number|free|speed/;
-const findParts = (hass, list) => {
+const slug = (t) =>
+  String(t || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+// What an entity is called without its device's name: its object id less the device's slug in front, its translation
+// key and its short name. A node or a guest named "pve-backup" is not a backup entity.
+const ownText = (e, hass) => {
+  const d = hass.devices?.[e.device_id];
+  // The entity id keeps the device's original name, even after a rename: both names are stripped.
+  const devs = [d?.name_by_user, d?.name].map((n) => slug(n || "")).filter(Boolean);
+  let obj = e.entity_id.split(".")[1] || "";
+  for (const dev of devs) if (obj.startsWith(`${dev}_`)) obj = obj.slice(dev.length + 1);
+  const name = slug(shortName(hass, e.entity_id));
+  return [obj, e.translation_key, devs.includes(name) ? "" : name].filter(Boolean).join(" ");
+};
+// `strict` (Proxmox VE): only the entities about backups count, never the node's or a guest's status, health or
+// power buttons, whatever the device is called.
+const findParts = (hass, list, strict = false) => {
+  const kt = strict ? (e) => ownText(e, hass) : (e) => keyText(e, hass);
+  if (strict) list = list.filter((e) => /backup/.test(kt(e)));
   const time = (e) => deviceClass(hass, e.entity_id) === "timestamp" || parseTime(hass.states[e.entity_id]?.state) !== null;
-  const sensor = (re, test = () => true) => pick(hass, list, "sensor", re, test);
-  const not = (re) => (e) => !re.test(keyText(e, hass));
+  const pk = (domain, re, test = () => true) => list.find((e) => domainOf(e.entity_id) === domain && re.test(kt(e)) && test(e))?.entity_id;
+  const sensor = (re, test = () => true) => pk("sensor", re, test);
+  const not = (re) => (e) => !re.test(kt(e));
   // A binary sensor by its device class (Duplicati's running and problem sensors), else by its name.
-  const binary = (cls, re) => list.find((e) => domainOf(e.entity_id) === "binary_sensor" && deviceClass(hass, e.entity_id) === cls && not(/stale|connect/)(e))?.entity_id || pick(hass, list, "binary_sensor", re);
+  const binary = (cls, re) => list.find((e) => domainOf(e.entity_id) === "binary_sensor" && deviceClass(hass, e.entity_id) === cls && not(/stale|connect/)(e))?.entity_id || pk("binary_sensor", re);
+  const specific = pk("button", /trigger_backup|create_backup|start_backup|backup_now|run_backup|backup_all/);
   return {
     last: sensor(/last_successful|last_success|last_backup|backup_last|last_run|last_completed|lastbackup/, (e) => time(e) && not(NOT_LAST)(e)),
     attempt: sensor(/last_attempt/, time),
     failure: sensor(/last_failure|last_fail/, time),
-    status: sensor(/manager_state|status|state|result/, (e) => !time(e) && not(/size|count|next/)(e)),
+    status: sensor(/manager_state|status|state|result/, (e) => !time(e) && not(/size|count|next|guests_without/)(e)),
     next: sensor(/next/, (e) => time(e) && not(/purge/)(e)),
     size: sensor(/target_size|backup_size/, not(/total/)) || sensor(/size/, not(/free|total|destination|remaining|source|added/)) || sensor(/size/, not(/free|destination/)),
     running: binary("running", /running|in_progress|backing_up|current_status/),
     failed: binary("problem", /fail|error|last_status|last_backup_status/),
-    button: pick(hass, list, "button", /trigger_backup|create_backup|start_backup|backup_now|run_backup/) || pick(hass, list, "button", /backup|run|start|trigger|create|now/, not(OTHER_TASK)),
+    // Proxmox: only a button that says it backs up, never a power button.
+    button: specific || (strict ? null : pk("button", /backup|run|start|trigger|create|now/, not(OTHER_TASK))),
   };
 };
 
-// The Google Drive Backup add-on's sensor (no registry entry): its last and next backups in attributes.
-const isDriveSensor = (s) => !!s && s.entity_id.startsWith("sensor.") && "last_backup" in (s.attributes || {}) && ("next_backup" in s.attributes || "backups_in_google_drive" in s.attributes);
+// Sensors of backup add-ons, set through Home Assistant's API (no registry entry), by what their attributes say:
+// read(state) gives { last, next, size, running, failed, late }.
+const lc = (s) => String(s?.state ?? "").toLowerCase();
+const ADDONS = {
+  // Google Drive Backup: sensor.backup_state, backed_up / error / waiting; its last and next backups in attributes.
+  google_drive_backup: {
+    test: (a) => "last_backup" in a && ("next_backup" in a || "backups_in_google_drive" in a),
+    read: (s, a) => ({ last: parseTime(a.last_backup), next: parseTime(a.next_backup), size: toBytes(a.size_in_google_drive ?? a.size_in_home_assistant), failed: lc(s) === "error" }),
+  },
+  // Samba Backup: sensor.samba_backup, IDLE / RUNNING / SUCCEEDED / FAILED; the last good backup ("2026-11-16 04:00").
+  samba_backup: {
+    test: (a) => "total_backups_succeeded" in a || ("backups_local" in a && "backups_remote" in a),
+    read: (s, a) => ({ last: parseTime(a.last_backup), running: lc(s) === "running", failed: lc(s) === "failed" }),
+  },
+  // OneDrive Backup: sensor.onedrivebackup, Syncing / Backed_Up / Backed_Up_Local / Backed_Up_Onedrive / Stale.
+  onedrive_backup: {
+    test: (a) => "Last OneDrive backup date" in a || "Backups in OneDrive" in a,
+    read: (s, a) => ({ last: parseTime(a["Last OneDrive backup date"] ?? a["Last Local backup date"]), running: lc(s) === "syncing", late: lc(s) === "stale" }),
+  },
+};
+const addonOf = (s) => (s?.entity_id?.startsWith("sensor.") ? Object.keys(ADDONS).find((k) => ADDONS[k].test(s.attributes || {})) || null : null);
 
 const _cache = new WeakMap();
 
-// A source: { key, platform, name, sub, parts (entity ids), drive (entity id of the add-on sensor), maxAge (ms),
+// A source: { key, platform, name, sub, parts (entity ids), drive (entity id of an add-on's sensor), maxAge (ms),
 // button, run }.
 const source = (hass, platform, list, extra = {}) => {
   const p = PLATFORMS[platform];
-  const parts = findParts(hass, list);
+  const parts = findParts(hass, list, platform === "proxmoxve");
   const dev = list[0]?.device_id ? hass.devices?.[list[0].device_id] : null;
   const devLabel = devName(dev);
   const own = platform === "backup" || platform === "auto_backup";
@@ -2061,17 +2139,24 @@ const source = (hass, platform, list, extra = {}) => {
 const resolve = (hass, config) => {
   let per = _cache.get(hass.entities);
   if (!per) _cache.set(hass.entities, (per = new Map()));
-  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}`;
+  // Home Assistant's own last backup is in the key: Auto Backup is listed only until it has one.
+  const own = Object.values(hass.entities || {}).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
+  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${parseTime(hass.states[own?.entity_id]?.state) !== null}`;
   if (per.has(sig)) return per.get(sig);
   const entries = Object.values(hass.entities || {}).filter((e) => hass.states[e.entity_id]);
   const deviceList = (e) => (e.device_id ? byDevice(hass).get(e.device_id) || [e] : [e]);
-  const drive = (id, extra = {}) => ({ key: id, platform: "google_drive_backup", name: extra.name || PLATFORMS.google_drive_backup.name, sub: "", parts: {}, drive: id, maxAge: (Number(extra.max_age) || 0) * 3.6e6 || null, button: extra.button || null, run: extra.button ? "button" : null });
+  // An add-on's sensor; Samba Backup is started through the add-on's input when its slug is given (`addon`).
+  const drive = (id, kind, extra = {}) => {
+    const run = extra.button ? "button" : kind === "samba_backup" && extra.addon ? ["hassio", "addon_stdin", { addon: extra.addon, input: "trigger" }] : null;
+    return { key: id, platform: kind, name: extra.name || PLATFORMS[kind].name, sub: "", parts: {}, drive: id, maxAge: (Number(extra.max_age) || 0) * 3.6e6 || null, button: extra.button || null, run };
+  };
   const sources = [];
   if (config.backups) {
     for (const x of asList(config.backups).map((b) => (typeof b === "string" ? { entity: b } : b))) {
       if (!x?.entity || !hass.states[x.entity]) continue;
-      if (isDriveSensor(hass.states[x.entity])) {
-        sources.push(drive(x.entity, x));
+      const kind = addonOf(hass.states[x.entity]);
+      if (kind) {
+        sources.push(drive(x.entity, kind, x));
         continue;
       }
       const e = hass.entities?.[x.entity] || { entity_id: x.entity };
@@ -2082,10 +2167,13 @@ const resolve = (hass, config) => {
   } else {
     const used = new Set();
     for (const platform of Object.keys(PLATFORMS)) {
-      if (platform === "google_drive_backup") {
-        for (const s of Object.values(hass.states)) if (isDriveSensor(s)) sources.push(drive(s.entity_id));
+      if (ADDONS[platform]) {
+        for (const s of Object.values(hass.states)) if (addonOf(s) === platform) sources.push(drive(s.entity_id, platform));
         continue;
       }
+      // Auto Backup makes Home Assistant backups too: listed once, by Home Assistant's own backups when they report a
+      // backup (the backup integration is always there, often unused when Auto Backup makes them).
+      if (platform === "auto_backup" && sources.some((x) => x.platform === "backup" && parseTime(hass.states[x.parts.last]?.state) !== null)) continue;
       const groups = new Map();
       for (const e of entries.filter((x) => x.platform === platform)) {
         const k = e.device_id || e.entity_id;
@@ -2121,13 +2209,17 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   const st = (id) => (id ? hass.states[id] : null);
   const time = (id) => parseTime(st(id)?.state);
   const out = { last: null, next: null, size: null, failedAt: null, running: false, failed: false };
+  let stale = false;
   if (src.drive) {
     const s = st(src.drive);
-    const a = s?.attributes || {};
-    out.last = parseTime(a.last_backup);
-    out.next = parseTime(a.next_backup);
-    out.size = toBytes(a.size_in_google_drive ?? a.size_in_home_assistant);
-    out.failed = String(s?.state).toLowerCase() === "error";
+    const r = (ADDONS[src.platform] || ADDONS.google_drive_backup).read(s, s?.attributes || {});
+    out.last = r.last ?? null;
+    out.next = r.next ?? null;
+    out.size = r.size ?? null;
+    out.running = !!r.running;
+    out.failed = !!r.failed;
+    stale = !!r.late;
+    if (out.failed) out.failedAt = parseTime(s?.last_changed);
   } else {
     const p = src.parts;
     out.last = time(p.last);
@@ -2148,7 +2240,7 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   if (out.running) out.status = "running";
   else if (out.failed) out.status = "failed";
   else if (out.last === null) out.status = "unknown";
-  else if (out.age > out.limit || (out.next !== null && out.next < now - 3.6e6)) out.status = "late";
+  else if (stale || out.age > out.limit || (out.next !== null && out.next < now - 3.6e6)) out.status = "late";
   else out.status = "ok";
   return out;
 };
@@ -2172,43 +2264,48 @@ const CLS = { failed: "crit", late: "warn", unknown: "idle", running: "active", 
 // Styles
 // ---------------------------------------------------------------------------
 
+// The illustration of the hero: servers sending to a cloud, with a badge of the worst status. Colors come from the
+// theme so that it reads in light and dark modes; while a backup runs, the arrow into the cloud moves.
+const art = (status, running = status === "running") => {
+  const badge = {
+    failed: '<circle cx="100" cy="82" r="11" fill="var(--bk-crit)"/><path d="M100 76 v7 M100 87 v.5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+    late: '<circle cx="100" cy="82" r="11" fill="var(--bk-warn)"/><path d="M100 76 v7 M100 87 v.5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+    ok: '<circle cx="100" cy="82" r="11" fill="var(--bk-ok)"/><path d="M95 82 l3.5 3.5 l6.5 -7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    running: '<circle cx="100" cy="82" r="11" fill="var(--bk-active)"/><path d="M100 76 a6 6 0 1 1 -6 6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+  }[status] || "";
+  const leds = [0, 1, 2].map((i) => `<rect x="14" y="${54 + i * 12}" width="36" height="10" rx="2" fill="var(--bk-rack)"/><circle cx="20" cy="${59 + i * 12}" r="1.8" fill="${status === "failed" && i === 2 ? "var(--bk-crit)" : "var(--bk-ok)"}"/><rect x="26" y="${57.5 + i * 12}" width="18" height="3" rx="1.5" fill="var(--bk-slot)"/>`).join("");
+  return `<svg viewBox="0 0 120 100" aria-hidden="true">
+    <path d="M40 40 a18 18 0 0 1 34 -6 a14 14 0 0 1 22 12 a12 12 0 0 1 -2 24 h-50 a15 15 0 0 1 -4 -30 z" fill="var(--bk-cloud)" stroke="var(--bk-cloud-line)" stroke-width="2"/>
+    <g class="arrow${running ? " moving" : ""}"><path d="M66 44 v16 m-6 -6 l6 6 l6 -6" stroke="var(--bk-active)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+    ${leds}${badge}</svg>`;
+};
+
 const BACKUP_STYLE = `
-  .rows { display: flex; flex-direction: column; gap: 12px; }
-  .row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .tile { position: relative; width: 44px; height: 44px; flex: none; display: grid; place-items: center; border-radius: 50%;
-          color: color-mix(in srgb, var(--c, var(--bk-idle)) 60%, var(--primary-text-color)); }
-  .tile > .icon { width: 20px; height: 20px; }
-  .tile .badge { position: absolute; right: -2px; bottom: -2px; width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center;
-                 background: var(--card-background-color, #fff); color: var(--c); }
-  .tile .badge .icon { width: 14px; height: 14px; }
-  /* A backup running: an arc turns round its source. */
-  .spin { position: absolute; inset: 0; border-radius: 50%; border: 3px solid color-mix(in srgb, var(--c, var(--bk-accent)) 18%, transparent);
+  :host { --bk-rack: #78909c; --bk-slot: #b0bec5; --bk-cloud: color-mix(in srgb, var(--bk-active) 12%, transparent);
+          --bk-cloud-line: color-mix(in srgb, var(--bk-active) 45%, transparent); }
+  /* A backup running: the arrow goes into the cloud, an arc turns round the source, the button's icon turns. */
+  .arrow.moving { animation: bk-drop 1.2s ease-in-out infinite; }
+  @keyframes bk-drop { 0% { transform: translateY(-6px); opacity: 0; } 30%, 70% { opacity: 1; } 100% { transform: translateY(6px); opacity: 0; } }
+  .spin { position: absolute; inset: -2px; border-radius: 50%; border: 3px solid color-mix(in srgb, var(--c, var(--bk-accent)) 18%, transparent);
           border-top-color: var(--c, var(--bk-accent)); animation: bk-spin 1.2s linear infinite; }
   @keyframes bk-spin { to { transform: rotate(360deg); } }
   .btn .icon.turn { animation: bk-spin 1.2s linear infinite; }
-  .row .info { gap: 2px; }
-  .row .rname { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row .rname small { font-size: 12px; font-weight: 400; color: var(--secondary-text-color); margin-left: 6px; }
-  .row .meta { font-size: 12px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row .meta.state { color: color-mix(in srgb, var(--c) 50%, var(--primary-text-color)); font-weight: 500; }
-  .row .meta .icon { width: 13px; height: 13px; vertical-align: -2px; margin-right: 2px; }
-  .row .age { flex: none; text-align: right; font-size: 15px; }
-  .row .age small { display: block; font-size: 11px; color: var(--secondary-text-color); }
-  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .stat { border-radius: 12px; padding: 8px 10px; background: var(--secondary-background-color, rgba(127,127,127,.12)); min-width: 0; }
-  .stat .k { font-size: 11px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .stat .v { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .row-name small { font-size: 12px; font-weight: 400; color: var(--secondary-text-color); margin-left: 6px; }
+  .row .btn { flex: none; }
+  .mini-art { flex: none; width: 84px; }
+  .mini-art svg { width: 84px; height: auto; display: block; }
   .mini .line .num { flex: none; margin-left: auto; }
   @container (max-width: 300px) {
-    .stats { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-    .stat { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 6px 10px; }
-    .stat .v { margin-top: 0; font-size: 14px; }
+    .hero-art { width: 64px; }
+    .big { flex-wrap: wrap; row-gap: 2px; }
+    .big b { font-size: 24px; }
+    .big span { white-space: normal; flex-basis: 100%; }
     .row { gap: 8px; }
-    .row .age { display: none; }
-    .tile { width: 38px; height: 38px; }
+    .row .btn span { display: none; }
+    .row .btn { width: 36px; height: 36px; padding: 0; border-radius: 50%; }
   }
   @container (max-width: 200px) {
-    .content.mini > .tile { display: none; }
+    .hero-art, .mini-art { display: none; }
   }
 `;
 
@@ -2263,21 +2360,27 @@ class BackupCard extends CardBase {
     return ICONS[PLATFORMS[src.platform]?.icon || "archive"];
   }
 
-  // The button that starts a backup of a source, when there is a way to (`show_run: false` hides it).
-  _runButton(it, extra = "") {
+  // The button that starts a backup of a source, when there is a way to (`show_run: false` hides it): a pill with a
+  // label in the rows, a round button in the mini card.
+  _runButton(it, round = false) {
     const src = it.src;
     if (this._config.show_run === false || !(Array.isArray(src.run) || (src.button && this._s(src.button)))) return "";
+    // A button entity that is unavailable cannot be pressed (one never pressed is "unknown", and fine).
+    const off = !Array.isArray(src.run) && src.button && this._s(src.button)?.state === "unavailable";
     const label = it.running ? this._t("running") : this._t("run_backup");
-    return `<button class="btn round${it.running ? "" : " primary"}${extra}" data-action="run" data-key="${esc(src.key)}" title="${esc(label)}" aria-label="${esc(`${label} · ${src.name}`)}"${
-      it.running ? " disabled" : ""
-    }>${svgIcon(it.running ? ICONS.sync : ICONS.play, it.running ? "turn" : "")}</button>`;
+    const text = it.running ? this._t("running") : this._t("back_up");
+    return `<button class="btn${round ? " round" : ""}${it.running ? " active" : round ? " primary" : ""}" data-action="run" data-key="${esc(src.key)}" title="${esc(label)}" aria-label="${esc(`${label} · ${src.name}`)}"${
+      it.running || off ? " disabled" : ""
+    }>${svgIcon(it.running ? ICONS.sync : ICONS.play, it.running ? "turn" : "")}${round ? "" : `<span>${esc(text)}</span>`}</button>`;
   }
 
-  _tile(it, size = 44) {
+  // The round icon of a source: the age of its last good backup against its limit as a ring, a badge with its status.
+  _icon_(it) {
     const p = it.age === null ? 0 : clamp(1 - it.age / it.limit, 0.04, 1);
-    const badge = it.status === "failed" ? ICONS.alert : it.status === "ok" ? ICONS.check : null;
-    return `<div class="tile ${CLS[it.status]}">${it.running ? '<span class="spin" aria-hidden="true"></span>' : ring(size, 3, it.status === "failed" ? 1 : p)}${svgIcon(this._icon(it.src))}${
-      badge ? `<span class="badge">${svgIcon(badge)}</span>` : ""
+    const badge = { failed: [ICONS.alert, "crit"], late: [ICONS.alert, "warn"], ok: [ICONS.check, "ok"], running: [ICONS.sync, "active"] }[it.status];
+    const ringHtml = it.running ? '<span class="spin" aria-hidden="true"></span>' : ring(44, 3, it.status === "failed" || it.status === "late" ? 1 : p);
+    return `<div class="row-icon ${CLS[it.status]}">${ringHtml}${svgIcon(this._icon(it.src))}${
+      badge ? `<span class="badge" style="--b: var(--bk-${badge[1]})">${svgIcon(badge[0])}</span>` : ""
     }</div>`;
   }
 
@@ -2285,47 +2388,57 @@ class BackupCard extends CardBase {
     return it.age === null ? this._t("never") : fmtSpan(this._hass, this._config, it.age);
   }
 
+  _state(it) {
+    const when = (ms) => fmtWhen(this._hass, this._config, ms);
+    if (it.status === "running") return this._t("running");
+    if (it.status === "failed") return it.failedAt ? this._t("failed_at", { when: when(it.failedAt) }) : this._t("failed");
+    if (it.status === "late") return this._t("late_limit", { limit: fmtSpan(this._hass, this._config, it.limit) });
+    return it.last ? this._t("last_at", { when: when(it.last) }) : this._t("unknown");
+  }
+
   _row(it) {
     const c = this._config;
     const src = it.src;
     const when = (ms) => fmtWhen(this._hass, this._config, ms);
-    const state =
-      it.status === "running"
-        ? this._t("running")
-        : it.status === "failed"
-          ? it.failedAt
-            ? this._t("failed_at", { when: when(it.failedAt) })
-            : this._t("failed")
-          : it.status === "late"
-            ? this._t("late_limit", { limit: fmtSpan(this._hass, this._config, it.limit) })
-            : it.last
-              ? this._t("last_at", { when: when(it.last) })
-              : this._t("unknown");
-    const more = [c.show_size !== false && it.size ? fmtSize(it.size, this._locale()) : "", c.show_next !== false && it.next && it.next > Date.now() ? this._t("next", { when: when(it.next) }) : ""].filter(Boolean).join(" · ");
+    const state = [
+      this._state(it),
+      c.show_size !== false && it.size ? fmtSize(it.size, this._locale()) : "",
+      c.show_next !== false && it.next && it.next > Date.now() ? this._t("next", { when: when(it.next) }) : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
     const target = src.drive || src.parts.last || src.parts.status;
     return `<div class="row">
-      ${this._tile(it)}
-      <div class="info clickable"${moreInfo(target)}>
-        <div class="rname">${esc(src.name)}${src.sub ? `<small>${esc(src.sub)}</small>` : ""}</div>
-        <div class="meta state ${CLS[it.status]}">${esc(state)}</div>
-        ${more ? `<div class="meta">${esc(more)}</div>` : ""}
+      ${this._icon_(it)}
+      <div class="row-text clickable"${moreInfo(target)}>
+        <div class="row-name">${esc(src.name)}${src.sub ? `<small>${esc(src.sub)}</small>` : ""}</div>
+        <div class="row-state ${CLS[it.status]}">${esc(state)}</div>
       </div>
-      <div class="age num">${esc(this._age(it))}${it.age !== null ? `<small>${esc(this._t("age"))}</small>` : ""}</div>
       ${this._runButton(it)}
     </div>`;
   }
 
-  // Three figures above the list: the newest good backup, the next scheduled one and the total size.
-  _stats(sum) {
-    const lasts = sum.items.filter((x) => x.last !== null);
-    const newest = lasts.sort((a, b) => b.last - a.last)[0];
+  // The hero: the illustration with the worst status, how long since the newest good backup, then a line for the
+  // first failed and the first late source, and one for the next backup and the total size.
+  _hero(sum) {
+    const lasts = sum.items.filter((x) => x.last !== null).sort((a, b) => b.last - a.last);
+    const newest = lasts[0];
     const nexts = sum.items.filter((x) => x.next !== null && x.next > Date.now()).sort((a, b) => a.next - b.next);
-    const total = sum.items.reduce((s, x) => s + (x.size || 0), 0);
-    const stat = (k, v) => `<div class="stat"><div class="k">${esc(this._t(k))}</div><div class="v num">${esc(v)}</div></div>`;
-    return `<div class="stats">${stat("newest", newest ? fmtRelative(this._hass, this._config, newest.last) : "—")}${stat("next_short", nexts[0] ? fmtRelative(this._hass, this._config, nexts[0].next) : "—")}${stat(
-      "total_size",
-      total ? fmtSize(total, this._locale()) : "—",
-    )}</div>`;
+    const total = sum.items.reduce((n, x) => n + (x.size || 0), 0);
+    const failed = sum.items.find((x) => x.status === "failed");
+    const late = sum.items.find((x) => x.status === "late");
+    const when = (ms) => fmtWhen(this._hass, this._config, ms);
+    const line = (cls, icon, text) => `<div class="line ${cls}">${svgIcon(icon)}<span>${esc(text)}</span></div>`;
+    const lines = [];
+    if (failed) lines.push(line("crit", ICONS.alert, this._t("src_failed", { name: failed.src.name, when: failed.failedAt ? when(failed.failedAt) : "" }).trim()));
+    if (late) lines.push(line("warn", ICONS.alert, this._t("src_late", { name: late.src.name, limit: fmtSpan(this._hass, this._config, late.limit) })));
+    if (!failed && !late) lines.push(line("ok", ICONS.check, this._t("all_ok")));
+    const more = [nexts[0] ? this._t("next", { when: when(nexts[0].next) }) : "", total ? fmtSize(total, this._locale()) : ""].filter(Boolean).join(" · ");
+    if (more) lines.push(line("", ICONS.calendar, more));
+    const big = newest
+      ? `<div class="big ${sum.worst.status === "ok" ? "ok" : "idle"}">${svgIcon(ICONS.shield)}<b>${esc(fmtSpan(this._hass, this._config, Date.now() - newest.last))}</b><span>${esc(this._t("since_good"))}</span></div>`
+      : `<div class="big crit">${svgIcon(ICONS.alert)}<b>${esc(this._t("never"))}</b></div>`;
+    return `<div class="hero"><div class="hero-art">${art(sum.worst.status, sum.items.some((x) => x.running))}</div><div class="hero-body">${big}${lines.join("")}</div></div>`;
   }
 
   _head(sum, sub) {
@@ -2337,13 +2450,17 @@ class BackupCard extends CardBase {
     if (error) return error;
     const sum = this._summary(m);
     const parts = [];
-    if (this._config.show_stats !== false) parts.push(this._stats(sum));
-    parts.push(this._section("backups", ICONS.archive, this._t("backups"), sum.items.length, `<div class="rows">${sum.items.map((it) => this._row(it)).join("")}</div>`));
+    if (this._config.show_stats !== false) parts.push(this._hero(sum));
+    parts.push(this._section("backups", ICONS.database, this._t("backups"), sum.items.length, `<div class="rows">${sum.items.map((it) => this._row(it)).join("")}</div>`));
     return `<style>${BASE_STYLE}${BACKUP_STYLE}</style>
       <ha-card>
         ${this._head(sum, sum.sub)}
         <div class="content">${parts.join("")}</div>
       </ha-card>`;
+  }
+
+  _onDisconnect() {
+    clearTimeout(this._runTimer);
   }
 
   _action(action, el) {
@@ -2386,13 +2503,13 @@ class BackupMiniCard extends withMini(BackupCard) {
       )
       .join("");
     // The run button of the first source that can start a backup (Home Assistant's own first).
-    const first = sum.items.find((it) => this._runButton(it));
-    const controls = first ? this._runButton(first) : "";
+    const first = sum.items.find((it) => this._runButton(it, true));
+    const controls = first ? this._runButton(first, true) : "";
     return `<style>${BASE_STYLE}${BACKUP_STYLE}${MINI_STYLE}</style>
       <ha-card>
         ${this._head(sum, "")}
         <div class="content mini">
-          ${this._tile(sum.worst, 44)}
+          <div class="mini-art">${art(sum.worst.status, sum.items.some((x) => x.running))}</div>
           <div class="info">${lines}</div>
           ${controls ? `<div class="controls">${controls}</div>` : ""}
         </div>
