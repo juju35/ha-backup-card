@@ -351,6 +351,39 @@ test("Proxmox VE: only the node's backup entities count, never its status, healt
   assert.equal(bk.sourceState(hass, bk.resolve(hass, {})[0], { now: NOW }).status, "failed");
 });
 
+test("Proxmox VE: a node or a guest named after backups is still not a backup", () => {
+  const node = { platform: "proxmoxve", device_id: "node" };
+  const vm = { platform: "proxmoxve", device_id: "vm" };
+  const hass = hassOf(
+    [
+      // A node named "pve-backup": up (status running), with power buttons, and its real backup sensors.
+      ["binary_sensor.pve_backup_status", "on", { device_class: "running", friendly_name: "pve-backup Status" }, { ...node, translation_key: "status" }],
+      ["binary_sensor.pve_backup_health", "on", { device_class: "problem", friendly_name: "pve-backup Health" }, { ...node, translation_key: "health" }],
+      ["button.pve_backup_shutdown", "unknown", { friendly_name: "pve-backup Shutdown" }, { ...node, translation_key: "shutdown" }],
+      ["button.pve_backup_start_all", "unknown", { friendly_name: "pve-backup Start all" }, { ...node, translation_key: "start_all" }],
+      ["sensor.pve_backup_last_backup", iso(NOW - 5 * H), { device_class: "timestamp", friendly_name: "pve-backup Last backup" }, { ...node, translation_key: "node_backup_last_backup" }],
+      // A guest named "backup" (Proxmox Backup Server in a VM), with no backup entity of its own.
+      ["sensor.backup_status", "running", { friendly_name: "backup Status" }, { ...vm, translation_key: "vm_status" }],
+      ["binary_sensor.backup_status", "on", { device_class: "running", friendly_name: "backup Status" }, { ...vm, translation_key: "status" }],
+      ["button.backup_start", "unknown", { friendly_name: "backup Start" }, { ...vm, translation_key: "start" }],
+      ["button.backup_shutdown", "unknown", { friendly_name: "backup Shutdown" }, { ...vm, translation_key: "shutdown" }],
+    ],
+    { node: { id: "node", name: "pve-backup" }, vm: { id: "vm", name: "backup" } },
+  );
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => x.name),
+    ["pve-backup"],
+  );
+  const st = bk.sourceState(hass, m[0], { now: NOW });
+  assert.equal(st.status, "ok");
+  assert.equal(st.running, false);
+  assert.equal(st.failed, false);
+  assert.equal(m[0].parts.running ?? null, null);
+  assert.equal(m[0].parts.failed ?? null, null);
+  assert.equal(m[0].button, null);
+});
+
 test("Auto Backup next to Home Assistant's backups: Home Assistant's backups are listed once", () => {
   const ha = { platform: "backup", device_id: null };
   const ab = { platform: "auto_backup", device_id: null };
@@ -365,6 +398,11 @@ test("Auto Backup next to Home Assistant's backups: Home Assistant's backups are
   same(
     bk.resolve(hassOf([rows[1]]), {}).map((x) => x.platform),
     ["auto_backup"],
+  );  // Home Assistant's backups set up but unused (no backup yet): Auto Backup, which makes them, is kept.
+  const unused = [["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }], rows[1]];
+  same(
+    bk.resolve(hassOf(unused), {}).map((x) => x.platform),
+    ["backup", "auto_backup"],
   );
 });
 
@@ -398,4 +436,16 @@ test("Samba Backup and OneDrive Backup add-ons: found by their sensors, states r
   const [src] = bk.resolve(hass, { backups: [{ entity: "sensor.samba_backup", addon: "15d21743_samba_backup" }] });
   same(src.run, ["hassio", "addon_stdin", { addon: "15d21743_samba_backup", input: "trigger" }]);
   assert.equal(bk.resolve(hass, { backups: ["sensor.samba_backup"] })[0].run, null);
+});
+
+test("the hero's shield is green only when every backup is up to date; an unavailable button is disabled", async () => {
+  const { html } = await mount();
+  assert.match(html(), /class="big idle">/);
+  const hass = makeHass();
+  hass.states["button.photos_lancer"] = { ...hass.states["button.photos_lancer"], state: "unavailable" };
+  const card = new BackupCard();
+  card.setConfig({});
+  card.hass = hass;
+  const btn = /<button[^>]*data-action="run"[^>]*aria-label="[^"]*Photos"[^>]*>/.exec(card.shadowRoot.innerHTML)?.[0] || "";
+  assert.match(btn, / disabled/);
 });

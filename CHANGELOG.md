@@ -9,8 +9,9 @@
 - Samba Backup and OneDrive Backup add-ons: found by their sensors, with their state (running, failed, late) and last backup; Samba Backup can be started through the add-on's input (`addon` in `backups`).
 
 ### Fixes
-- Proxmox VE: only the backup entities of a node are read. The node's status (running) and health (problem) no longer show a backup as running or failed, its power buttons are no longer offered as a back up button, and guests without backups no longer appear as sources.
-- Auto Backup next to Home Assistant's own backups: Home Assistant's backups are listed once.
+- Proxmox VE: only the backup entities of a node are read, whatever the node or guest is called (even "pve-backup"). The node's status (running) and health (problem) no longer show a backup as running or failed, its power buttons are never offered as a back up button, and guests without backups no longer appear as sources.
+- Auto Backup next to Home Assistant's own backups: Home Assistant's backups are listed once; Auto Backup is kept while Home Assistant's own backups have none.
+- The back up button is disabled while its button entity is unavailable.
 
 ## 1.0.0 - 2026-11-16
 

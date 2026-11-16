@@ -53,7 +53,6 @@ const STRINGS = {
     running: "Running",
     unknown: "No backup",
     never: "Never",
-    age: "age",
     all_ok: "All up to date",
     n_failed: "{n} failed",
     n_late: "{n} late",
@@ -101,7 +100,6 @@ const STRINGS = {
     running: "En cours",
     unknown: "Aucune sauvegarde",
     never: "Jamais",
-    age: "âge",
     all_ok: "Toutes à jour",
     n_failed: "{n} en échec",
     n_late: "{n} en retard",
@@ -149,7 +147,6 @@ const STRINGS = {
     running: "Läuft",
     unknown: "Kein Backup",
     never: "Nie",
-    age: "Alter",
     all_ok: "Alle aktuell",
     n_failed: "{n} fehlgeschlagen",
     n_late: "{n} verspätet",
@@ -197,7 +194,6 @@ const STRINGS = {
     running: "En curso",
     unknown: "Sin copia",
     never: "Nunca",
-    age: "edad",
     all_ok: "Todas al día",
     n_failed: "{n} fallidas",
     n_late: "{n} atrasadas",
@@ -245,7 +241,6 @@ const STRINGS = {
     running: "In corso",
     unknown: "Nessun backup",
     never: "Mai",
-    age: "età",
     all_ok: "Tutti aggiornati",
     n_failed: "{n} falliti",
     n_late: "{n} in ritardo",
@@ -293,7 +288,6 @@ const STRINGS = {
     running: "Bezig",
     unknown: "Geen back-up",
     never: "Nooit",
-    age: "leeftijd",
     all_ok: "Alles actueel",
     n_failed: "{n} mislukt",
     n_late: "{n} te laat",
@@ -341,7 +335,6 @@ const STRINGS = {
     running: "Em curso",
     unknown: "Sem cópia",
     never: "Nunca",
-    age: "idade",
     all_ok: "Todas em dia",
     n_failed: "{n} falharam",
     n_late: "{n} atrasadas",
@@ -389,7 +382,6 @@ const STRINGS = {
     running: "W toku",
     unknown: "Brak kopii",
     never: "Nigdy",
-    age: "wiek",
     all_ok: "Wszystkie aktualne",
     n_failed: "Nieudane: {n}",
     n_late: "Opóźnione: {n}",
@@ -437,7 +429,6 @@ const STRINGS = {
     running: "У току",
     unknown: "Нема копије",
     never: "Никад",
-    age: "старост",
     all_ok: "Све ажурне",
     n_failed: "Неуспешне: {n}",
     n_late: "Касне: {n}",
@@ -485,7 +476,6 @@ const STRINGS = {
     running: "U toku",
     unknown: "Nema kopije",
     never: "Nikad",
-    age: "starost",
     all_ok: "Sve ažurne",
     n_failed: "Neuspešne: {n}",
     n_late: "Kasne: {n}",
@@ -533,7 +523,6 @@ const STRINGS = {
     running: "În curs",
     unknown: "Nicio copie",
     never: "Niciodată",
-    age: "vechime",
     all_ok: "Toate la zi",
     n_failed: "{n} eșuate",
     n_late: "{n} întârziate",
@@ -581,7 +570,6 @@ const STRINGS = {
     running: "I gang",
     unknown: "Ingen kopi",
     never: "Aldrig",
-    age: "alder",
     all_ok: "Alle opdaterede",
     n_failed: "{n} mislykkede",
     n_late: "{n} forsinkede",
@@ -629,7 +617,6 @@ const STRINGS = {
     running: "Pågår",
     unknown: "Ingen kopia",
     never: "Aldrig",
-    age: "ålder",
     all_ok: "Alla aktuella",
     n_failed: "{n} misslyckade",
     n_late: "{n} försenade",
@@ -677,7 +664,6 @@ const STRINGS = {
     running: "В ход",
     unknown: "Няма копие",
     never: "Никога",
-    age: "възраст",
     all_ok: "Всички актуални",
     n_failed: "Неуспешни: {n}",
     n_late: "Закъснели: {n}",
@@ -725,7 +711,6 @@ const STRINGS = {
     running: "Выполняется",
     unknown: "Нет копии",
     never: "Никогда",
-    age: "возраст",
     all_ok: "Все актуальны",
     n_failed: "С ошибкой: {n}",
     n_late: "Просрочено: {n}",
@@ -773,7 +758,6 @@ const STRINGS = {
     running: "Виконується",
     unknown: "Немає копії",
     never: "Ніколи",
-    age: "вік",
     all_ok: "Усі актуальні",
     n_failed: "З помилкою: {n}",
     n_late: "Прострочено: {n}",
@@ -821,7 +805,6 @@ const STRINGS = {
     running: "Folyamatban",
     unknown: "Nincs mentés",
     never: "Soha",
-    age: "kor",
     all_ok: "Mind naprakész",
     n_failed: "{n} sikertelen",
     n_late: "{n} késésben",
@@ -869,7 +852,6 @@ const STRINGS = {
     running: "Prebieha",
     unknown: "Žiadna záloha",
     never: "Nikdy",
-    age: "vek",
     all_ok: "Všetky aktuálne",
     n_failed: "Zlyhané: {n}",
     n_late: "Oneskorené: {n}",
@@ -917,7 +899,6 @@ const STRINGS = {
     running: "Probíhá",
     unknown: "Žádná záloha",
     never: "Nikdy",
-    age: "stáří",
     all_ok: "Všechny aktuální",
     n_failed: "Selhalo: {n}",
     n_late: "Opožděné: {n}",
@@ -965,7 +946,6 @@ const STRINGS = {
     running: "V teku",
     unknown: "Ni kopije",
     never: "Nikoli",
-    age: "starost",
     all_ok: "Vse posodobljene",
     n_failed: "Neuspešne: {n}",
     n_late: "Zamujajo: {n}",
@@ -1013,7 +993,6 @@ const STRINGS = {
     running: "Notiek",
     unknown: "Nav kopijas",
     never: "Nekad",
-    age: "vecums",
     all_ok: "Visas aktuālas",
     n_failed: "Neizdevās: {n}",
     n_late: "Kavējas: {n}",
@@ -1061,7 +1040,6 @@ const STRINGS = {
     running: "Σε εξέλιξη",
     unknown: "Κανένα αντίγραφο",
     never: "Ποτέ",
-    age: "ηλικία",
     all_ok: "Όλα ενημερωμένα",
     n_failed: "Απέτυχαν: {n}",
     n_late: "Καθυστερούν: {n}",
@@ -1227,8 +1205,12 @@ const keyText = (e, hass) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "_");
 const deviceClass = (hass, id) => hass.states[id]?.attributes?.device_class;
-// The entity of a device whose domain and text match (and that passes `test`).
-const pick = (hass, list, domain, re, test = () => true) => list.find((e) => domainOf(e.entity_id) === domain && re.test(keyText(e, hass)) && test(e))?.entity_id;
+// Name of an entity without its device's name in front ("Kitchen Pasta" on the device "Kitchen" → "Pasta").
+const shortName = (hass, id) => {
+  const name = nameOf(hass, id);
+  const dev = devName(hass.devices?.[hass.entities?.[id]?.device_id]);
+  return dev && name.startsWith(`${dev} `) && name.length > dev.length + 1 ? name.slice(dev.length + 1) : name;
+};
 
 // ---------------------------------------------------------------------------
 // Styles
@@ -2066,15 +2048,32 @@ const toBytes = (v, unit) => {
 // Buttons of other tasks than a backup (Backrest's prune, check, forget…).
 const OTHER_TASK = /prune|check|forget|refresh|unlock|stats|purge|restore|cancel/;
 const NOT_LAST = /attempt|fail|size|duration|result|status|next|count|number|free|speed/;
+const slug = (t) =>
+  String(t || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+// What an entity is called without its device's name: its object id less the device's slug in front, its translation
+// key and its short name. A node or a guest named "pve-backup" is not a backup entity.
+const ownText = (e, hass) => {
+  const dev = slug(devName(hass.devices?.[e.device_id]));
+  let obj = e.entity_id.split(".")[1] || "";
+  if (dev && obj.startsWith(`${dev}_`)) obj = obj.slice(dev.length + 1);
+  const name = slug(shortName(hass, e.entity_id));
+  return [obj, e.translation_key, name === slug(devName(hass.devices?.[e.device_id])) ? "" : name].filter(Boolean).join(" ");
+};
 // `strict` (Proxmox VE): only the entities about backups count, never the node's or a guest's status, health or
-// power buttons.
+// power buttons, whatever the device is called.
 const findParts = (hass, list, strict = false) => {
-  if (strict) list = list.filter((e) => /backup/.test(keyText(e, hass)));
+  const kt = strict ? (e) => ownText(e, hass) : (e) => keyText(e, hass);
+  if (strict) list = list.filter((e) => /backup/.test(kt(e)));
   const time = (e) => deviceClass(hass, e.entity_id) === "timestamp" || parseTime(hass.states[e.entity_id]?.state) !== null;
-  const sensor = (re, test = () => true) => pick(hass, list, "sensor", re, test);
-  const not = (re) => (e) => !re.test(keyText(e, hass));
+  const pk = (domain, re, test = () => true) => list.find((e) => domainOf(e.entity_id) === domain && re.test(kt(e)) && test(e))?.entity_id;
+  const sensor = (re, test = () => true) => pk("sensor", re, test);
+  const not = (re) => (e) => !re.test(kt(e));
   // A binary sensor by its device class (Duplicati's running and problem sensors), else by its name.
-  const binary = (cls, re) => list.find((e) => domainOf(e.entity_id) === "binary_sensor" && deviceClass(hass, e.entity_id) === cls && not(/stale|connect/)(e))?.entity_id || pick(hass, list, "binary_sensor", re);
+  const binary = (cls, re) => list.find((e) => domainOf(e.entity_id) === "binary_sensor" && deviceClass(hass, e.entity_id) === cls && not(/stale|connect/)(e))?.entity_id || pk("binary_sensor", re);
+  const specific = pk("button", /trigger_backup|create_backup|start_backup|backup_now|run_backup|backup_all/);
   return {
     last: sensor(/last_successful|last_success|last_backup|backup_last|last_run|last_completed|lastbackup/, (e) => time(e) && not(NOT_LAST)(e)),
     attempt: sensor(/last_attempt/, time),
@@ -2084,7 +2083,8 @@ const findParts = (hass, list, strict = false) => {
     size: sensor(/target_size|backup_size/, not(/total/)) || sensor(/size/, not(/free|total|destination|remaining|source|added/)) || sensor(/size/, not(/free|destination/)),
     running: binary("running", /running|in_progress|backing_up|current_status/),
     failed: binary("problem", /fail|error|last_status|last_backup_status/),
-    button: pick(hass, list, "button", /trigger_backup|create_backup|start_backup|backup_now|run_backup/) || pick(hass, list, "button", /backup|run|start|trigger|create|now/, not(OTHER_TASK)),
+    // Proxmox: only a button that says it backs up, never a power button.
+    button: specific || (strict ? null : pk("button", /backup|run|start|trigger|create|now/, not(OTHER_TASK))),
   };
 };
 
@@ -2167,8 +2167,9 @@ const resolve = (hass, config) => {
         for (const s of Object.values(hass.states)) if (addonOf(s) === platform) sources.push(drive(s.entity_id, platform));
         continue;
       }
-      // Auto Backup makes Home Assistant backups too: listed once, by Home Assistant's own backups when both are set up.
-      if (platform === "auto_backup" && sources.some((x) => x.platform === "backup")) continue;
+      // Auto Backup makes Home Assistant backups too: listed once, by Home Assistant's own backups when they report a
+      // backup (the backup integration is always there, often unused when Auto Backup makes them).
+      if (platform === "auto_backup" && sources.some((x) => x.platform === "backup" && parseTime(hass.states[x.parts.last]?.state) !== null)) continue;
       const groups = new Map();
       for (const e of entries.filter((x) => x.platform === platform)) {
         const k = e.device_id || e.entity_id;
@@ -2360,10 +2361,12 @@ class BackupCard extends CardBase {
   _runButton(it, round = false) {
     const src = it.src;
     if (this._config.show_run === false || !(Array.isArray(src.run) || (src.button && this._s(src.button)))) return "";
+    // A button entity that is unavailable cannot be pressed (one never pressed is "unknown", and fine).
+    const off = !Array.isArray(src.run) && src.button && this._s(src.button)?.state === "unavailable";
     const label = it.running ? this._t("running") : this._t("run_backup");
     const text = it.running ? this._t("running") : this._t("back_up");
     return `<button class="btn${round ? " round" : ""}${it.running ? " active" : round ? " primary" : ""}" data-action="run" data-key="${esc(src.key)}" title="${esc(label)}" aria-label="${esc(`${label} · ${src.name}`)}"${
-      it.running ? " disabled" : ""
+      it.running || off ? " disabled" : ""
     }>${svgIcon(it.running ? ICONS.sync : ICONS.play, it.running ? "turn" : "")}${round ? "" : `<span>${esc(text)}</span>`}</button>`;
   }
 
@@ -2429,7 +2432,7 @@ class BackupCard extends CardBase {
     const more = [nexts[0] ? this._t("next", { when: when(nexts[0].next) }) : "", total ? fmtSize(total, this._locale()) : ""].filter(Boolean).join(" · ");
     if (more) lines.push(line("", ICONS.calendar, more));
     const big = newest
-      ? `<div class="big ok">${svgIcon(ICONS.shield)}<b>${esc(fmtSpan(this._hass, this._config, Date.now() - newest.last))}</b><span>${esc(this._t("since_good"))}</span></div>`
+      ? `<div class="big ${sum.worst.status === "ok" ? "ok" : "idle"}">${svgIcon(ICONS.shield)}<b>${esc(fmtSpan(this._hass, this._config, Date.now() - newest.last))}</b><span>${esc(this._t("since_good"))}</span></div>`
       : `<div class="big crit">${svgIcon(ICONS.alert)}<b>${esc(this._t("never"))}</b></div>`;
     return `<div class="hero"><div class="hero-art">${art(sum.worst.status, sum.items.some((x) => x.running))}</div><div class="hero-body">${big}${lines.join("")}</div></div>`;
   }
@@ -2450,6 +2453,10 @@ class BackupCard extends CardBase {
         ${this._head(sum, sum.sub)}
         <div class="content">${parts.join("")}</div>
       </ha-card>`;
+  }
+
+  _onDisconnect() {
+    clearTimeout(this._runTimer);
   }
 
   _action(action, el) {
