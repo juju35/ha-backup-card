@@ -1,0 +1,19 @@
+{
+  "name": "ha-backup-card",
+  "version": "1.0.0",
+  "description": "Lovelace cards for Home Assistant: your backups: Home Assistant, Proxmox VE, Duplicati, Backrest and more, with the age of the last good one against its limit.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs && node --check dist/backup-card.js",
+    "test": "node --test test/*.test.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "acorn": "^8.19.0",
+    "css-tree": "^3.2.1",
+    "playwright": "^1.56.1"
+  }
+}
