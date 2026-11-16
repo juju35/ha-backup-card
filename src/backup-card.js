@@ -2056,11 +2056,13 @@ const slug = (t) =>
 // What an entity is called without its device's name: its object id less the device's slug in front, its translation
 // key and its short name. A node or a guest named "pve-backup" is not a backup entity.
 const ownText = (e, hass) => {
-  const dev = slug(devName(hass.devices?.[e.device_id]));
+  const d = hass.devices?.[e.device_id];
+  // The entity id keeps the device's original name, even after a rename: both names are stripped.
+  const devs = [d?.name_by_user, d?.name].map((n) => slug(n || "")).filter(Boolean);
   let obj = e.entity_id.split(".")[1] || "";
-  if (dev && obj.startsWith(`${dev}_`)) obj = obj.slice(dev.length + 1);
+  for (const dev of devs) if (obj.startsWith(`${dev}_`)) obj = obj.slice(dev.length + 1);
   const name = slug(shortName(hass, e.entity_id));
-  return [obj, e.translation_key, name === slug(devName(hass.devices?.[e.device_id])) ? "" : name].filter(Boolean).join(" ");
+  return [obj, e.translation_key, devs.includes(name) ? "" : name].filter(Boolean).join(" ");
 };
 // `strict` (Proxmox VE): only the entities about backups count, never the node's or a guest's status, health or
 // power buttons, whatever the device is called.
@@ -2137,7 +2139,9 @@ const source = (hass, platform, list, extra = {}) => {
 const resolve = (hass, config) => {
   let per = _cache.get(hass.entities);
   if (!per) _cache.set(hass.entities, (per = new Map()));
-  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}`;
+  // Home Assistant's own last backup is in the key: Auto Backup is listed only until it has one.
+  const own = Object.values(hass.entities || {}).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
+  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${parseTime(hass.states[own?.entity_id]?.state) !== null}`;
   if (per.has(sig)) return per.get(sig);
   const entries = Object.values(hass.entities || {}).filter((e) => hass.states[e.entity_id]);
   const deviceList = (e) => (e.device_id ? byDevice(hass).get(e.device_id) || [e] : [e]);

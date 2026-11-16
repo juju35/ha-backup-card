@@ -370,10 +370,23 @@ test("Proxmox VE: a node or a guest named after backups is still not a backup", 
     ],
     { node: { id: "node", name: "pve-backup" }, vm: { id: "vm", name: "backup" } },
   );
+  check(hass);
+  // Renamed in Home Assistant: the entity ids keep the original names.
+  hass.devices.node.name_by_user = "Main server";
+  hass.devices.vm.name_by_user = "Archive";
+  // Their friendly names follow the new device names, as in Home Assistant.
+  for (const st of Object.values(hass.states)) {
+    const f = st.attributes.friendly_name;
+    st.attributes = { ...st.attributes, friendly_name: f.replace(/^pve-backup /, "Main server ").replace(/^backup /, "Archive ") };
+  }
+  check({ ...hass, entities: { ...hass.entities } });
+});
+
+function check(hass) {
   const m = bk.resolve(hass, {});
   same(
     m.map((x) => x.name),
-    ["pve-backup"],
+    [hass.devices.node.name_by_user || "pve-backup"],
   );
   const st = bk.sourceState(hass, m[0], { now: NOW });
   assert.equal(st.status, "ok");
@@ -382,7 +395,7 @@ test("Proxmox VE: a node or a guest named after backups is still not a backup", 
   assert.equal(m[0].parts.running ?? null, null);
   assert.equal(m[0].parts.failed ?? null, null);
   assert.equal(m[0].button, null);
-});
+}
 
 test("Auto Backup next to Home Assistant's backups: Home Assistant's backups are listed once", () => {
   const ha = { platform: "backup", device_id: null };
@@ -448,4 +461,19 @@ test("the hero's shield is green only when every backup is up to date; an unavai
   card.hass = hass;
   const btn = /<button[^>]*data-action="run"[^>]*aria-label="[^"]*Photos"[^>]*>/.exec(card.shadowRoot.innerHTML)?.[0] || "";
   assert.match(btn, / disabled/);
+});
+
+test("Auto Backup is dropped once Home Assistant's own backups have a last backup, without a reload", () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const hass = hassOf([
+    ["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ]);
+  assert.equal(bk.resolve(hass, {}).length, 2);
+  hass.states["sensor.backup_last"] = { ...hass.states["sensor.backup_last"], state: iso(NOW - H) };
+  same(
+    bk.resolve(hass, {}).map((x) => x.platform),
+    ["backup"],
+  );
 });
