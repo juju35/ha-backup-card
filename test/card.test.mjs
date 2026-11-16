@@ -290,3 +290,112 @@ test("every clickable element can be reached and used from the keyboard", async 
     assert.match(m[0], /tabindex="0"/, m[0]);
   }
 });
+
+// A hass of its own for the integration cases below: entities given as [entity_id, state, attributes, registry].
+const hassOf = (rows, devices = {}) => {
+  const states = {};
+  const entities = {};
+  for (const [entity_id, state, attributes = {}, reg] of rows) {
+    states[entity_id] = { entity_id, state: String(state), attributes, last_changed: new Date(NOW - H).toISOString(), last_updated: new Date(NOW - H).toISOString() };
+    if (reg) entities[entity_id] = { entity_id, device_id: null, translation_key: null, ...reg };
+  }
+  return { states, entities, devices, areas: {}, language: "en", locale: { language: "en" }, callService() {} };
+};
+const iso = (ms) => new Date(ms).toISOString();
+
+test("Proxmox VE: only the node's backup entities count, never its status, health, guests or power buttons", () => {
+  const core = { platform: "proxmoxve", device_id: "node" };
+  const vm = { platform: "proxmoxve", device_id: "vm" };
+  const custom = { platform: "proxmoxve", device_id: "node2" };
+  const hass = hassOf(
+    [
+      // Core: a node up (status running), unhealthy (problem), with a good last backup.
+      ["binary_sensor.pve_status", "on", { device_class: "running", friendly_name: "pve Status" }, { ...core, translation_key: "status" }],
+      ["binary_sensor.pve_health", "on", { device_class: "problem", friendly_name: "pve Health" }, { ...core, translation_key: "health" }],
+      ["binary_sensor.pve_backup_status", "off", { device_class: "problem", friendly_name: "pve Backup status" }, { ...core, translation_key: "node_backup_status" }],
+      ["sensor.pve_last_backup", iso(NOW - 5 * H), { device_class: "timestamp", friendly_name: "pve Last backup" }, { ...core, translation_key: "node_backup_last_backup" }],
+      ["sensor.pve_backup_duration", "600", { device_class: "duration", unit_of_measurement: "s" }, { ...core, translation_key: "node_backup_duration" }],
+      ["button.pve_reboot", "unknown", { friendly_name: "pve Reboot" }, { ...core, translation_key: "reboot" }],
+      ["button.pve_start_all", "unknown", { friendly_name: "pve Start all" }, { ...core, translation_key: "start_all" }],
+      // A guest: running, with a status sensor, but no backup entity.
+      ["binary_sensor.vm_status", "on", { device_class: "running", friendly_name: "web Status" }, { ...vm, translation_key: "status" }],
+      ["sensor.vm_status", "running", { friendly_name: "web Status" }, { ...vm, translation_key: "vm_status" }],
+      ["button.vm_start", "unknown", { friendly_name: "web Start" }, { ...vm, translation_key: "start" }],
+      // Custom integration: backup running / status / last, and a back-up button next to a start button.
+      ["binary_sensor.pbs_status", "on", { device_class: "running", friendly_name: "node2 Status" }, { ...custom, translation_key: "status" }],
+      ["binary_sensor.pbs_backup_running", "off", { device_class: "running", friendly_name: "node2 Backup running" }, { ...custom, translation_key: "backup_running" }],
+      ["binary_sensor.pbs_backup_status", "off", { device_class: "problem", friendly_name: "node2 Backup status" }, { ...custom, translation_key: "backup_status" }],
+      ["sensor.pbs_backup_last", iso(NOW - 2 * H), { device_class: "timestamp", friendly_name: "node2 Last backup" }, { ...custom, translation_key: "backup_last" }],
+      ["button.pbs_start", "unknown", { friendly_name: "node2 Start" }, { ...custom, translation_key: "start" }],
+      ["button.pbs_backup_all", "unknown", { friendly_name: "node2 Back up all" }, { ...custom, translation_key: "backup_all" }],
+    ],
+    { node: { id: "node", name: "Node pve" }, vm: { id: "vm", name: "web" }, node2: { id: "node2", name: "Node pve2" } },
+  );
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => x.name),
+    ["Node pve", "Node pve2"],
+  );
+  const [a, b] = m.map((src) => bk.sourceState(hass, src, { now: NOW }));
+  assert.equal(a.status, "ok");
+  assert.equal(a.running, false);
+  assert.equal(a.failed, false);
+  assert.equal(m[0].parts.last, "sensor.pve_last_backup");
+  assert.equal(m[0].button, null);
+  assert.equal(b.status, "ok");
+  assert.equal(m[1].parts.last, "sensor.pbs_backup_last");
+  assert.equal(m[1].parts.running, "binary_sensor.pbs_backup_running");
+  assert.equal(m[1].button, "button.pbs_backup_all");
+  // The backup itself failing is a failure.
+  hass.states["binary_sensor.pve_backup_status"].state = "on";
+  assert.equal(bk.sourceState(hass, bk.resolve(hass, {})[0], { now: NOW }).status, "failed");
+});
+
+test("Auto Backup next to Home Assistant's backups: Home Assistant's backups are listed once", () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const rows = [
+    ["sensor.backup_last", iso(NOW - 5 * H), { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ];
+  same(
+    bk.resolve(hassOf(rows), {}).map((x) => x.platform),
+    ["backup"],
+  );
+  same(
+    bk.resolve(hassOf([rows[1]]), {}).map((x) => x.platform),
+    ["auto_backup"],
+  );
+});
+
+test("Samba Backup and OneDrive Backup add-ons: found by their sensors, states read", () => {
+  const samba = (state) => ["sensor.samba_backup", state, { friendly_name: "Samba Backup", backups_local: "3", backups_remote: "5", total_backups_succeeded: "12", total_backups_failed: "1", last_backup: "2026-11-16 04:00" }];
+  const one = (state, last) => ["sensor.onedrivebackup", state, { "Last Local backup date": last, "Last OneDrive backup date": last, "Backups in Home Assistant": "2", "Backups in OneDrive": "4" }];
+  const hass = hassOf([samba("IDLE"), one("Backed_Up", "2026-11-16 03:00:00")]);
+  const m = bk.resolve(hass, {});
+  same(
+    m.map((x) => [x.platform, x.name]),
+    [
+      ["samba_backup", "Samba Backup"],
+      ["onedrive_backup", "OneDrive Backup"],
+    ],
+  );
+  const st = (h) => bk.resolve(h, {}).map((src) => bk.sourceState(h, src, { now: NOW }));
+  const [s, o] = st(hass);
+  assert.equal(s.status, "ok");
+  assert.equal(s.last, Date.parse("2026-11-16T04:00"));
+  assert.equal(o.status, "ok");
+  assert.equal(o.last, Date.parse("2026-11-16T03:00:00"));
+  same(
+    st(hassOf([samba("RUNNING"), one("Syncing", "2026-11-16 03:00:00")])).map((x) => x.status),
+    ["running", "running"],
+  );
+  same(
+    st(hassOf([samba("FAILED"), one("Stale", "2026-11-16 03:00:00")])).map((x) => x.status),
+    ["failed", "late"],
+  );
+  // Samba Backup started through the add-on's input, when its slug is given.
+  const [src] = bk.resolve(hass, { backups: [{ entity: "sensor.samba_backup", addon: "15d21743_samba_backup" }] });
+  same(src.run, ["hassio", "addon_stdin", { addon: "15d21743_samba_backup", input: "trigger" }]);
+  assert.equal(bk.resolve(hass, { backups: ["sensor.samba_backup"] })[0].run, null);
+});

@@ -4,7 +4,7 @@
  *
  * Lovelace cards for your backups: the age of the last good backup of each source against its limit, a status (up
  * to date, late, failed, running), its size, the next scheduled one, and a button that starts one. The sources come
- * from Home Assistant's own backups, the Google Drive Backup add-on, Proxmox VE, Auto Backup, Duplicati, Duplicati
+ * from Home Assistant's own backups, the Google Drive Backup, Samba Backup and OneDrive Backup add-ons, Proxmox VE, Auto Backup, Duplicati, Duplicati
  * Monitor, Backrest and Veeam, found through the entity and device registries; any "last backup" sensor can also be
  * set in the configuration.
  */
@@ -31,6 +31,8 @@ const CARD_ICONS = {
 const PLATFORMS = {
   backup: { name: "Home Assistant", icon: "home", run: ["backup", "create_automatic", {}] },
   google_drive_backup: { name: "Google Drive Backup", icon: "cloud", run: null },
+  samba_backup: { name: "Samba Backup", icon: "server", run: null },
+  onedrive_backup: { name: "OneDrive Backup", icon: "cloud", run: null },
   proxmoxve: { name: "Proxmox VE", icon: "server", run: null },
   auto_backup: { name: "Auto Backup", icon: "home", run: ["auto_backup", "backup_full", {}] },
   duplicati: { name: "Duplicati", icon: "archive", run: "button" },
@@ -2064,7 +2066,10 @@ const toBytes = (v, unit) => {
 // Buttons of other tasks than a backup (Backrest's prune, check, forget…).
 const OTHER_TASK = /prune|check|forget|refresh|unlock|stats|purge|restore|cancel/;
 const NOT_LAST = /attempt|fail|size|duration|result|status|next|count|number|free|speed/;
-const findParts = (hass, list) => {
+// `strict` (Proxmox VE): only the entities about backups count, never the node's or a guest's status, health or
+// power buttons.
+const findParts = (hass, list, strict = false) => {
+  if (strict) list = list.filter((e) => /backup/.test(keyText(e, hass)));
   const time = (e) => deviceClass(hass, e.entity_id) === "timestamp" || parseTime(hass.states[e.entity_id]?.state) !== null;
   const sensor = (re, test = () => true) => pick(hass, list, "sensor", re, test);
   const not = (re) => (e) => !re.test(keyText(e, hass));
@@ -2074,7 +2079,7 @@ const findParts = (hass, list) => {
     last: sensor(/last_successful|last_success|last_backup|backup_last|last_run|last_completed|lastbackup/, (e) => time(e) && not(NOT_LAST)(e)),
     attempt: sensor(/last_attempt/, time),
     failure: sensor(/last_failure|last_fail/, time),
-    status: sensor(/manager_state|status|state|result/, (e) => !time(e) && not(/size|count|next/)(e)),
+    status: sensor(/manager_state|status|state|result/, (e) => !time(e) && not(/size|count|next|guests_without/)(e)),
     next: sensor(/next/, (e) => time(e) && not(/purge/)(e)),
     size: sensor(/target_size|backup_size/, not(/total/)) || sensor(/size/, not(/free|total|destination|remaining|source|added/)) || sensor(/size/, not(/free|destination/)),
     running: binary("running", /running|in_progress|backing_up|current_status/),
@@ -2083,16 +2088,35 @@ const findParts = (hass, list) => {
   };
 };
 
-// The Google Drive Backup add-on's sensor (no registry entry): its last and next backups in attributes.
-const isDriveSensor = (s) => !!s && s.entity_id.startsWith("sensor.") && "last_backup" in (s.attributes || {}) && ("next_backup" in s.attributes || "backups_in_google_drive" in s.attributes);
+// Sensors of backup add-ons, set through Home Assistant's API (no registry entry), by what their attributes say:
+// read(state) gives { last, next, size, running, failed, late }.
+const lc = (s) => String(s?.state ?? "").toLowerCase();
+const ADDONS = {
+  // Google Drive Backup: sensor.backup_state, backed_up / error / waiting; its last and next backups in attributes.
+  google_drive_backup: {
+    test: (a) => "last_backup" in a && ("next_backup" in a || "backups_in_google_drive" in a),
+    read: (s, a) => ({ last: parseTime(a.last_backup), next: parseTime(a.next_backup), size: toBytes(a.size_in_google_drive ?? a.size_in_home_assistant), failed: lc(s) === "error" }),
+  },
+  // Samba Backup: sensor.samba_backup, IDLE / RUNNING / SUCCEEDED / FAILED; the last good backup ("2026-11-16 04:00").
+  samba_backup: {
+    test: (a) => "total_backups_succeeded" in a || ("backups_local" in a && "backups_remote" in a),
+    read: (s, a) => ({ last: parseTime(a.last_backup), running: lc(s) === "running", failed: lc(s) === "failed" }),
+  },
+  // OneDrive Backup: sensor.onedrivebackup, Syncing / Backed_Up / Backed_Up_Local / Backed_Up_Onedrive / Stale.
+  onedrive_backup: {
+    test: (a) => "Last OneDrive backup date" in a || "Backups in OneDrive" in a,
+    read: (s, a) => ({ last: parseTime(a["Last OneDrive backup date"] ?? a["Last Local backup date"]), running: lc(s) === "syncing", late: lc(s) === "stale" }),
+  },
+};
+const addonOf = (s) => (s?.entity_id?.startsWith("sensor.") ? Object.keys(ADDONS).find((k) => ADDONS[k].test(s.attributes || {})) || null : null);
 
 const _cache = new WeakMap();
 
-// A source: { key, platform, name, sub, parts (entity ids), drive (entity id of the add-on sensor), maxAge (ms),
+// A source: { key, platform, name, sub, parts (entity ids), drive (entity id of an add-on's sensor), maxAge (ms),
 // button, run }.
 const source = (hass, platform, list, extra = {}) => {
   const p = PLATFORMS[platform];
-  const parts = findParts(hass, list);
+  const parts = findParts(hass, list, platform === "proxmoxve");
   const dev = list[0]?.device_id ? hass.devices?.[list[0].device_id] : null;
   const devLabel = devName(dev);
   const own = platform === "backup" || platform === "auto_backup";
@@ -2117,13 +2141,18 @@ const resolve = (hass, config) => {
   if (per.has(sig)) return per.get(sig);
   const entries = Object.values(hass.entities || {}).filter((e) => hass.states[e.entity_id]);
   const deviceList = (e) => (e.device_id ? byDevice(hass).get(e.device_id) || [e] : [e]);
-  const drive = (id, extra = {}) => ({ key: id, platform: "google_drive_backup", name: extra.name || PLATFORMS.google_drive_backup.name, sub: "", parts: {}, drive: id, maxAge: (Number(extra.max_age) || 0) * 3.6e6 || null, button: extra.button || null, run: extra.button ? "button" : null });
+  // An add-on's sensor; Samba Backup is started through the add-on's input when its slug is given (`addon`).
+  const drive = (id, kind, extra = {}) => {
+    const run = extra.button ? "button" : kind === "samba_backup" && extra.addon ? ["hassio", "addon_stdin", { addon: extra.addon, input: "trigger" }] : null;
+    return { key: id, platform: kind, name: extra.name || PLATFORMS[kind].name, sub: "", parts: {}, drive: id, maxAge: (Number(extra.max_age) || 0) * 3.6e6 || null, button: extra.button || null, run };
+  };
   const sources = [];
   if (config.backups) {
     for (const x of asList(config.backups).map((b) => (typeof b === "string" ? { entity: b } : b))) {
       if (!x?.entity || !hass.states[x.entity]) continue;
-      if (isDriveSensor(hass.states[x.entity])) {
-        sources.push(drive(x.entity, x));
+      const kind = addonOf(hass.states[x.entity]);
+      if (kind) {
+        sources.push(drive(x.entity, kind, x));
         continue;
       }
       const e = hass.entities?.[x.entity] || { entity_id: x.entity };
@@ -2134,10 +2163,12 @@ const resolve = (hass, config) => {
   } else {
     const used = new Set();
     for (const platform of Object.keys(PLATFORMS)) {
-      if (platform === "google_drive_backup") {
-        for (const s of Object.values(hass.states)) if (isDriveSensor(s)) sources.push(drive(s.entity_id));
+      if (ADDONS[platform]) {
+        for (const s of Object.values(hass.states)) if (addonOf(s) === platform) sources.push(drive(s.entity_id, platform));
         continue;
       }
+      // Auto Backup makes Home Assistant backups too: listed once, by Home Assistant's own backups when both are set up.
+      if (platform === "auto_backup" && sources.some((x) => x.platform === "backup")) continue;
       const groups = new Map();
       for (const e of entries.filter((x) => x.platform === platform)) {
         const k = e.device_id || e.entity_id;
@@ -2173,13 +2204,17 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   const st = (id) => (id ? hass.states[id] : null);
   const time = (id) => parseTime(st(id)?.state);
   const out = { last: null, next: null, size: null, failedAt: null, running: false, failed: false };
+  let stale = false;
   if (src.drive) {
     const s = st(src.drive);
-    const a = s?.attributes || {};
-    out.last = parseTime(a.last_backup);
-    out.next = parseTime(a.next_backup);
-    out.size = toBytes(a.size_in_google_drive ?? a.size_in_home_assistant);
-    out.failed = String(s?.state).toLowerCase() === "error";
+    const r = (ADDONS[src.platform] || ADDONS.google_drive_backup).read(s, s?.attributes || {});
+    out.last = r.last ?? null;
+    out.next = r.next ?? null;
+    out.size = r.size ?? null;
+    out.running = !!r.running;
+    out.failed = !!r.failed;
+    stale = !!r.late;
+    if (out.failed) out.failedAt = parseTime(s?.last_changed);
   } else {
     const p = src.parts;
     out.last = time(p.last);
@@ -2200,7 +2235,7 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   if (out.running) out.status = "running";
   else if (out.failed) out.status = "failed";
   else if (out.last === null) out.status = "unknown";
-  else if (out.age > out.limit || (out.next !== null && out.next < now - 3.6e6)) out.status = "late";
+  else if (stale || out.age > out.limit || (out.next !== null && out.next < now - 3.6e6)) out.status = "late";
   else out.status = "ok";
   return out;
 };

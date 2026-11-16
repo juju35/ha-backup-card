@@ -6,6 +6,11 @@
 - Restyled in the common tile look of the other cards: a summary with an illustration of the worst status (the arrow into the cloud moves while a backup runs), the time since the newest good backup, the failed and late sources, the next backup and the total size.
 - Rows as on the other cards: a round icon with the age ring and a status badge, the state in its color with the size and the next backup, and a "Back up" button with its label (round on narrow cards).
 - Mini card with the illustration, the sources most in need first and a round back up now button.
+- Samba Backup and OneDrive Backup add-ons: found by their sensors, with their state (running, failed, late) and last backup; Samba Backup can be started through the add-on's input (`addon` in `backups`).
+
+### Fixes
+- Proxmox VE: only the backup entities of a node are read. The node's status (running) and health (problem) no longer show a backup as running or failed, its power buttons are no longer offered as a back up button, and guests without backups no longer appear as sources.
+- Auto Backup next to Home Assistant's own backups: Home Assistant's backups are listed once.
 
 ## 1.0.0 - 2026-11-16
 
