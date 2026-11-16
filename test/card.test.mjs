@@ -128,13 +128,15 @@ test("rows: the last backup, the size and the next one, and the age", async () =
   assert.match(html(), /Proxmox VE/);
 });
 
-test("summary: the newest backup, the next one and the total size", async () => {
+test("summary: time since the newest good backup, the failed and late ones, the next one and the total size", async () => {
   const { html } = await mount();
-  assert.match(html(), /Last backup<\/div><div class="v num">3 hr\. ago/);
-  assert.match(html(), /Next backup<\/div><div class="v num">in 19 hr\./);
-  assert.match(html(), /Total size<\/div><div class="v num">25 GB/);
+  assert.match(html(), /class="hero"/);
+  assert.match(html(), /<b>3h<\/b><span>since the last good backup<\/span>/);
+  assert.match(html(), /class="line crit">.*?<span>Documents failed today 2:00 AM<\/span>/s);
+  assert.match(html(), /class="line warn">.*?<span>Node pve older than 26h<\/span>/s);
+  assert.match(html(), /<span>Next tomorrow 4:45 AM · 25 GB<\/span>/);
   const off = await mount({ show_stats: false, show_size: false, show_next: false });
-  assert.doesNotMatch(off.html(), /class="stats"|GB|Next tomorrow/);
+  assert.doesNotMatch(off.html(), /class="hero"|GB|Next tomorrow/);
 });
 
 test("back up now: Home Assistant's service, Backrest's button; then shown running", async () => {
@@ -220,7 +222,7 @@ test("mini card: the worst first with their age, a back up now button; the detai
   ]);
   assert.match(html(), /data-action="run"/);
   click(card, { action: "zoom" });
-  assert.match(html(), /class="stats"/);
+  assert.match(html(), /class="hero"/);
   card._unzoom.tap({ composedPath: () => [] });
   assert.match(html(), /content mini/);
 });

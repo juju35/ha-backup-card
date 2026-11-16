@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 - 2026-11-16
+
+### Features
+- Restyled in the common tile look of the other cards: a summary with an illustration of the worst status (the arrow into the cloud moves while a backup runs), the time since the newest good backup, the failed and late sources, the next backup and the total size.
+- Rows as on the other cards: a round icon with the age ring and a status badge, the state in its color with the size and the next backup, and a "Back up" button with its label (round on narrow cards).
+- Mini card with the illustration, the sources most in need first and a round back up now button.
+
 ## 1.0.0 - 2026-11-16
 
 First release.

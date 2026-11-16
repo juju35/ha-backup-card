@@ -15,5 +15,5 @@ export const shots = twins([
 ]);
 
 // One looping GIF per distinct animated state:
-//   running — backups run: an arc turns round their source, the button's icon turns
-export const gifs = twins([{ file: "running", type: "backup-card", width: 460, config: { show_stats: false }, variant: "running", seconds: 1.2 }]);
+//   running — backups run: the arrow goes into the cloud, an arc turns round their source, the button's icon turns
+export const gifs = twins([{ file: "running", type: "backup-card", width: 460, config: {}, variant: "running", seconds: 1.2 }]);

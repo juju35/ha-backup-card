@@ -36,8 +36,8 @@ The sources are **discovered automatically** from the Home Assistant entity and 
 - One row per source: a **ring** that empties as the last good backup gets older (full just after a backup, empty at the limit), the source's icon and a status badge
 - **Status** of each source: **Up to date**, **Late** (older than `max_age`, 26 hours by default, or a scheduled backup missed by an hour), **Failed** (an attempt or a failure after the last good backup, an error status, a failed sensor), **Running**
 - When the last backup was made, its **size**, the **next scheduled** one, and the age in large
-- **Summary** above the list: the newest backup, the next one and the total size
-- **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, an arc turns round its source (see [Animations](#animations))
+- **Summary** above the list, as on the other cards: an illustration with the worst status, the time since the newest good backup, the failed and late sources, the next backup and the total size
+- **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, the arrow goes into the cloud and an arc turns round its source (see [Animations](#animations))
 - Status chip on the title's line: the worst status of all the sources; the subtitle counts the failed, late and running ones
 - Header icon in a tinted round badge, in the colour of the worst status
 - Collapsible list, folded back to its default by a click elsewhere on the page
@@ -155,7 +155,7 @@ zoom: true
 | `show_subtitle` | full | `true` | Show the subtitle (the failed, late and running counts) |
 | `backups` | both | Automatic | Sources: their "last backup" sensor (or the add-on's `sensor.backup_state`), or `{ entity, name, max_age, button }`; the other parts are found on its device |
 | `max_age` | both | `26` | Maximum age of the last good backup, in hours: older, a source is late |
-| `show_stats` | both | `true` | Summary of the newest backup, the next one and the total size |
+| `show_stats` | both | `true` | Summary: time since the newest good backup, failed and late sources, next backup and total size |
 | `show_size` | both | `true` | Size of each backup |
 | `show_next` | both | `true` | Next scheduled backup |
 | `show_run` | both | `true` | Back up now buttons |
@@ -178,7 +178,7 @@ The card shows *Running* until the source reports a newer backup (two minutes at
 
 ### Animations
 
-While a backup runs, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
+While a backup runs, the arrow goes into the cloud, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
 
 | Light | Dark |
 |---|---|
@@ -213,7 +213,7 @@ The detail button (top right) shows the full card's content:
 
 ### Narrow cards
 
-The full card at 6 columns of a phone's Sections view (the summary in a column) and the mini card at its minimum width:
+The full card at 6 columns of a phone's Sections view (the summary with a smaller illustration) and the mini card at its minimum width:
 
 | Light | Dark |
 |---|---|
