@@ -91,6 +91,11 @@ const STRINGS = {
     show_subtitle: "Show subtitle",
     no_registry: "This card needs Home Assistant 2024.8 or later.",
     unavailable: "Unavailable",
+    illustration: "Animated illustration",
+    illustration_theme: "Illustration theme",
+    theme_auto: "Automatic (sun or dark theme)",
+    theme_day: "Day",
+    theme_night: "Night",
   },
   fr: {
     backups: "Sauvegardes",
@@ -138,6 +143,11 @@ const STRINGS = {
     show_subtitle: "Afficher le sous-titre",
     no_registry: "Cette carte nécessite Home Assistant 2024.8 ou plus récent.",
     unavailable: "Indisponible",
+    illustration: "Illustration animée",
+    illustration_theme: "Thème de l’illustration",
+    theme_auto: "Automatique (soleil ou thème sombre)",
+    theme_day: "Jour",
+    theme_night: "Nuit",
   },
   de: {
     backups: "Backups",
@@ -185,6 +195,11 @@ const STRINGS = {
     show_subtitle: "Untertitel anzeigen",
     no_registry: "Diese Karte benötigt Home Assistant 2024.8 oder neuer.",
     unavailable: "Nicht verfügbar",
+    illustration: "Animierte Illustration",
+    illustration_theme: "Thema der Illustration",
+    theme_auto: "Automatisch (Sonne oder dunkles Design)",
+    theme_day: "Tag",
+    theme_night: "Nacht",
   },
   es: {
     backups: "Copias de seguridad",
@@ -232,6 +247,11 @@ const STRINGS = {
     show_subtitle: "Mostrar subtítulo",
     no_registry: "Esta tarjeta necesita Home Assistant 2024.8 o posterior.",
     unavailable: "No disponible",
+    illustration: "Ilustración animada",
+    illustration_theme: "Tema de la ilustración",
+    theme_auto: "Automático (sol o tema oscuro)",
+    theme_day: "Día",
+    theme_night: "Noche",
   },
   it: {
     backups: "Backup",
@@ -279,6 +299,11 @@ const STRINGS = {
     show_subtitle: "Mostra sottotitolo",
     no_registry: "Questa scheda richiede Home Assistant 2024.8 o successivo.",
     unavailable: "Non disponibile",
+    illustration: "Illustrazione animata",
+    illustration_theme: "Tema dell’illustrazione",
+    theme_auto: "Automatico (sole o tema scuro)",
+    theme_day: "Giorno",
+    theme_night: "Notte",
   },
   nl: {
     backups: "Back-ups",
@@ -326,6 +351,11 @@ const STRINGS = {
     show_subtitle: "Ondertitel tonen",
     no_registry: "Deze kaart vereist Home Assistant 2024.8 of nieuwer.",
     unavailable: "Niet beschikbaar",
+    illustration: "Geanimeerde illustratie",
+    illustration_theme: "Thema van de illustratie",
+    theme_auto: "Automatisch (zon of donker thema)",
+    theme_day: "Dag",
+    theme_night: "Nacht",
   },
   pt: {
     backups: "Cópias de segurança",
@@ -373,6 +403,11 @@ const STRINGS = {
     show_subtitle: "Mostrar subtítulo",
     no_registry: "Este cartão requer o Home Assistant 2024.8 ou posterior.",
     unavailable: "Indisponível",
+    illustration: "Ilustração animada",
+    illustration_theme: "Tema da ilustração",
+    theme_auto: "Automático (sol ou tema escuro)",
+    theme_day: "Dia",
+    theme_night: "Noite",
   },
   pl: {
     backups: "Kopie zapasowe",
@@ -420,6 +455,11 @@ const STRINGS = {
     show_subtitle: "Pokaż podtytuł",
     no_registry: "Ta karta wymaga Home Assistant 2024.8 lub nowszego.",
     unavailable: "Niedostępne",
+    illustration: "Animowana ilustracja",
+    illustration_theme: "Motyw ilustracji",
+    theme_auto: "Automatycznie (słońce lub ciemny motyw)",
+    theme_day: "Dzień",
+    theme_night: "Noc",
   },
   sr: {
     backups: "Резервне копије",
@@ -467,6 +507,11 @@ const STRINGS = {
     show_subtitle: "Прикажи поднаслов",
     no_registry: "Ова картица захтева Home Assistant 2024.8 или новији.",
     unavailable: "Недоступно",
+    illustration: "Анимирана илустрација",
+    illustration_theme: "Тема илустрације",
+    theme_auto: "Аутоматски (сунце или тамна тема)",
+    theme_day: "Дан",
+    theme_night: "Ноћ",
   },
   "sr-Latn": {
     backups: "Rezervne kopije",
@@ -514,6 +559,11 @@ const STRINGS = {
     show_subtitle: "Prikaži podnaslov",
     no_registry: "Ova kartica zahteva Home Assistant 2024.8 ili noviji.",
     unavailable: "Nedostupno",
+    illustration: "Animirana ilustracija",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Automatski (sunce ili tamna tema)",
+    theme_day: "Dan",
+    theme_night: "Noć",
   },
   ro: {
     backups: "Copii de rezervă",
@@ -561,6 +611,11 @@ const STRINGS = {
     show_subtitle: "Afișează subtitlul",
     no_registry: "Acest card necesită Home Assistant 2024.8 sau mai nou.",
     unavailable: "Indisponibil",
+    illustration: "Ilustrație animată",
+    illustration_theme: "Tema ilustrației",
+    theme_auto: "Automat (soare sau temă întunecată)",
+    theme_day: "Zi",
+    theme_night: "Noapte",
   },
   da: {
     backups: "Sikkerhedskopier",
@@ -608,6 +663,11 @@ const STRINGS = {
     show_subtitle: "Vis undertitel",
     no_registry: "Dette kort kræver Home Assistant 2024.8 eller nyere.",
     unavailable: "Utilgængelig",
+    illustration: "Animeret illustration",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatisk (sol eller mørkt tema)",
+    theme_day: "Dag",
+    theme_night: "Nat",
   },
   sv: {
     backups: "Säkerhetskopior",
@@ -655,6 +715,11 @@ const STRINGS = {
     show_subtitle: "Visa undertitel",
     no_registry: "Det här kortet kräver Home Assistant 2024.8 eller senare.",
     unavailable: "Otillgänglig",
+    illustration: "Animerad illustration",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatiskt (sol eller mörkt tema)",
+    theme_day: "Dag",
+    theme_night: "Natt",
   },
   bg: {
     backups: "Резервни копия",
@@ -702,6 +767,11 @@ const STRINGS = {
     show_subtitle: "Покажи подзаглавие",
     no_registry: "Тази карта изисква Home Assistant 2024.8 или по-нов.",
     unavailable: "Недостъпно",
+    illustration: "Анимирана илюстрация",
+    illustration_theme: "Тема на илюстрацията",
+    theme_auto: "Автоматично (слънце или тъмна тема)",
+    theme_day: "Ден",
+    theme_night: "Нощ",
   },
   ru: {
     backups: "Резервные копии",
@@ -749,6 +819,11 @@ const STRINGS = {
     show_subtitle: "Показывать подзаголовок",
     no_registry: "Для этой карточки нужен Home Assistant 2024.8 или новее.",
     unavailable: "Недоступно",
+    illustration: "Анимированная иллюстрация",
+    illustration_theme: "Тема иллюстрации",
+    theme_auto: "Автоматически (солнце или тёмная тема)",
+    theme_day: "День",
+    theme_night: "Ночь",
   },
   uk: {
     backups: "Резервні копії",
@@ -796,6 +871,11 @@ const STRINGS = {
     show_subtitle: "Показувати підзаголовок",
     no_registry: "Для цієї картки потрібен Home Assistant 2024.8 або новіший.",
     unavailable: "Недоступно",
+    illustration: "Анімована ілюстрація",
+    illustration_theme: "Тема ілюстрації",
+    theme_auto: "Автоматично (сонце або темна тема)",
+    theme_day: "День",
+    theme_night: "Ніч",
   },
   hu: {
     backups: "Biztonsági mentések",
@@ -843,6 +923,11 @@ const STRINGS = {
     show_subtitle: "Alcím megjelenítése",
     no_registry: "Ehhez a kártyához Home Assistant 2024.8 vagy újabb szükséges.",
     unavailable: "Nem elérhető",
+    illustration: "Animált illusztráció",
+    illustration_theme: "Az illusztráció témája",
+    theme_auto: "Automatikus (nap vagy sötét téma)",
+    theme_day: "Nappal",
+    theme_night: "Éjszaka",
   },
   sk: {
     backups: "Zálohy",
@@ -890,6 +975,11 @@ const STRINGS = {
     show_subtitle: "Zobraziť podnadpis",
     no_registry: "Táto karta vyžaduje Home Assistant 2024.8 alebo novší.",
     unavailable: "Nedostupné",
+    illustration: "Animovaná ilustrácia",
+    illustration_theme: "Téma ilustrácie",
+    theme_auto: "Automaticky (slnko alebo tmavá téma)",
+    theme_day: "Deň",
+    theme_night: "Noc",
   },
   cs: {
     backups: "Zálohy",
@@ -937,6 +1027,11 @@ const STRINGS = {
     show_subtitle: "Zobrazit podtitul",
     no_registry: "Tato karta vyžaduje Home Assistant 2024.8 nebo novější.",
     unavailable: "Nedostupné",
+    illustration: "Animovaná ilustrace",
+    illustration_theme: "Motiv ilustrace",
+    theme_auto: "Automaticky (slunce nebo tmavý motiv)",
+    theme_day: "Den",
+    theme_night: "Noc",
   },
   sl: {
     backups: "Varnostne kopije",
@@ -984,6 +1079,11 @@ const STRINGS = {
     show_subtitle: "Prikaži podnaslov",
     no_registry: "Ta kartica potrebuje Home Assistant 2024.8 ali novejši.",
     unavailable: "Ni na voljo",
+    illustration: "Animirana ilustracija",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Samodejno (sonce ali temna tema)",
+    theme_day: "Dan",
+    theme_night: "Noč",
   },
   lv: {
     backups: "Rezerves kopijas",
@@ -1031,6 +1131,11 @@ const STRINGS = {
     show_subtitle: "Rādīt apakšvirsrakstu",
     no_registry: "Šai kartītei nepieciešams Home Assistant 2024.8 vai jaunāks.",
     unavailable: "Nav pieejams",
+    illustration: "Animēta ilustrācija",
+    illustration_theme: "Ilustrācijas motīvs",
+    theme_auto: "Automātiski (saule vai tumšā tēma)",
+    theme_day: "Diena",
+    theme_night: "Nakts",
   },
   el: {
     backups: "Αντίγραφα ασφαλείας",
@@ -1078,6 +1183,11 @@ const STRINGS = {
     show_subtitle: "Εμφάνιση υπότιτλου",
     no_registry: "Αυτή η κάρτα απαιτεί Home Assistant 2024.8 ή νεότερο.",
     unavailable: "Μη διαθέσιμο",
+    illustration: "Κινούμενη εικονογράφηση",
+    illustration_theme: "Θέμα εικονογράφησης",
+    theme_auto: "Αυτόματο (ήλιος ή σκούρο θέμα)",
+    theme_day: "Ημέρα",
+    theme_night: "Νύχτα",
   },
 };
 
@@ -1221,7 +1331,7 @@ const BASE_STYLE = `
           --bk-crit: var(--error-color, #db4437); --bk-idle: var(--disabled-text-color, #9e9e9e); --bk-active: var(--info-color, #039be5);
           /* Text in a state color is mixed with the text color so that it reads at 4.5:1 at least. */
           --bk-accent-text: color-mix(in srgb, var(--bk-accent) 50%, var(--primary-text-color)); }
-  ha-card { overflow: hidden; container-type: inline-size; }
+  ha-card { overflow: hidden; container: bk-card / inline-size; }
   /* Natural width in a parent that sizes to its content (inline-block, grid "auto" column), without a minimum. */
   :host { display: block; min-width: 0; --bk-natural-width: 380px; }
   :host::before { content: ""; display: grid; grid-template-columns: minmax(0, var(--bk-natural-width)); height: 0; }
@@ -1237,13 +1347,27 @@ const BASE_STYLE = `
           flex: 0 1 auto; min-width: 0; max-width: 50%; overflow: hidden; box-sizing: border-box; }
   .chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 0; }
-  /* The chip sits on the title's line, whether a subtitle follows or not. */
-  .header .chip, .header .zoom { align-self: flex-start; margin-top: 10px; }
+  .header .zoom { align-self: flex-start; margin-top: 10px; }
+  .header > .titles { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  /* The status pill right after the title, its whole label on one line, while the title stays whole beside it
+     (measured by the card, see _fitPill); otherwise on its own line under a one-line subtitle, and with its dot alone
+     when even that does not fit the header. */
+  .ctline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .ctline > .name { flex: 0 1 auto; min-width: 0; }
+  .ctline > .chip { flex: none; max-width: none; }
+  .ctline > .chip .chip-text { white-space: nowrap; overflow: visible; }
+  .header > .titles.below { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .header > .titles.below > .ctline { display: contents; }
+  .header > .titles.below > .ctline > .chip { order: 3; justify-self: start; align-self: start; margin-top: 3px; }
+  .header > .titles.below > .sub { order: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header > .titles.dot-only > .ctline { display: flex; }
+  .header > .titles.dot-only > .ctline > .chip { order: 0; margin-top: 0; align-self: center; padding: 4px; }
+  .header > .titles.dot-only > .ctline > .chip .chip-text { display: none; }
   .type-icon { position: relative; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
                --bk-tint: var(--c, var(--bk-accent)); background: color-mix(in srgb, var(--bk-tint) 16%, transparent); transition: background-color .3s ease; }
   .type-icon .icon { width: 24px; height: 24px; fill: color-mix(in srgb, var(--bk-tint) 60%, var(--primary-text-color)); transition: fill .3s ease; }
   .titles { flex: 1 1 0; min-width: 5ch; }
-  :host([hide-title]) .titles > .name, :host([hide-subtitle]) .titles > .sub { display: none; }
+  :host([hide-title]) .titles > .name, :host([hide-title]) .titles > :is(.ctline, .tline) > .name, :host([hide-subtitle]) .titles > .sub { display: none; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sub { font-size: 12px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .warning { padding: 16px; color: color-mix(in srgb, var(--bk-warn) 50%, var(--primary-text-color)); }
@@ -1329,10 +1453,12 @@ const BASE_STYLE = `
           color: color-mix(in srgb, var(--c, var(--bk-idle)) 60%, var(--primary-text-color)); background: color-mix(in srgb, var(--c, var(--bk-idle)) 14%, transparent); }
   .pill .icon { width: 14px; height: 14px; color: var(--c, var(--bk-idle)); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
-  @container (max-width: 230px) {
+  @container bk-card (max-width: 230px) {
+    .header { gap: 6px; }
+  }
+  @container bk-card (max-width: 200px) {
     .chip { padding: 4px; flex: none; }
     .chip-text { display: none; }
-    .header { gap: 6px; }
   }
 `;
 
@@ -1373,6 +1499,13 @@ const MINI_STYLE = `
 
 // Element names of Home Assistant dialogs (a more-info opened from the card): a click there is not "elsewhere".
 const DIALOG_TAGS = new Set(["HA-MORE-INFO-DIALOG", "HA-DIALOG", "DIALOG"]);
+// The width of an element's whole text in fractional pixels, even while an ellipsis cuts it.
+const textWidth = (el) => {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  return range.getBoundingClientRect().width || el.scrollWidth;
+};
+
 const isOutside = (card, ev) => {
   const path = ev.composedPath();
   return !path.includes(card) && !path.some((n) => DIALOG_TAGS.has(n.tagName));
@@ -1542,7 +1675,7 @@ class CardBase extends HTMLElement {
     if (!h || !this._config) return null;
     const m = this._resolve();
     const ids = m ? this._entityIds(m) : [];
-    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
+    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, h.states?.["sun.sun"]?.state, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
   }
 
   _extraDeps() {
@@ -1560,6 +1693,52 @@ class CardBase extends HTMLElement {
     return this._model;
   }
 
+  // The header's status pill goes right after the title, on its row, only while the title stays whole and the
+  // pill's whole label fits beside it; otherwise it takes a line of its own under the subtitle (.below), the title
+  // whole on its row (cut only when it does not fit alone). There, in the banner, the subtitle keeps one line; if the
+  // text still does not fit above the ground strip, the pill keeps its dot alone (.dot-only, its label in its tooltip
+  // and for screen readers). Measured after each render and on each new width, whatever the language: no fixed
+  // width threshold.
+  _fitPill() {
+    if (!this.isConnected) return;
+    for (const t of this.shadowRoot?.querySelectorAll?.(".titles") || []) {
+      const row = t.querySelector(".tline, .ctline");
+      const pills = row ? [...row.children].filter((n) => n.matches(".chip")) : [];
+      if (!pills.length || !pills[0].getBoundingClientRect) continue;
+      t.classList.remove("below", "dot-only");
+      const name = row.querySelector(".name");
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+      const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
+      const need = pills.reduce((w, p) => w + p.getBoundingClientRect().width + gap, title - gap);
+      if (need > t.getBoundingClientRect().width - 0.5) {
+        t.classList.add("below");
+        const banner = t.closest(".banner");
+        if (banner) {
+          const b = banner.getBoundingClientRect();
+          // Each element as it shows: its box cut by its ancestors that hide their overflow (a clamped line).
+          const out = [...t.querySelectorAll("*")].some((n) => {
+            let { top, bottom } = n.getBoundingClientRect();
+            for (let p = n.parentElement; p && p !== t; p = p.parentElement) {
+              if (getComputedStyle(p).overflowY === "visible") continue;
+              top = Math.max(top, p.getBoundingClientRect().top);
+              bottom = Math.min(bottom, p.getBoundingClientRect().bottom);
+            }
+            return bottom - top > 0.5 && (top < b.top - 0.5 || bottom > b.bottom - (parseFloat(getComputedStyle(banner).getPropertyValue("--g")) || 10) + 0.5);
+          });
+          if (out) t.classList.add("dot-only");
+        }
+      }
+      // A subtitle cut by its ellipsis keeps its whole text in its tooltip.
+      const s = t.querySelector(".sub");
+      if (s && (!s.hasAttribute("title") || s.dataset.fit)) {
+        const cut = s.scrollWidth > s.clientWidth + 1;
+        s.toggleAttribute("data-fit", cut);
+        if (cut) s.title = s.textContent.trim();
+        else s.removeAttribute("title");
+      }
+    }
+  }
+
   connectedCallback() {
     // A click elsewhere on the page folds the sections back to their defaults and closes the popup.
     this._outside ??= watchOutside(
@@ -1572,6 +1751,18 @@ class CardBase extends HTMLElement {
       },
     );
     this._outside.on();
+    // A new width (or the web font loaded): the status pill is fitted again, in the next frame.
+    if (typeof ResizeObserver === "function") {
+      this._resize ??= new ResizeObserver((entries) => {
+        const w = Math.round(entries.at(-1).contentRect.width);
+        if (w === this._fitWidth) return;
+        this._fitWidth = w;
+        cancelAnimationFrame(this._fitFrame);
+        this._fitFrame = requestAnimationFrame(() => this._fitPill());
+      });
+      this._resize.observe(this);
+    }
+    document.fonts?.ready?.then(() => this._fitPill());
     if (this._dialog) window.addEventListener("keydown", this._onKey);
     clearInterval(this._tick);
     this._tick = setInterval(() => {
@@ -1583,6 +1774,8 @@ class CardBase extends HTMLElement {
 
   disconnectedCallback() {
     this._pressing = this._dirty = false;
+    this._resize?.disconnect();
+    this._fitWidth = null;
     window.removeEventListener("pointerup", this._onPressEnd, true);
     window.removeEventListener("pointercancel", this._onPressEnd, true);
     clearInterval(this._tick);
@@ -1651,6 +1844,7 @@ class CardBase extends HTMLElement {
       const kept = this._dialog || this._byPointer ? null : this._focusedSpot();
       this._html = html;
       this.shadowRoot.innerHTML = html;
+      this._fitPill();
       // Fields get back what was typed, and the caret when one had the focus.
       for (const el of this.shadowRoot.querySelectorAll?.("[data-keep]") || []) {
         const v = this._inputs[el.dataset.keep];
@@ -1829,16 +2023,15 @@ class CardBase extends HTMLElement {
       <div class="header">
         <div class="type-icon ${cls}">${extra}${svgIcon(icon)}</div>
         <div class="titles">
-          <div class="name">${esc(title)}</div>
+          <div class="ctline"><div class="name">${esc(title)}</div>${
+            chip
+              ? `<span class="chip ${chip.cls}${chip.entity ? " clickable" : ""}"${moreInfo(chip.entity)} title="${esc(chip.text)}" aria-label="${esc(
+                  chip.text,
+                )}"><span class="dot"></span><span class="chip-text">${esc(chip.text)}</span></span>`
+              : ""
+          }</div>
           ${sub ? `<div class="sub">${esc(sub)}</div>` : ""}
         </div>
-        ${
-          chip
-            ? `<span class="chip ${chip.cls}${chip.entity ? " clickable" : ""}"${moreInfo(chip.entity)} title="${esc(chip.text)}" aria-label="${esc(
-                chip.text,
-              )}"><span class="dot"></span><span class="chip-text">${esc(chip.text)}</span></span>`
-            : ""
-        }
         ${this._zoomButton()}
       </div>`;
   }
@@ -2310,6 +2503,145 @@ const BACKUP_STYLE = `
 `;
 
 // ---------------------------------------------------------------------------
+// Illustrated header
+// ---------------------------------------------------------------------------
+
+// The banner: the title on the left, over the wall of a server room; on the right (a 200 × 80 picture drawn to the
+// right edge, its empty left part cropped on a narrow card) the home server and its backup disk standing on the
+// floor, a link up to a cloud seen through the window. Its state is the worst one: up to date (a green check on the
+// cloud), running (packets go up the link, a turning arrow), late (an amber link and mark), failed (a red link and
+// mark, a red light on the server), no backup (a grey link). A 10 px concrete strip runs edge to edge under it.
+const BK_NO_VALUE = new Set(["unknown", "unavailable", "none", ""]);
+// Night picture: forced by illustration_theme, else the sun below the horizon or Home Assistant's dark mode
+// (the dark theme shows the night picture even while the sun is up; an unavailable sun leaves the dark mode alone).
+const bkIsNight = (hass, config) => {
+  const theme = config?.illustration_theme;
+  if (theme === "night") return true;
+  if (theme === "day") return false;
+  return hass?.states?.["sun.sun"]?.state === "below_horizon" || !!hass?.themes?.darkMode;
+};
+let bkUid = 0;
+const BK_LINK = "M124 42 Q138 14 164 27";
+// `state`: ok, running, late, failed or idle; `uid` keeps each card's ids apart on a page with several cards.
+const bkSceneSvg = (state, uid) => {
+  const leds = [0, 1, 2]
+    .map(
+      (i) =>
+        `<rect class="bk-bay" x="104" y="${46 + i * 10}" width="26" height="8" rx="1"/><rect class="bk-slot2" x="113" y="${49.2 + i * 10}" width="13" height="1.6" rx=".8"/><circle class="bk-led${
+          state === "failed" && i === 1 ? " bad" : ""
+        }" cx="108" cy="${50 + i * 10}" r="1.3" style="animation-delay:${i * 0.3}s"/>`,
+    )
+    .join("");
+  const packets =
+    state === "running"
+      ? [0, 1, 2].map((i) => `<rect class="bk-pk" x="-2.6" y="-2.6" width="5.2" height="5.2" rx="1" style="animation-delay:-${(i * 0.6).toFixed(1)}s;--d:${25 + i * 25}%"/>`).join("")
+      : "";
+  const mark = (cls, x, y) =>
+    `<g class="bk-mark ${cls}" transform="translate(${x} ${y})"><circle r="6.5"/><path class="bk-mark-line" d="M0 -3.2v3.6M0 2.8v.3"/></g>`;
+  const badge = {
+    ok: '<g class="bk-mark ok" transform="translate(186 40)"><circle r="6.5"/><path class="bk-mark-line" d="M-2.8 0l1.9 1.9 3.6-3.8"/></g>',
+    running:
+      '<g class="bk-mark active" transform="translate(186 40)"><circle r="6.5"/><g class="bk-turn"><circle r="3.4" fill="none"/><path class="bk-mark-line" d="M0 -3.2a3.2 3.2 0 1 1 -3.2 3.2"/></g></g>',
+    failed: mark("crit blink", 141, 24),
+    late: mark("warn", 141, 24),
+  }[state] || "";
+  const stars = [
+    [158, 14, 0.7],
+    [170, 10, 0.5],
+    [189, 14, 0.6],
+    [160, 42, 0.5],
+  ]
+    .map(([x, y, r]) => `<circle class="bk-star" cx="${x}" cy="${y}" r="${r}"/>`)
+    .join("");
+  return `<svg class="bk-scene" viewBox="0 0 200 80" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+    <defs><clipPath id="bk-win-${uid}"><rect x="151" y="7" width="42" height="40"/></clipPath></defs>
+    <rect class="bk-frame" x="150" y="6" width="44" height="42" rx="2"/>
+    <g clip-path="url(#bk-win-${uid})"><g class="bk-night-only">${stars}</g><path class="bk-puff" d="M154 16a3 3 0 0 1 5 -1.6a3.6 3.6 0 0 1 6.6 1.8a2 2 0 0 1 0 3.8h-10a2 2 0 0 1 -1.6 -4z"/></g>
+    <g transform="translate(150 6) scale(1.2)"><path class="bk-cloud ${state}" d="M14 22a8 8 0 0 1 15 -3a6 6 0 0 1 6 10h-23a6 6 0 0 1 2 -7z"/></g>
+    <path class="bk-link ${state}" d="${BK_LINK}"/>${packets}
+    <rect class="bk-server" x="100" y="42" width="34" height="38" rx="3"/>${leds}
+    <rect class="bk-disk" x="140" y="64" width="16" height="16" rx="2"/><rect class="bk-disk-top" x="143" y="67" width="10" height="2" rx="1"/><circle class="bk-led" cx="148" cy="75" r="1.1"/>
+    ${badge}
+  </svg>`;
+};
+
+const BK_BANNER_STYLE = `
+  .banner { position: relative; overflow: hidden; height: 90px; --g: 10px; --sw: min(200px, max(104px, 42%));
+            background: #e7eaee; color: #0d2a45; }
+  .banner.night { background: #232a36; color: #fff; }
+  .bk-scene { position: absolute; right: 0; bottom: var(--g); height: calc(100% - var(--g)); width: var(--sw); }
+  .bk-ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--g); background: #9aa1a9; box-shadow: inset 0 2px 0 #b5bbc2; }
+  .night .bk-ground { background: #2c323b; box-shadow: inset 0 2px 0 #3a414c; }
+  .htext { position: absolute; z-index: 1; left: 12px; top: 0; bottom: var(--g); right: calc(var(--sw) + 4px); display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .htext .titles { flex: 1 1 0; align-self: stretch; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr);
+                   align-content: center; row-gap: 2px; }
+  /* The status pill right after the title, centred on it, in the icon's color. */
+  /* The status pill right after the title, its whole label on one line, while the title stays whole beside it
+     (measured by the card, see _fitPill); otherwise on its own line under a one-line subtitle, and with its dot alone
+     when even that does not fit the header. */
+  .tline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .tline > .name { flex: 0 1 auto; min-width: 0; }
+  .tline > .chip { flex: none; max-width: none; }
+  .tline > .chip .chip-text { white-space: nowrap; overflow: visible; }
+  .htext .titles.below { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .htext .titles.below > .tline { display: contents; }
+  .htext .titles.below > .tline > .chip { order: 3; justify-self: start; align-self: start; margin-top: 3px; }
+  .htext .titles.below > .sub { order: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .htext .titles.dot-only > .tline { display: flex; }
+  .htext .titles.dot-only > .tline > .chip { order: 0; margin-top: 0; align-self: center; padding: 4px; }
+  .htext .titles.dot-only > .tline > .chip .chip-text { display: none; }
+  .banner .chip { margin: 0; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px;
+                  background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
+  .banner.night .chip { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
+  .banner .chip .dot { width: 7px; height: 7px; }
+  @container bk-card (max-width: 200px) { .banner .chip { padding: 4px; } .banner .chip .chip-text { display: none; } }
+  .htext .name { font-size: 16px; font-weight: 500; }
+  .htext .sub { font-size: 13px; color: #3b5b78; }
+  .night .htext .sub { color: rgba(255,255,255,.78); }
+  /* The round icon on the wall: its color is the worst status (green, blue while running, amber, red, grey). */
+  .banner .type-icon { background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bk-tint) 22%, transparent); }
+  .banner .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 82%, #0d2a45); }
+  .banner.night .type-icon { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .banner.night .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 72%, #fff); }
+  /* The mini card's expand / collapse button: a 24 px frosted disc in the banner's top-right corner. */
+  .banner .zoom { position: absolute; z-index: 2; top: 5px; right: 5px; margin: 0; width: 24px; height: 24px; color: #33506b; background: rgba(255,255,255,.55);
+                  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .banner .zoom:hover { background: rgba(255,255,255,.75); color: #33506b; }
+  .banner.night .zoom { color: #fff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+  .banner.night .zoom:hover { background: rgba(255,255,255,.22); color: #fff; }
+  .bk-frame { fill: #cfe8f8; stroke: #fff; stroke-width: 2; }
+  .night .bk-frame { fill: #1b2f52; stroke: #4a5568; }
+  .bk-puff { fill: #fff; opacity: .75; }
+  .night .bk-puff { opacity: .12; }
+  .bk-night-only { display: none; } .night .bk-night-only { display: inline; }
+  .bk-star { fill: #fff; animation: bk-twinkle 1.2s ease-in-out infinite; }
+  .bk-star:nth-child(2n) { animation-delay: -.6s; }
+  .bk-cloud { fill: #fff; stroke: var(--bk-active); stroke-width: 1.2; }
+  .bk-cloud.failed { stroke: var(--bk-crit); } .bk-cloud.late { stroke: var(--bk-warn); } .bk-cloud.idle { stroke: #9aa3ae; }
+  .bk-link { fill: none; stroke: #9aa3ae; stroke-width: 1.6; stroke-dasharray: 3 3; }
+  .night .bk-link { stroke: #5a6578; }
+  .bk-link.running { stroke: color-mix(in srgb, var(--bk-active) 55%, #9aa3ae); animation: bk-flow .6s linear infinite; }
+  .bk-link.failed { stroke: var(--bk-crit); } .bk-link.late { stroke: var(--bk-warn); }
+  .bk-pk { fill: var(--bk-active); offset-path: path("${BK_LINK}"); offset-rotate: 0deg; animation: bk-pk 1.8s linear infinite; }
+  .bk-server { fill: #2a3038; } .night .bk-server { fill: #1d2229; stroke: #3c4558; stroke-width: .8; }
+  .bk-bay { fill: #3d4552; } .bk-slot2 { fill: #56606e; }
+  .bk-led { fill: #43c463; animation: bk-blink 1.2s steps(2) infinite; } .bk-led.bad { fill: var(--bk-crit); }
+  .bk-disk { fill: #5f6b7a; } .night .bk-disk { fill: #4a5462; } .bk-disk-top { fill: #9aa3ae; }
+  .bk-mark circle { fill: var(--c); } .bk-mark .bk-turn circle { fill: none; }
+  .bk-mark-line { fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .bk-mark.blink { animation: bk-blink 1.2s steps(2) infinite; }
+  .bk-turn { transform-box: fill-box; transform-origin: center; animation: bk-spin 1.2s linear infinite; }
+  @keyframes bk-pk { from { offset-distance: 0%; opacity: 0; } 15%, 85% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+  @keyframes bk-flow { to { stroke-dashoffset: -6; } }
+  @keyframes bk-blink { 50% { opacity: .25; } }
+  @keyframes bk-twinkle { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+  /* Still: the packets wait along the link. Every period divides 1.2 s, so that the README's GIF loops. */
+  @media (prefers-reduced-motion: reduce) { .bk-pk { offset-distance: var(--d); } }
+  /* Too narrow for the picture beside the title and the status pill: the wall alone stays. */
+  @container (max-width: 260px) { .bk-scene { display: none; } .htext { right: 36px; } }
+`;
+
+// ---------------------------------------------------------------------------
 // Cards
 // ---------------------------------------------------------------------------
 
@@ -2331,7 +2663,7 @@ class BackupCard extends CardBase {
   }
 
   _extraDeps() {
-    return [this._startedAt];
+    return [this._startedAt, this._hass?.states?.["sun.sun"]?.state];
   }
 
   _emptyKey(m) {
@@ -2441,8 +2773,35 @@ class BackupCard extends CardBase {
     return `<div class="hero"><div class="hero-art">${art(sum.worst.status, sum.items.some((x) => x.running))}</div><div class="hero-body">${big}${lines.join("")}</div></div>`;
   }
 
+  // The state the banner shows: the worst one, running when a backup runs and none failed or is late.
+  _sceneState(sum) {
+    const w = sum.worst.status;
+    if (w === "failed" || w === "late") return w;
+    if (sum.items.some((x) => x.running)) return "running";
+    return w === "ok" ? "ok" : "idle";
+  }
+
+  // The illustrated banner (`illustration: false`: the classic header, with the status chip). On the banner the
+  // status is the icon's color and the subtitle; the icon opens the entity the chip would open.
   _head(sum, sub) {
-    return this._header({ icon: ICONS.backup, cls: CLS[sum.worst.status], title: this._config.title || this._t("backups"), sub, chip: sum.chip });
+    const c = this._config;
+    const title = c.title || this._t("backups");
+    if (c.illustration === false) return this._header({ icon: ICONS.backup, cls: CLS[sum.worst.status], title, sub, chip: sum.chip });
+    this._uid ??= ++bkUid;
+    const state = this._sceneState(sum);
+    const cls = { ok: "ok", running: "active", late: "warn", failed: "crit", idle: "idle" }[state];
+    // The status pill in the icon's color; the subtitle keeps the counts (failed, late, running), never the status again.
+    const label = state === "running" ? this._t("running") : sum.chip.text;
+    const pill = `<span class="chip ${cls}${sum.chip.entity ? " clickable" : ""}"${moreInfo(sum.chip.entity)} title="${esc(label)}" aria-label="${esc(
+      label,
+    )}"><span class="dot"></span><span class="chip-text">${esc(label)}</span></span>`;
+    return `<div class="banner bk-${state}${bkIsNight(this._hass, c) ? " night" : ""}">${bkSceneSvg(state, this._uid)}<div class="bk-ground" aria-hidden="true"></div>
+      <div class="htext"><div class="type-icon ${cls}${sum.chip.entity ? " clickable" : ""}"${moreInfo(sum.chip.entity)} title="${esc(sum.chip.text)}" aria-label="${esc(sum.chip.text)}">${svgIcon(ICONS.cloud)}</div>
+        <div class="titles"><div class="tline"><div class="name">${esc(title)}</div>${pill}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</div></div>${this._zoomButton()}</div>`;
+  }
+
+  _bannerStyle() {
+    return this._config.illustration === false ? "" : BK_BANNER_STYLE;
   }
 
   _render() {
@@ -2452,7 +2811,7 @@ class BackupCard extends CardBase {
     const parts = [];
     if (this._config.show_stats !== false) parts.push(this._hero(sum));
     parts.push(this._section("backups", ICONS.database, this._t("backups"), sum.items.length, `<div class="rows">${sum.items.map((it) => this._row(it)).join("")}</div>`));
-    return `<style>${BASE_STYLE}${BACKUP_STYLE}</style>
+    return `<style>${BASE_STYLE}${BACKUP_STYLE}${this._bannerStyle()}</style>
       <ha-card>
         ${this._head(sum, sum.sub)}
         <div class="content">${parts.join("")}</div>
@@ -2505,7 +2864,7 @@ class BackupMiniCard extends withMini(BackupCard) {
     // The run button of the first source that can start a backup (Home Assistant's own first).
     const first = sum.items.find((it) => this._runButton(it, true));
     const controls = first ? this._runButton(first, true) : "";
-    return `<style>${BASE_STYLE}${BACKUP_STYLE}${MINI_STYLE}</style>
+    return `<style>${BASE_STYLE}${BACKUP_STYLE}${MINI_STYLE}${this._bannerStyle()}</style>
       <ha-card>
         ${this._head(sum, "")}
         <div class="content mini">
@@ -2524,6 +2883,7 @@ class BackupMiniCard extends withMini(BackupCard) {
 class BackupCardEditor extends EditorBase {
   static get toggles() {
     return [
+      ["illustration", true],
       ["show_title", true],
       ["show_subtitle", true],
       ["show_stats", true],
@@ -2537,10 +2897,16 @@ class BackupCardEditor extends EditorBase {
     return ["backups"];
   }
 
+  static get defaults() {
+    return { illustration_theme: "auto" };
+  }
+
   _fields() {
+    const tr = (k) => t(this._hass, this._config, k);
     return [
       { name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } },
       { name: "max_age", selector: { number: { min: 1, max: 24 * 60, mode: "box", unit_of_measurement: "h" } } },
+      { name: "illustration_theme", selector: { select: { mode: "dropdown", options: ["auto", "day", "night"].map((value) => ({ value, label: tr(`theme_${value}`) })) } } },
     ];
   }
 }

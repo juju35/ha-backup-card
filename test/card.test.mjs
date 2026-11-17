@@ -110,13 +110,52 @@ test("the limit: max_age of the card, or of one backup", async () => {
   assert.equal(bk.sourceState(makeHass(), m[0], { now: NOW }).status, "ok");
 });
 
-test("header: the worst status in the chip, the counts in the subtitle", async () => {
-  const { html } = await mount();
+test("classic header (illustration: false): the worst status in the chip, the counts in the subtitle", async () => {
+  const { html } = await mount({ illustration: false });
   assert.match(html(), /1 failed · 1 late/);
   assert.match(html(), /class="chip crit[^"]*"[^>]*title="Failed"/);
-  const ok = await mount({}, "ok");
+  assert.doesNotMatch(html(), /class="banner/);
+  const ok = await mount({ illustration: false }, "ok");
   assert.match(ok.html(), /All up to date/);
   assert.match(ok.html(), /chip ok/);
+});
+
+test("illustrated header: the scene, the icon's color and the subtitle follow the worst status", async () => {
+  const { html } = await mount();
+  assert.match(html(), /class="banner bk-failed/);
+  assert.match(html(), /class="type-icon crit[^"]*"[^>]*title="Failed"/);
+  assert.match(html(), /1 failed · 1 late/);
+  assert.match(html(), /class="bk-ground"/);
+  const ok = await mount({}, "ok");
+  assert.match(ok.html(), /class="banner bk-ok/);
+  assert.match(ok.html(), /class="type-icon ok/);
+  assert.match(ok.html(), /class="bk-mark ok"/);
+  const run = await mount({}, "running");
+  assert.match(run.html(), /class="banner bk-running/);
+  assert.match(run.html(), /class="type-icon active/);
+  assert.equal((run.html().match(/class="bk-pk"/g) || []).length, 3);
+});
+
+test("illustrated header: night by illustration_theme, sun.sun or the dark theme, and ids per card", async () => {
+  assert.match((await mount({ illustration_theme: "night" })).html(), /class="banner bk-failed night"/);
+  assert.doesNotMatch((await mount({ illustration_theme: "day" })).html(), /night"/);
+  const sky = async (sun, dark, config = {}) => {
+    const { card, hass, html } = await mount(config);
+    card.hass = { ...hass, states: { ...hass.states, "sun.sun": { entity_id: "sun.sun", state: sun } }, themes: { darkMode: dark } };
+    await new Promise((r) => setTimeout(r, 0));
+    return /class="banner [^"]*\bnight"/.test(html());
+  };
+  assert.equal(await sky("above_horizon", true), true, "dark theme while the sun is up: night");
+  assert.equal(await sky("above_horizon", false), false, "light theme while the sun is up: day");
+  assert.equal(await sky("below_horizon", false), true);
+  assert.equal(await sky("unavailable", true), true);
+  assert.equal(await sky("above_horizon", true, { illustration_theme: "day" }), false);
+  assert.equal(await sky("above_horizon", false, { illustration_theme: "night" }), true);
+  const a = await mount();
+  const b = await mount();
+  const id = (h) => h.match(/id="(bk-win-\d+)"/)[1];
+  assert.notEqual(id(a.html()), id(b.html()));
+  assert.match(a.html(), new RegExp(`url\\(#${id(a.html())}\\)`));
 });
 
 test("rows: the last backup, the size and the next one, and the age", async () => {

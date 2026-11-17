@@ -53,7 +53,7 @@ const base = () => {
 
 // The variants of the captures:
 //   default — as above: three up to date, one late, one failed
-//   running — Home Assistant and Backrest are backing up
+//   running — Home Assistant and Backrest are backing up, the others up to date (the banner shows the packets)
 //   ok      — everything up to date
 export const mockData = (variant = "default") => {
   const d = base();
@@ -61,7 +61,7 @@ export const mockData = (variant = "default") => {
     d.states["sensor.sauvegarde_etat"].state = "create_backup";
     d.states["binary_sensor.photos_en_cours"].state = "on";
   }
-  if (variant === "ok") {
+  if (variant === "ok" || variant === "running") {
     d.states["sensor.pve_derniere_sauvegarde"].state = iso(Date.parse("2026-11-16T01:00:00Z"));
     d.states["sensor.documents_statut"].state = "Success";
     d.states["sensor.documents_derniere"].state = iso(Date.parse("2026-11-16T02:04:00Z"));
