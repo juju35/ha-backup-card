@@ -1,6 +1,6 @@
 {
   "name": "ha-backup-card",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Lovelace cards for Home Assistant: your backups: Home Assistant, Proxmox VE, Duplicati, Backrest and more, with the age of the last good one against its limit.",
   "private": true,
   "type": "module",
