@@ -91,6 +91,11 @@ const STRINGS = {
     show_subtitle: "Show subtitle",
     no_registry: "This card needs Home Assistant 2024.8 or later.",
     unavailable: "Unavailable",
+    illustration: "Animated illustration",
+    illustration_theme: "Illustration theme",
+    theme_auto: "Automatic (sun)",
+    theme_day: "Day",
+    theme_night: "Night",
   },
   fr: {
     backups: "Sauvegardes",
@@ -138,6 +143,11 @@ const STRINGS = {
     show_subtitle: "Afficher le sous-titre",
     no_registry: "Cette carte nécessite Home Assistant 2024.8 ou plus récent.",
     unavailable: "Indisponible",
+    illustration: "Illustration animée",
+    illustration_theme: "Thème de l’illustration",
+    theme_auto: "Automatique (soleil)",
+    theme_day: "Jour",
+    theme_night: "Nuit",
   },
   de: {
     backups: "Backups",
@@ -185,6 +195,11 @@ const STRINGS = {
     show_subtitle: "Untertitel anzeigen",
     no_registry: "Diese Karte benötigt Home Assistant 2024.8 oder neuer.",
     unavailable: "Nicht verfügbar",
+    illustration: "Animierte Illustration",
+    illustration_theme: "Thema der Illustration",
+    theme_auto: "Automatisch (Sonne)",
+    theme_day: "Tag",
+    theme_night: "Nacht",
   },
   es: {
     backups: "Copias de seguridad",
@@ -232,6 +247,11 @@ const STRINGS = {
     show_subtitle: "Mostrar subtítulo",
     no_registry: "Esta tarjeta necesita Home Assistant 2024.8 o posterior.",
     unavailable: "No disponible",
+    illustration: "Ilustración animada",
+    illustration_theme: "Tema de la ilustración",
+    theme_auto: "Automático (sol)",
+    theme_day: "Día",
+    theme_night: "Noche",
   },
   it: {
     backups: "Backup",
@@ -279,6 +299,11 @@ const STRINGS = {
     show_subtitle: "Mostra sottotitolo",
     no_registry: "Questa scheda richiede Home Assistant 2024.8 o successivo.",
     unavailable: "Non disponibile",
+    illustration: "Illustrazione animata",
+    illustration_theme: "Tema dell’illustrazione",
+    theme_auto: "Automatico (sole)",
+    theme_day: "Giorno",
+    theme_night: "Notte",
   },
   nl: {
     backups: "Back-ups",
@@ -326,6 +351,11 @@ const STRINGS = {
     show_subtitle: "Ondertitel tonen",
     no_registry: "Deze kaart vereist Home Assistant 2024.8 of nieuwer.",
     unavailable: "Niet beschikbaar",
+    illustration: "Geanimeerde illustratie",
+    illustration_theme: "Thema van de illustratie",
+    theme_auto: "Automatisch (zon)",
+    theme_day: "Dag",
+    theme_night: "Nacht",
   },
   pt: {
     backups: "Cópias de segurança",
@@ -373,6 +403,11 @@ const STRINGS = {
     show_subtitle: "Mostrar subtítulo",
     no_registry: "Este cartão requer o Home Assistant 2024.8 ou posterior.",
     unavailable: "Indisponível",
+    illustration: "Ilustração animada",
+    illustration_theme: "Tema da ilustração",
+    theme_auto: "Automático (sol)",
+    theme_day: "Dia",
+    theme_night: "Noite",
   },
   pl: {
     backups: "Kopie zapasowe",
@@ -420,6 +455,11 @@ const STRINGS = {
     show_subtitle: "Pokaż podtytuł",
     no_registry: "Ta karta wymaga Home Assistant 2024.8 lub nowszego.",
     unavailable: "Niedostępne",
+    illustration: "Animowana ilustracja",
+    illustration_theme: "Motyw ilustracji",
+    theme_auto: "Automatycznie (słońce)",
+    theme_day: "Dzień",
+    theme_night: "Noc",
   },
   sr: {
     backups: "Резервне копије",
@@ -467,6 +507,11 @@ const STRINGS = {
     show_subtitle: "Прикажи поднаслов",
     no_registry: "Ова картица захтева Home Assistant 2024.8 или новији.",
     unavailable: "Недоступно",
+    illustration: "Анимирана илустрација",
+    illustration_theme: "Тема илустрације",
+    theme_auto: "Аутоматски (сунце)",
+    theme_day: "Дан",
+    theme_night: "Ноћ",
   },
   "sr-Latn": {
     backups: "Rezervne kopije",
@@ -514,6 +559,11 @@ const STRINGS = {
     show_subtitle: "Prikaži podnaslov",
     no_registry: "Ova kartica zahteva Home Assistant 2024.8 ili noviji.",
     unavailable: "Nedostupno",
+    illustration: "Animirana ilustracija",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Automatski (sunce)",
+    theme_day: "Dan",
+    theme_night: "Noć",
   },
   ro: {
     backups: "Copii de rezervă",
@@ -561,6 +611,11 @@ const STRINGS = {
     show_subtitle: "Afișează subtitlul",
     no_registry: "Acest card necesită Home Assistant 2024.8 sau mai nou.",
     unavailable: "Indisponibil",
+    illustration: "Ilustrație animată",
+    illustration_theme: "Tema ilustrației",
+    theme_auto: "Automat (soare)",
+    theme_day: "Zi",
+    theme_night: "Noapte",
   },
   da: {
     backups: "Sikkerhedskopier",
@@ -608,6 +663,11 @@ const STRINGS = {
     show_subtitle: "Vis undertitel",
     no_registry: "Dette kort kræver Home Assistant 2024.8 eller nyere.",
     unavailable: "Utilgængelig",
+    illustration: "Animeret illustration",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatisk (sol)",
+    theme_day: "Dag",
+    theme_night: "Nat",
   },
   sv: {
     backups: "Säkerhetskopior",
@@ -655,6 +715,11 @@ const STRINGS = {
     show_subtitle: "Visa undertitel",
     no_registry: "Det här kortet kräver Home Assistant 2024.8 eller senare.",
     unavailable: "Otillgänglig",
+    illustration: "Animerad illustration",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatiskt (sol)",
+    theme_day: "Dag",
+    theme_night: "Natt",
   },
   bg: {
     backups: "Резервни копия",
@@ -702,6 +767,11 @@ const STRINGS = {
     show_subtitle: "Покажи подзаглавие",
     no_registry: "Тази карта изисква Home Assistant 2024.8 или по-нов.",
     unavailable: "Недостъпно",
+    illustration: "Анимирана илюстрация",
+    illustration_theme: "Тема на илюстрацията",
+    theme_auto: "Автоматично (слънце)",
+    theme_day: "Ден",
+    theme_night: "Нощ",
   },
   ru: {
     backups: "Резервные копии",
@@ -749,6 +819,11 @@ const STRINGS = {
     show_subtitle: "Показывать подзаголовок",
     no_registry: "Для этой карточки нужен Home Assistant 2024.8 или новее.",
     unavailable: "Недоступно",
+    illustration: "Анимированная иллюстрация",
+    illustration_theme: "Тема иллюстрации",
+    theme_auto: "Автоматически (солнце)",
+    theme_day: "День",
+    theme_night: "Ночь",
   },
   uk: {
     backups: "Резервні копії",
@@ -796,6 +871,11 @@ const STRINGS = {
     show_subtitle: "Показувати підзаголовок",
     no_registry: "Для цієї картки потрібен Home Assistant 2024.8 або новіший.",
     unavailable: "Недоступно",
+    illustration: "Анімована ілюстрація",
+    illustration_theme: "Тема ілюстрації",
+    theme_auto: "Автоматично (сонце)",
+    theme_day: "День",
+    theme_night: "Ніч",
   },
   hu: {
     backups: "Biztonsági mentések",
@@ -843,6 +923,11 @@ const STRINGS = {
     show_subtitle: "Alcím megjelenítése",
     no_registry: "Ehhez a kártyához Home Assistant 2024.8 vagy újabb szükséges.",
     unavailable: "Nem elérhető",
+    illustration: "Animált illusztráció",
+    illustration_theme: "Az illusztráció témája",
+    theme_auto: "Automatikus (nap)",
+    theme_day: "Nappal",
+    theme_night: "Éjszaka",
   },
   sk: {
     backups: "Zálohy",
@@ -890,6 +975,11 @@ const STRINGS = {
     show_subtitle: "Zobraziť podnadpis",
     no_registry: "Táto karta vyžaduje Home Assistant 2024.8 alebo novší.",
     unavailable: "Nedostupné",
+    illustration: "Animovaná ilustrácia",
+    illustration_theme: "Téma ilustrácie",
+    theme_auto: "Automaticky (slnko)",
+    theme_day: "Deň",
+    theme_night: "Noc",
   },
   cs: {
     backups: "Zálohy",
@@ -937,6 +1027,11 @@ const STRINGS = {
     show_subtitle: "Zobrazit podtitul",
     no_registry: "Tato karta vyžaduje Home Assistant 2024.8 nebo novější.",
     unavailable: "Nedostupné",
+    illustration: "Animovaná ilustrace",
+    illustration_theme: "Motiv ilustrace",
+    theme_auto: "Automaticky (slunce)",
+    theme_day: "Den",
+    theme_night: "Noc",
   },
   sl: {
     backups: "Varnostne kopije",
@@ -984,6 +1079,11 @@ const STRINGS = {
     show_subtitle: "Prikaži podnaslov",
     no_registry: "Ta kartica potrebuje Home Assistant 2024.8 ali novejši.",
     unavailable: "Ni na voljo",
+    illustration: "Animirana ilustracija",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Samodejno (sonce)",
+    theme_day: "Dan",
+    theme_night: "Noč",
   },
   lv: {
     backups: "Rezerves kopijas",
@@ -1031,6 +1131,11 @@ const STRINGS = {
     show_subtitle: "Rādīt apakšvirsrakstu",
     no_registry: "Šai kartītei nepieciešams Home Assistant 2024.8 vai jaunāks.",
     unavailable: "Nav pieejams",
+    illustration: "Animēta ilustrācija",
+    illustration_theme: "Ilustrācijas motīvs",
+    theme_auto: "Automātiski (saule)",
+    theme_day: "Diena",
+    theme_night: "Nakts",
   },
   el: {
     backups: "Αντίγραφα ασφαλείας",
@@ -1078,6 +1183,11 @@ const STRINGS = {
     show_subtitle: "Εμφάνιση υπότιτλου",
     no_registry: "Αυτή η κάρτα απαιτεί Home Assistant 2024.8 ή νεότερο.",
     unavailable: "Μη διαθέσιμο",
+    illustration: "Κινούμενη εικονογράφηση",
+    illustration_theme: "Θέμα εικονογράφησης",
+    theme_auto: "Αυτόματα (ήλιος)",
+    theme_day: "Ημέρα",
+    theme_night: "Νύχτα",
   },
 };
 
@@ -2310,6 +2420,121 @@ const BACKUP_STYLE = `
 `;
 
 // ---------------------------------------------------------------------------
+// Illustrated header
+// ---------------------------------------------------------------------------
+
+// The banner: the title on the left, over the wall of a server room; on the right (a 200 × 80 picture drawn to the
+// right edge, its empty left part cropped on a narrow card) the home server and its backup disk standing on the
+// floor, a link up to a cloud seen through the window. Its state is the worst one: up to date (a green check on the
+// cloud), running (packets go up the link, a turning arrow), late (an amber link and mark), failed (a red link and
+// mark, a red light on the server), no backup (a grey link). A 10 px concrete strip runs edge to edge under it.
+const BK_NO_VALUE = new Set(["unknown", "unavailable", "none", ""]);
+// Night picture: forced by illustration_theme, else the sun below the horizon, else Home Assistant's dark mode.
+const bkIsNight = (hass, config) => {
+  const theme = config?.illustration_theme;
+  if (theme === "night") return true;
+  if (theme === "day") return false;
+  const sun = hass?.states?.["sun.sun"];
+  if (sun && !BK_NO_VALUE.has(String(sun.state))) return sun.state === "below_horizon";
+  return !!hass?.themes?.darkMode;
+};
+let bkUid = 0;
+const BK_LINK = "M124 42 Q138 14 164 27";
+// `state`: ok, running, late, failed or idle; `uid` keeps each card's ids apart on a page with several cards.
+const bkSceneSvg = (state, uid) => {
+  const leds = [0, 1, 2]
+    .map(
+      (i) =>
+        `<rect class="bk-bay" x="104" y="${46 + i * 10}" width="26" height="8" rx="1"/><rect class="bk-slot2" x="113" y="${49.2 + i * 10}" width="13" height="1.6" rx=".8"/><circle class="bk-led${
+          state === "failed" && i === 1 ? " bad" : ""
+        }" cx="108" cy="${50 + i * 10}" r="1.3" style="animation-delay:${i * 0.3}s"/>`,
+    )
+    .join("");
+  const packets =
+    state === "running"
+      ? [0, 1, 2].map((i) => `<rect class="bk-pk" x="-2.6" y="-2.6" width="5.2" height="5.2" rx="1" style="animation-delay:-${(i * 0.6).toFixed(1)}s;--d:${25 + i * 25}%"/>`).join("")
+      : "";
+  const mark = (cls, x, y) =>
+    `<g class="bk-mark ${cls}" transform="translate(${x} ${y})"><circle r="6.5"/><path class="bk-mark-line" d="M0 -3.2v3.6M0 2.8v.3"/></g>`;
+  const badge = {
+    ok: '<g class="bk-mark ok" transform="translate(186 40)"><circle r="6.5"/><path class="bk-mark-line" d="M-2.8 0l1.9 1.9 3.6-3.8"/></g>',
+    running:
+      '<g class="bk-mark active" transform="translate(186 40)"><circle r="6.5"/><g class="bk-turn"><circle r="3.4" fill="none"/><path class="bk-mark-line" d="M0 -3.2a3.2 3.2 0 1 1 -3.2 3.2"/></g></g>',
+    failed: mark("crit blink", 141, 24),
+    late: mark("warn", 141, 24),
+  }[state] || "";
+  const stars = [
+    [158, 14, 0.7],
+    [170, 10, 0.5],
+    [189, 14, 0.6],
+    [160, 42, 0.5],
+  ]
+    .map(([x, y, r]) => `<circle class="bk-star" cx="${x}" cy="${y}" r="${r}"/>`)
+    .join("");
+  return `<svg class="bk-scene" viewBox="0 0 200 80" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+    <defs><clipPath id="bk-win-${uid}"><rect x="151" y="7" width="42" height="40"/></clipPath></defs>
+    <rect class="bk-frame" x="150" y="6" width="44" height="42" rx="2"/>
+    <g clip-path="url(#bk-win-${uid})"><g class="bk-night-only">${stars}</g><path class="bk-puff" d="M154 16a3 3 0 0 1 5 -1.6a3.6 3.6 0 0 1 6.6 1.8a2 2 0 0 1 0 3.8h-10a2 2 0 0 1 -1.6 -4z"/></g>
+    <g transform="translate(150 6) scale(1.2)"><path class="bk-cloud ${state}" d="M14 22a8 8 0 0 1 15 -3a6 6 0 0 1 6 10h-23a6 6 0 0 1 2 -7z"/></g>
+    <path class="bk-link ${state}" d="${BK_LINK}"/>${packets}
+    <rect class="bk-server" x="100" y="42" width="34" height="38" rx="3"/>${leds}
+    <rect class="bk-disk" x="140" y="64" width="16" height="16" rx="2"/><rect class="bk-disk-top" x="143" y="67" width="10" height="2" rx="1"/><circle class="bk-led" cx="148" cy="75" r="1.1"/>
+    ${badge}
+  </svg>`;
+};
+
+const BK_BANNER_STYLE = `
+  .banner { position: relative; overflow: hidden; height: 90px; --g: 10px; --sw: min(200px, max(104px, 42%));
+            background: #e7eaee; color: #0d2a45; }
+  .banner.night { background: #232a36; color: #fff; }
+  .bk-scene { position: absolute; right: 0; bottom: var(--g); height: calc(100% - var(--g)); width: var(--sw); }
+  .bk-ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--g); background: #9aa1a9; box-shadow: inset 0 2px 0 #b5bbc2; }
+  .night .bk-ground { background: #2c323b; box-shadow: inset 0 2px 0 #3a414c; }
+  .htext { position: absolute; z-index: 1; left: 12px; top: 0; bottom: var(--g); right: calc(var(--sw) + 4px); display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .htext .titles { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .htext .name { font-size: 16px; font-weight: 500; }
+  .htext .sub { font-size: 13px; color: #3b5b78; }
+  .night .htext .sub { color: rgba(255,255,255,.78); }
+  /* The round icon on the wall: its color is the worst status (green, blue while running, amber, red, grey). */
+  .banner .type-icon { background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bk-tint) 22%, transparent); }
+  .banner .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 82%, #0d2a45); }
+  .banner.night .type-icon { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .banner.night .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 72%, #fff); }
+  .banner .zoom { position: absolute; z-index: 2; top: 6px; right: 6px; margin: 0; color: #0d2a45; background: rgba(255,255,255,.55); }
+  .banner.night .zoom { color: #fff; background: rgba(10,20,40,.45); }
+  .bk-frame { fill: #cfe8f8; stroke: #fff; stroke-width: 2; }
+  .night .bk-frame { fill: #1b2f52; stroke: #4a5568; }
+  .bk-puff { fill: #fff; opacity: .75; }
+  .night .bk-puff { opacity: .12; }
+  .bk-night-only { display: none; } .night .bk-night-only { display: inline; }
+  .bk-star { fill: #fff; animation: bk-twinkle 1.2s ease-in-out infinite; }
+  .bk-star:nth-child(2n) { animation-delay: -.6s; }
+  .bk-cloud { fill: #fff; stroke: var(--bk-active); stroke-width: 1.2; }
+  .bk-cloud.failed { stroke: var(--bk-crit); } .bk-cloud.late { stroke: var(--bk-warn); } .bk-cloud.idle { stroke: #9aa3ae; }
+  .bk-link { fill: none; stroke: #9aa3ae; stroke-width: 1.6; stroke-dasharray: 3 3; }
+  .night .bk-link { stroke: #5a6578; }
+  .bk-link.running { stroke: color-mix(in srgb, var(--bk-active) 55%, #9aa3ae); animation: bk-flow .6s linear infinite; }
+  .bk-link.failed { stroke: var(--bk-crit); } .bk-link.late { stroke: var(--bk-warn); }
+  .bk-pk { fill: var(--bk-active); offset-path: path("${BK_LINK}"); offset-rotate: 0deg; animation: bk-pk 1.8s linear infinite; }
+  .bk-server { fill: #2a3038; } .night .bk-server { fill: #1d2229; stroke: #3c4558; stroke-width: .8; }
+  .bk-bay { fill: #3d4552; } .bk-slot2 { fill: #56606e; }
+  .bk-led { fill: #43c463; animation: bk-blink 1.2s steps(2) infinite; } .bk-led.bad { fill: var(--bk-crit); }
+  .bk-disk { fill: #5f6b7a; } .night .bk-disk { fill: #4a5462; } .bk-disk-top { fill: #9aa3ae; }
+  .bk-mark circle { fill: var(--c); } .bk-mark .bk-turn circle { fill: none; }
+  .bk-mark-line { fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .bk-mark.blink { animation: bk-blink 1.2s steps(2) infinite; }
+  .bk-turn { transform-box: fill-box; transform-origin: center; animation: bk-spin 1.2s linear infinite; }
+  @keyframes bk-pk { from { offset-distance: 0%; opacity: 0; } 15%, 85% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+  @keyframes bk-flow { to { stroke-dashoffset: -6; } }
+  @keyframes bk-blink { 50% { opacity: .25; } }
+  @keyframes bk-twinkle { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+  /* Still: the packets wait along the link. Every period divides 1.2 s, so that the README's GIF loops. */
+  @media (prefers-reduced-motion: reduce) { .bk-pk { offset-distance: var(--d); } }
+  /* Too narrow for the picture: the wall alone stays. */
+  @container (max-width: 220px) { .bk-scene { display: none; } .htext { right: 36px; } }
+`;
+
+// ---------------------------------------------------------------------------
 // Cards
 // ---------------------------------------------------------------------------
 
@@ -2331,7 +2556,7 @@ class BackupCard extends CardBase {
   }
 
   _extraDeps() {
-    return [this._startedAt];
+    return [this._startedAt, this._hass?.states?.["sun.sun"]?.state];
   }
 
   _emptyKey(m) {
@@ -2441,8 +2666,31 @@ class BackupCard extends CardBase {
     return `<div class="hero"><div class="hero-art">${art(sum.worst.status, sum.items.some((x) => x.running))}</div><div class="hero-body">${big}${lines.join("")}</div></div>`;
   }
 
+  // The state the banner shows: the worst one, running when a backup runs and none failed or is late.
+  _sceneState(sum) {
+    const w = sum.worst.status;
+    if (w === "failed" || w === "late") return w;
+    if (sum.items.some((x) => x.running)) return "running";
+    return w === "ok" ? "ok" : "idle";
+  }
+
+  // The illustrated banner (`illustration: false`: the classic header, with the status chip). On the banner the
+  // status is the icon's color and the subtitle; the icon opens the entity the chip would open.
   _head(sum, sub) {
-    return this._header({ icon: ICONS.backup, cls: CLS[sum.worst.status], title: this._config.title || this._t("backups"), sub, chip: sum.chip });
+    const c = this._config;
+    const title = c.title || this._t("backups");
+    if (c.illustration === false) return this._header({ icon: ICONS.backup, cls: CLS[sum.worst.status], title, sub, chip: sum.chip });
+    this._uid ??= ++bkUid;
+    const state = this._sceneState(sum);
+    const cls = { ok: "ok", running: "active", late: "warn", failed: "crit", idle: "idle" }[state];
+    const text = sub || sum.chip.text;
+    return `<div class="banner bk-${state}${bkIsNight(this._hass, c) ? " night" : ""}">${bkSceneSvg(state, this._uid)}<div class="bk-ground" aria-hidden="true"></div>
+      <div class="htext"><div class="type-icon ${cls}${sum.chip.entity ? " clickable" : ""}"${moreInfo(sum.chip.entity)} title="${esc(sum.chip.text)}" aria-label="${esc(sum.chip.text)}">${svgIcon(ICONS.cloud)}</div>
+        <div class="titles"><div class="name">${esc(title)}</div>${text ? `<div class="sub">${esc(text)}</div>` : ""}</div></div>${this._zoomButton()}</div>`;
+  }
+
+  _bannerStyle() {
+    return this._config.illustration === false ? "" : BK_BANNER_STYLE;
   }
 
   _render() {
@@ -2452,7 +2700,7 @@ class BackupCard extends CardBase {
     const parts = [];
     if (this._config.show_stats !== false) parts.push(this._hero(sum));
     parts.push(this._section("backups", ICONS.database, this._t("backups"), sum.items.length, `<div class="rows">${sum.items.map((it) => this._row(it)).join("")}</div>`));
-    return `<style>${BASE_STYLE}${BACKUP_STYLE}</style>
+    return `<style>${BASE_STYLE}${BACKUP_STYLE}${this._bannerStyle()}</style>
       <ha-card>
         ${this._head(sum, sum.sub)}
         <div class="content">${parts.join("")}</div>
@@ -2505,7 +2753,7 @@ class BackupMiniCard extends withMini(BackupCard) {
     // The run button of the first source that can start a backup (Home Assistant's own first).
     const first = sum.items.find((it) => this._runButton(it, true));
     const controls = first ? this._runButton(first, true) : "";
-    return `<style>${BASE_STYLE}${BACKUP_STYLE}${MINI_STYLE}</style>
+    return `<style>${BASE_STYLE}${BACKUP_STYLE}${MINI_STYLE}${this._bannerStyle()}</style>
       <ha-card>
         ${this._head(sum, "")}
         <div class="content mini">
@@ -2524,6 +2772,7 @@ class BackupMiniCard extends withMini(BackupCard) {
 class BackupCardEditor extends EditorBase {
   static get toggles() {
     return [
+      ["illustration", true],
       ["show_title", true],
       ["show_subtitle", true],
       ["show_stats", true],
@@ -2537,10 +2786,16 @@ class BackupCardEditor extends EditorBase {
     return ["backups"];
   }
 
+  static get defaults() {
+    return { illustration_theme: "auto" };
+  }
+
   _fields() {
+    const tr = (k) => t(this._hass, this._config, k);
     return [
       { name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } },
       { name: "max_age", selector: { number: { min: 1, max: 24 * 60, mode: "box", unit_of_measurement: "h" } } },
+      { name: "illustration_theme", selector: { select: { mode: "dropdown", options: ["auto", "day", "night"].map((value) => ({ value, label: tr(`theme_${value}`) })) } } },
     ];
   }
 }

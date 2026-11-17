@@ -40,8 +40,8 @@ The sources are **discovered automatically** from the Home Assistant entity and 
 - When the last backup was made, its **size** and the **next scheduled** one; its age as a ring round its icon, against its limit
 - **Summary** above the list, as on the other cards: an illustration with the worst status, the time since the newest good backup, the failed and late sources, the next backup and the total size
 - **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, the arrow goes into the cloud and an arc turns round its source (see [Animations](#animations))
-- Status chip on the title's line: the worst status of all the sources; the subtitle counts the failed, late and running ones
-- Header icon in a tinted round badge, in the colour of the worst status
+- **Illustrated header** (90 px, full and mini card): the home server and its backup disk on a concrete floor, linked to a cloud seen through the window, in the worst status: a green check when up to date, packets going up the link while a backup runs, an amber link when late, a red link and a red server light when one failed; night version after sunset (or with a dark theme), `illustration: false` for the classic header with its status chip
+- Header icon in a round badge, in the colour of the worst status (green, blue while running, amber, red, grey); the subtitle counts the failed, late and running ones
 - Collapsible list, folded back to its default by a click elsewhere on the page
 - Click a source to open its Home Assistant history (more-info dialog)
 - Detail button on the mini card (top right): it switches the mini card to the full card's content and back; a click anywhere outside the card brings the compact view back
@@ -134,6 +134,8 @@ backups:
     max_age: 192
   - sensor.backup_state
 max_age: 26
+illustration: true
+illustration_theme: auto
 show_title: true
 show_subtitle: true
 show_stats: true
@@ -155,6 +157,8 @@ zoom: true
 | Option | Card | Default | Description |
 |---|---|---|---|
 | `title` | both | Backups | Card title |
+| `illustration` | both | `true` | Illustrated header (server, link and cloud in the worst status); `false`: classic header with the status chip |
+| `illustration_theme` | both | `auto` | Day or night picture: `auto` (night when `sun.sun` is below the horizon, else with a dark theme), `day` or `night` |
 | `show_title` | both | `true` | Show the title in the header |
 | `show_subtitle` | full | `true` | Show the subtitle (the failed, late and running counts) |
 | `backups` | both | Automatic | Sources: their "last backup" sensor (or an add-on's sensor: `sensor.backup_state`, `sensor.samba_backup`, `sensor.onedrivebackup`), or `{ entity, name, max_age, button, addon }` (`addon`: the slug of the Samba Backup add-on, such as `15d21743_samba_backup`, to back up through its input); the other parts are found on its device |
@@ -184,7 +188,7 @@ The card shows *Running* until the source reports a newer backup (two minutes at
 
 ### Animations
 
-While a backup runs, the arrow goes into the cloud, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
+While a backup runs, packets go up from the server to the cloud in the header, the arrow goes into the cloud, an arc turns round its source and the button's icon turns; the animation honours `prefers-reduced-motion`:
 
 | Light | Dark |
 |---|---|

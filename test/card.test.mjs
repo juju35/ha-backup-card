@@ -110,13 +110,40 @@ test("the limit: max_age of the card, or of one backup", async () => {
   assert.equal(bk.sourceState(makeHass(), m[0], { now: NOW }).status, "ok");
 });
 
-test("header: the worst status in the chip, the counts in the subtitle", async () => {
-  const { html } = await mount();
+test("classic header (illustration: false): the worst status in the chip, the counts in the subtitle", async () => {
+  const { html } = await mount({ illustration: false });
   assert.match(html(), /1 failed · 1 late/);
   assert.match(html(), /class="chip crit[^"]*"[^>]*title="Failed"/);
-  const ok = await mount({}, "ok");
+  assert.doesNotMatch(html(), /class="banner/);
+  const ok = await mount({ illustration: false }, "ok");
   assert.match(ok.html(), /All up to date/);
   assert.match(ok.html(), /chip ok/);
+});
+
+test("illustrated header: the scene, the icon's color and the subtitle follow the worst status", async () => {
+  const { html } = await mount();
+  assert.match(html(), /class="banner bk-failed/);
+  assert.match(html(), /class="type-icon crit[^"]*"[^>]*title="Failed"/);
+  assert.match(html(), /1 failed · 1 late/);
+  assert.match(html(), /class="bk-ground"/);
+  const ok = await mount({}, "ok");
+  assert.match(ok.html(), /class="banner bk-ok/);
+  assert.match(ok.html(), /class="type-icon ok/);
+  assert.match(ok.html(), /class="bk-mark ok"/);
+  const run = await mount({}, "running");
+  assert.match(run.html(), /class="banner bk-running/);
+  assert.match(run.html(), /class="type-icon active/);
+  assert.equal((run.html().match(/class="bk-pk"/g) || []).length, 3);
+});
+
+test("illustrated header: night by illustration_theme, sun.sun or the dark theme, and ids per card", async () => {
+  assert.match((await mount({ illustration_theme: "night" })).html(), /class="banner bk-failed night"/);
+  assert.doesNotMatch((await mount({ illustration_theme: "day" })).html(), /night"/);
+  const a = await mount();
+  const b = await mount();
+  const id = (h) => h.match(/id="(bk-win-\d+)"/)[1];
+  assert.notEqual(id(a.html()), id(b.html()));
+  assert.match(a.html(), new RegExp(`url\\(#${id(a.html())}\\)`));
 });
 
 test("rows: the last backup, the size and the next one, and the age", async () => {

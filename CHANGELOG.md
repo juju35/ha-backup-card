@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 - 2026-11-17
+
+### Features
+- Illustrated header, 90 px on the full and the mini card: the home server and its backup disk on a concrete floor strip, linked to a cloud seen through the window, in the worst status: a green check when up to date, packets going up the link while a backup runs, an amber link when late, a red link, mark and server light when one failed, a grey link with no backup.
+- The header icon (a cloud in a round badge) takes the colour of the worst status: green, blue while running, amber, red or grey; it opens the entity of the worst source.
+- Night picture after sunset (`sun.sun`), else with a dark theme; `illustration_theme: day | night` forces one, `illustration: false` keeps the classic header with its status chip. Both options are in the visual editors and translated in every language; the animations honour `prefers-reduced-motion`.
+
 ## 1.1.0 - 2026-11-16
 
 ### Features
