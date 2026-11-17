@@ -40,7 +40,7 @@ The sources are **discovered automatically** from the Home Assistant entity and 
 - When the last backup was made, its **size** and the **next scheduled** one; its age as a ring round its icon, against its limit
 - **Summary** above the list, as on the other cards: an illustration with the worst status, the time since the newest good backup, the failed and late sources, the next backup and the total size
 - **Back up now** button, each integration its own way (see [Backing up now](#backing-up-now)); while a backup runs, the arrow goes into the cloud and an arc turns round its source (see [Animations](#animations))
-- **Illustrated header** (90 px, full and mini card): the home server and its backup disk on a concrete floor, linked to a cloud seen through the window, in the worst status: a green check when up to date, packets going up the link while a backup runs, an amber link when late, a red link and a red server light when one failed; night version after sunset (or with a dark theme), `illustration: false` for the classic header with its status chip
+- **Illustrated header** (90 px, full and mini card): the home server and its backup disk on a concrete floor, linked to a cloud seen through the window, in the worst status: a green check when up to date, packets going up the link while a backup runs, an amber link when late, a red link and a red server light when one failed; night version after sunset or with a dark theme (even while the sun is up), `illustration: false` for the classic header with its status chip
 - Header icon in a round badge, in the colour of the worst status (green, blue while running, amber, red, grey); the subtitle counts the failed, late and running ones
 - Collapsible list, folded back to its default by a click elsewhere on the page
 - Click a source to open its Home Assistant history (more-info dialog)
@@ -158,7 +158,7 @@ zoom: true
 |---|---|---|---|
 | `title` | both | Backups | Card title |
 | `illustration` | both | `true` | Illustrated header (server, link and cloud in the worst status); `false`: classic header with the status chip |
-| `illustration_theme` | both | `auto` | Day or night picture: `auto` (night when `sun.sun` is below the horizon, else with a dark theme), `day` or `night` |
+| `illustration_theme` | both | `auto` | Day or night picture: `auto` (night when `sun.sun` is below the horizon or with a dark theme, even while the sun is up), `day` or `night` |
 | `show_title` | both | `true` | Show the title in the header |
 | `show_subtitle` | full | `true` | Show the subtitle (the failed, late and running counts) |
 | `backups` | both | Automatic | Sources: their "last backup" sensor (or an add-on's sensor: `sensor.backup_state`, `sensor.samba_backup`, `sensor.onedrivebackup`), or `{ entity, name, max_age, button, addon }` (`addon`: the slug of the Samba Backup add-on, such as `15d21743_samba_backup`, to back up through its input); the other parts are found on its device |

@@ -139,6 +139,18 @@ test("illustrated header: the scene, the icon's color and the subtitle follow th
 test("illustrated header: night by illustration_theme, sun.sun or the dark theme, and ids per card", async () => {
   assert.match((await mount({ illustration_theme: "night" })).html(), /class="banner bk-failed night"/);
   assert.doesNotMatch((await mount({ illustration_theme: "day" })).html(), /night"/);
+  const sky = async (sun, dark, config = {}) => {
+    const { card, hass, html } = await mount(config);
+    card.hass = { ...hass, states: { ...hass.states, "sun.sun": { entity_id: "sun.sun", state: sun } }, themes: { darkMode: dark } };
+    await new Promise((r) => setTimeout(r, 0));
+    return /class="banner [^"]*\bnight"/.test(html());
+  };
+  assert.equal(await sky("above_horizon", true), true, "dark theme while the sun is up: night");
+  assert.equal(await sky("above_horizon", false), false, "light theme while the sun is up: day");
+  assert.equal(await sky("below_horizon", false), true);
+  assert.equal(await sky("unavailable", true), true);
+  assert.equal(await sky("above_horizon", true, { illustration_theme: "day" }), false);
+  assert.equal(await sky("above_horizon", false, { illustration_theme: "night" }), true);
   const a = await mount();
   const b = await mount();
   const id = (h) => h.match(/id="(bk-win-\d+)"/)[1];

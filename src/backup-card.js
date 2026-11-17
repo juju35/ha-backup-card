@@ -1663,7 +1663,7 @@ class CardBase extends HTMLElement {
     if (!h || !this._config) return null;
     const m = this._resolve();
     const ids = m ? this._entityIds(m) : [];
-    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
+    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, h.states?.["sun.sun"]?.state, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
   }
 
   _extraDeps() {
@@ -2439,14 +2439,13 @@ const BACKUP_STYLE = `
 // cloud), running (packets go up the link, a turning arrow), late (an amber link and mark), failed (a red link and
 // mark, a red light on the server), no backup (a grey link). A 10 px concrete strip runs edge to edge under it.
 const BK_NO_VALUE = new Set(["unknown", "unavailable", "none", ""]);
-// Night picture: forced by illustration_theme, else the sun below the horizon, else Home Assistant's dark mode.
+// Night picture: forced by illustration_theme, else the sun below the horizon or Home Assistant's dark mode
+// (the dark theme shows the night picture even while the sun is up; an unavailable sun leaves the dark mode alone).
 const bkIsNight = (hass, config) => {
   const theme = config?.illustration_theme;
   if (theme === "night") return true;
   if (theme === "day") return false;
-  const sun = hass?.states?.["sun.sun"];
-  if (sun && !BK_NO_VALUE.has(String(sun.state))) return sun.state === "below_horizon";
-  return !!hass?.themes?.darkMode;
+  return hass?.states?.["sun.sun"]?.state === "below_horizon" || !!hass?.themes?.darkMode;
 };
 let bkUid = 0;
 const BK_LINK = "M124 42 Q138 14 164 27";
