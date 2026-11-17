@@ -1331,7 +1331,7 @@ const BASE_STYLE = `
           --bk-crit: var(--error-color, #db4437); --bk-idle: var(--disabled-text-color, #9e9e9e); --bk-active: var(--info-color, #039be5);
           /* Text in a state color is mixed with the text color so that it reads at 4.5:1 at least. */
           --bk-accent-text: color-mix(in srgb, var(--bk-accent) 50%, var(--primary-text-color)); }
-  ha-card { overflow: hidden; container-type: inline-size; }
+  ha-card { overflow: hidden; container: bk-card / inline-size; }
   /* Natural width in a parent that sizes to its content (inline-block, grid "auto" column), without a minimum. */
   :host { display: block; min-width: 0; --bk-natural-width: 380px; }
   :host::before { content: ""; display: grid; grid-template-columns: minmax(0, var(--bk-natural-width)); height: 0; }
@@ -1439,7 +1439,7 @@ const BASE_STYLE = `
           color: color-mix(in srgb, var(--c, var(--bk-idle)) 60%, var(--primary-text-color)); background: color-mix(in srgb, var(--c, var(--bk-idle)) 14%, transparent); }
   .pill .icon { width: 14px; height: 14px; color: var(--c, var(--bk-idle)); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
-  @container (max-width: 230px) {
+  @container bk-card (max-width: 230px) {
     .chip { padding: 4px; flex: none; }
     .chip-text { display: none; }
     .header { gap: 6px; }
@@ -2491,7 +2491,23 @@ const BK_BANNER_STYLE = `
   .bk-ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--g); background: #9aa1a9; box-shadow: inset 0 2px 0 #b5bbc2; }
   .night .bk-ground { background: #2c323b; box-shadow: inset 0 2px 0 #3a414c; }
   .htext { position: absolute; z-index: 1; left: 12px; top: 0; bottom: var(--g); right: calc(var(--sw) + 4px); display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .htext .titles { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  /* The titles are their own container: when the title row runs out of room, the pill drops under the subtitle. */
+  .htext .titles { container: bk-titles / inline-size; flex: 1 1 0; align-self: stretch; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr);
+                   align-content: center; row-gap: 2px; }
+  /* The status pill right after the title, centred on it, in the icon's color; the title ellipsises first and keeps
+     4 characters. */
+  .htext .tline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .htext .tline .name { flex: 0 1 auto; min-width: 4ch; }
+  .banner .chip { flex: 0 0 auto; margin: 0; max-width: 100%; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px;
+                  background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
+  .banner.night .chip { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
+  .banner .chip .dot { width: 7px; height: 7px; }
+  @container bk-titles (max-width: 190px) {
+    .htext .tline { display: contents; }
+    .banner .chip { grid-row: 3; justify-self: start; margin-top: 1px; }
+  }
+  @container bk-card (max-width: 230px) { .banner .chip { padding: 1px 8px; } .banner .chip .chip-text { display: inline; } }
+  @container bk-card (max-width: 200px) { .banner .chip { padding: 4px; } .banner .chip .chip-text { display: none; } }
   .htext .name { font-size: 16px; font-weight: 500; }
   .htext .sub { font-size: 13px; color: #3b5b78; }
   .night .htext .sub { color: rgba(255,255,255,.78); }
@@ -2500,8 +2516,12 @@ const BK_BANNER_STYLE = `
   .banner .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 82%, #0d2a45); }
   .banner.night .type-icon { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
   .banner.night .type-icon .icon { fill: color-mix(in srgb, var(--bk-tint) 72%, #fff); }
-  .banner .zoom { position: absolute; z-index: 2; top: 6px; right: 6px; margin: 0; color: #0d2a45; background: rgba(255,255,255,.55); }
-  .banner.night .zoom { color: #fff; background: rgba(10,20,40,.45); }
+  /* The mini card's expand / collapse button: a 24 px frosted disc in the banner's top-right corner. */
+  .banner .zoom { position: absolute; z-index: 2; top: 5px; right: 5px; margin: 0; width: 24px; height: 24px; color: #33506b; background: rgba(255,255,255,.55);
+                  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .banner .zoom:hover { background: rgba(255,255,255,.75); color: #33506b; }
+  .banner.night .zoom { color: #fff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+  .banner.night .zoom:hover { background: rgba(255,255,255,.22); color: #fff; }
   .bk-frame { fill: #cfe8f8; stroke: #fff; stroke-width: 2; }
   .night .bk-frame { fill: #1b2f52; stroke: #4a5568; }
   .bk-puff { fill: #fff; opacity: .75; }
@@ -2530,8 +2550,8 @@ const BK_BANNER_STYLE = `
   @keyframes bk-twinkle { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
   /* Still: the packets wait along the link. Every period divides 1.2 s, so that the README's GIF loops. */
   @media (prefers-reduced-motion: reduce) { .bk-pk { offset-distance: var(--d); } }
-  /* Too narrow for the picture: the wall alone stays. */
-  @container (max-width: 220px) { .bk-scene { display: none; } .htext { right: 36px; } }
+  /* Too narrow for the picture beside the title and the status pill: the wall alone stays. */
+  @container (max-width: 260px) { .bk-scene { display: none; } .htext { right: 36px; } }
 `;
 
 // ---------------------------------------------------------------------------
@@ -2683,10 +2703,14 @@ class BackupCard extends CardBase {
     this._uid ??= ++bkUid;
     const state = this._sceneState(sum);
     const cls = { ok: "ok", running: "active", late: "warn", failed: "crit", idle: "idle" }[state];
-    const text = sub || sum.chip.text;
+    // The status pill in the icon's color; the subtitle keeps the counts (failed, late, running), never the status again.
+    const label = state === "running" ? this._t("running") : sum.chip.text;
+    const pill = `<span class="chip ${cls}${sum.chip.entity ? " clickable" : ""}"${moreInfo(sum.chip.entity)} title="${esc(label)}" aria-label="${esc(
+      label,
+    )}"><span class="dot"></span><span class="chip-text">${esc(label)}</span></span>`;
     return `<div class="banner bk-${state}${bkIsNight(this._hass, c) ? " night" : ""}">${bkSceneSvg(state, this._uid)}<div class="bk-ground" aria-hidden="true"></div>
       <div class="htext"><div class="type-icon ${cls}${sum.chip.entity ? " clickable" : ""}"${moreInfo(sum.chip.entity)} title="${esc(sum.chip.text)}" aria-label="${esc(sum.chip.text)}">${svgIcon(ICONS.cloud)}</div>
-        <div class="titles"><div class="name">${esc(title)}</div>${text ? `<div class="sub">${esc(text)}</div>` : ""}</div></div>${this._zoomButton()}</div>`;
+        <div class="titles"><div class="tline"><div class="name">${esc(title)}</div>${pill}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</div></div>${this._zoomButton()}</div>`;
   }
 
   _bannerStyle() {
