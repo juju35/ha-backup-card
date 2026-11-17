@@ -136,7 +136,7 @@ test("illustrated header: the scene, the icon's color and the subtitle follow th
   assert.equal((run.html().match(/class="bk-pk"/g) || []).length, 3);
 });
 
-test("illustrated header: night by illustration_theme, sun.sun or the dark theme, and ids per card", async () => {
+test("illustrated header: night by illustration_theme or the dark theme alone, and ids per card", async () => {
   assert.match((await mount({ illustration_theme: "night" })).html(), /class="banner bk-failed night"/);
   assert.doesNotMatch((await mount({ illustration_theme: "day" })).html(), /night"/);
   const sky = async (sun, dark, config = {}) => {
@@ -147,7 +147,7 @@ test("illustrated header: night by illustration_theme, sun.sun or the dark theme
   };
   assert.equal(await sky("above_horizon", true), true, "dark theme while the sun is up: night");
   assert.equal(await sky("above_horizon", false), false, "light theme while the sun is up: day");
-  assert.equal(await sky("below_horizon", false), true);
+  assert.equal(await sky("below_horizon", false), false, "light theme after sunset: day");
   assert.equal(await sky("unavailable", true), true);
   assert.equal(await sky("above_horizon", true, { illustration_theme: "day" }), false);
   assert.equal(await sky("above_horizon", false, { illustration_theme: "night" }), true);

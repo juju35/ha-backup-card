@@ -93,7 +93,7 @@ const STRINGS = {
     unavailable: "Unavailable",
     illustration: "Animated illustration",
     illustration_theme: "Illustration theme",
-    theme_auto: "Automatic (sun or dark theme)",
+    theme_auto: "Automatic: night with a dark theme, day with a light theme",
     theme_day: "Day",
     theme_night: "Night",
   },
@@ -145,7 +145,7 @@ const STRINGS = {
     unavailable: "Indisponible",
     illustration: "Illustration animée",
     illustration_theme: "Thème de l’illustration",
-    theme_auto: "Automatique (soleil ou thème sombre)",
+    theme_auto: "Automatique : nuit avec un thème sombre, jour avec un thème clair",
     theme_day: "Jour",
     theme_night: "Nuit",
   },
@@ -197,7 +197,7 @@ const STRINGS = {
     unavailable: "Nicht verfügbar",
     illustration: "Animierte Illustration",
     illustration_theme: "Thema der Illustration",
-    theme_auto: "Automatisch (Sonne oder dunkles Design)",
+    theme_auto: "Automatisch: Nacht bei dunklem Thema, Tag bei hellem Thema",
     theme_day: "Tag",
     theme_night: "Nacht",
   },
@@ -249,7 +249,7 @@ const STRINGS = {
     unavailable: "No disponible",
     illustration: "Ilustración animada",
     illustration_theme: "Tema de la ilustración",
-    theme_auto: "Automático (sol o tema oscuro)",
+    theme_auto: "Automático: noche con un tema oscuro, día con un tema claro",
     theme_day: "Día",
     theme_night: "Noche",
   },
@@ -301,7 +301,7 @@ const STRINGS = {
     unavailable: "Non disponibile",
     illustration: "Illustrazione animata",
     illustration_theme: "Tema dell’illustrazione",
-    theme_auto: "Automatico (sole o tema scuro)",
+    theme_auto: "Automatico: notte con un tema scuro, giorno con un tema chiaro",
     theme_day: "Giorno",
     theme_night: "Notte",
   },
@@ -353,7 +353,7 @@ const STRINGS = {
     unavailable: "Niet beschikbaar",
     illustration: "Geanimeerde illustratie",
     illustration_theme: "Thema van de illustratie",
-    theme_auto: "Automatisch (zon of donker thema)",
+    theme_auto: "Automatisch: nacht met een donker thema, dag met een licht thema",
     theme_day: "Dag",
     theme_night: "Nacht",
   },
@@ -405,7 +405,7 @@ const STRINGS = {
     unavailable: "Indisponível",
     illustration: "Ilustração animada",
     illustration_theme: "Tema da ilustração",
-    theme_auto: "Automático (sol ou tema escuro)",
+    theme_auto: "Automático: noite com um tema escuro, dia com um tema claro",
     theme_day: "Dia",
     theme_night: "Noite",
   },
@@ -457,7 +457,7 @@ const STRINGS = {
     unavailable: "Niedostępne",
     illustration: "Animowana ilustracja",
     illustration_theme: "Motyw ilustracji",
-    theme_auto: "Automatycznie (słońce lub ciemny motyw)",
+    theme_auto: "Automatycznie: noc przy ciemnym motywie, dzień przy jasnym motywie",
     theme_day: "Dzień",
     theme_night: "Noc",
   },
@@ -509,7 +509,7 @@ const STRINGS = {
     unavailable: "Недоступно",
     illustration: "Анимирана илустрација",
     illustration_theme: "Тема илустрације",
-    theme_auto: "Аутоматски (сунце или тамна тема)",
+    theme_auto: "Аутоматски: ноћ уз тамну тему, дан уз светлу тему",
     theme_day: "Дан",
     theme_night: "Ноћ",
   },
@@ -561,7 +561,7 @@ const STRINGS = {
     unavailable: "Nedostupno",
     illustration: "Animirana ilustracija",
     illustration_theme: "Tema ilustracije",
-    theme_auto: "Automatski (sunce ili tamna tema)",
+    theme_auto: "Automatski: noć uz tamnu temu, dan uz svetlu temu",
     theme_day: "Dan",
     theme_night: "Noć",
   },
@@ -613,7 +613,7 @@ const STRINGS = {
     unavailable: "Indisponibil",
     illustration: "Ilustrație animată",
     illustration_theme: "Tema ilustrației",
-    theme_auto: "Automat (soare sau temă întunecată)",
+    theme_auto: "Automat: noapte cu o temă întunecată, zi cu o temă luminoasă",
     theme_day: "Zi",
     theme_night: "Noapte",
   },
@@ -665,7 +665,7 @@ const STRINGS = {
     unavailable: "Utilgængelig",
     illustration: "Animeret illustration",
     illustration_theme: "Illustrationens tema",
-    theme_auto: "Automatisk (sol eller mørkt tema)",
+    theme_auto: "Automatisk: nat med et mørkt tema, dag med et lyst tema",
     theme_day: "Dag",
     theme_night: "Nat",
   },
@@ -717,7 +717,7 @@ const STRINGS = {
     unavailable: "Otillgänglig",
     illustration: "Animerad illustration",
     illustration_theme: "Illustrationens tema",
-    theme_auto: "Automatiskt (sol eller mörkt tema)",
+    theme_auto: "Automatiskt: natt med ett mörkt tema, dag med ett ljust tema",
     theme_day: "Dag",
     theme_night: "Natt",
   },
@@ -769,7 +769,7 @@ const STRINGS = {
     unavailable: "Недостъпно",
     illustration: "Анимирана илюстрация",
     illustration_theme: "Тема на илюстрацията",
-    theme_auto: "Автоматично (слънце или тъмна тема)",
+    theme_auto: "Автоматично: нощ с тъмна тема, ден със светла тема",
     theme_day: "Ден",
     theme_night: "Нощ",
   },
@@ -821,7 +821,7 @@ const STRINGS = {
     unavailable: "Недоступно",
     illustration: "Анимированная иллюстрация",
     illustration_theme: "Тема иллюстрации",
-    theme_auto: "Автоматически (солнце или тёмная тема)",
+    theme_auto: "Автоматически: ночь при тёмной теме, день при светлой теме",
     theme_day: "День",
     theme_night: "Ночь",
   },
@@ -873,7 +873,7 @@ const STRINGS = {
     unavailable: "Недоступно",
     illustration: "Анімована ілюстрація",
     illustration_theme: "Тема ілюстрації",
-    theme_auto: "Автоматично (сонце або темна тема)",
+    theme_auto: "Автоматично: ніч з темною темою, день зі світлою темою",
     theme_day: "День",
     theme_night: "Ніч",
   },
@@ -925,7 +925,7 @@ const STRINGS = {
     unavailable: "Nem elérhető",
     illustration: "Animált illusztráció",
     illustration_theme: "Az illusztráció témája",
-    theme_auto: "Automatikus (nap vagy sötét téma)",
+    theme_auto: "Automatikus: éjszaka sötét témával, nappal világos témával",
     theme_day: "Nappal",
     theme_night: "Éjszaka",
   },
@@ -977,7 +977,7 @@ const STRINGS = {
     unavailable: "Nedostupné",
     illustration: "Animovaná ilustrácia",
     illustration_theme: "Téma ilustrácie",
-    theme_auto: "Automaticky (slnko alebo tmavá téma)",
+    theme_auto: "Automaticky: noc s tmavou témou, deň so svetlou témou",
     theme_day: "Deň",
     theme_night: "Noc",
   },
@@ -1029,7 +1029,7 @@ const STRINGS = {
     unavailable: "Nedostupné",
     illustration: "Animovaná ilustrace",
     illustration_theme: "Motiv ilustrace",
-    theme_auto: "Automaticky (slunce nebo tmavý motiv)",
+    theme_auto: "Automaticky: noc s tmavým motivem, den se světlým motivem",
     theme_day: "Den",
     theme_night: "Noc",
   },
@@ -1081,7 +1081,7 @@ const STRINGS = {
     unavailable: "Ni na voljo",
     illustration: "Animirana ilustracija",
     illustration_theme: "Tema ilustracije",
-    theme_auto: "Samodejno (sonce ali temna tema)",
+    theme_auto: "Samodejno: noč s temno temo, dan s svetlo temo",
     theme_day: "Dan",
     theme_night: "Noč",
   },
@@ -1133,7 +1133,7 @@ const STRINGS = {
     unavailable: "Nav pieejams",
     illustration: "Animēta ilustrācija",
     illustration_theme: "Ilustrācijas motīvs",
-    theme_auto: "Automātiski (saule vai tumšā tēma)",
+    theme_auto: "Automātiski: nakts ar tumšu tēmu, diena ar gaišu tēmu",
     theme_day: "Diena",
     theme_night: "Nakts",
   },
@@ -1185,7 +1185,7 @@ const STRINGS = {
     unavailable: "Μη διαθέσιμο",
     illustration: "Κινούμενη εικονογράφηση",
     illustration_theme: "Θέμα εικονογράφησης",
-    theme_auto: "Αυτόματο (ήλιος ή σκούρο θέμα)",
+    theme_auto: "Αυτόματο: νύχτα με σκούρο θέμα, μέρα με ανοιχτό θέμα",
     theme_day: "Ημέρα",
     theme_night: "Νύχτα",
   },
@@ -1675,7 +1675,7 @@ class CardBase extends HTMLElement {
     if (!h || !this._config) return null;
     const m = this._resolve();
     const ids = m ? this._entityIds(m) : [];
-    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, h.states?.["sun.sun"]?.state, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
+    return [h.entities, h.devices, h.areas, h.language, h.locale, h.themes?.darkMode, Math.floor(Date.now() / 6e4), ...this._extraDeps(), ...ids.map((id) => h.states[id])];
   }
 
   _extraDeps() {
@@ -2512,13 +2512,13 @@ const BACKUP_STYLE = `
 // cloud), running (packets go up the link, a turning arrow), late (an amber link and mark), failed (a red link and
 // mark, a red light on the server), no backup (a grey link). A 10 px concrete strip runs edge to edge under it.
 const BK_NO_VALUE = new Set(["unknown", "unavailable", "none", ""]);
-// Night picture: forced by illustration_theme, else the sun below the horizon or Home Assistant's dark mode
-// (the dark theme shows the night picture even while the sun is up; an unavailable sun leaves the dark mode alone).
+// Night picture: forced by illustration_theme, else Home Assistant's dark mode alone (a light theme keeps the day
+// picture after sunset).
 const bkIsNight = (hass, config) => {
   const theme = config?.illustration_theme;
   if (theme === "night") return true;
   if (theme === "day") return false;
-  return hass?.states?.["sun.sun"]?.state === "below_horizon" || !!hass?.themes?.darkMode;
+  return !!hass?.themes?.darkMode;
 };
 let bkUid = 0;
 const BK_LINK = "M124 42 Q138 14 164 27";
@@ -2663,7 +2663,7 @@ class BackupCard extends CardBase {
   }
 
   _extraDeps() {
-    return [this._startedAt, this._hass?.states?.["sun.sun"]?.state];
+    return [this._startedAt];
   }
 
   _emptyKey(m) {
