@@ -1347,13 +1347,22 @@ const BASE_STYLE = `
           flex: 0 1 auto; min-width: 0; max-width: 50%; overflow: hidden; box-sizing: border-box; }
   .chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 0; }
-  /* The chip sits on the title's line, whether a subtitle follows or not. */
-  .header .chip, .header .zoom { align-self: flex-start; margin-top: 10px; }
+  /* The chip sits right after the title, centred on it; the title ellipsises first and keeps 4 characters. Short of
+     room, the chip drops under the subtitle, whole. */
+  .header .zoom { align-self: flex-start; margin-top: 10px; }
+  .header > .titles { container: bk-ctitles / inline-size; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .ctline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .ctline .name { flex: 0 1 auto; min-width: 4ch; }
+  .ctline .chip { flex: none; max-width: 100%; }
+  @container bk-ctitles (max-width: 190px) {
+    .ctline { display: contents; }
+    .ctline .chip { grid-row: 3; justify-self: start; margin-top: 2px; }
+  }
   .type-icon { position: relative; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
                --bk-tint: var(--c, var(--bk-accent)); background: color-mix(in srgb, var(--bk-tint) 16%, transparent); transition: background-color .3s ease; }
   .type-icon .icon { width: 24px; height: 24px; fill: color-mix(in srgb, var(--bk-tint) 60%, var(--primary-text-color)); transition: fill .3s ease; }
   .titles { flex: 1 1 0; min-width: 5ch; }
-  :host([hide-title]) .titles > .name, :host([hide-subtitle]) .titles > .sub { display: none; }
+  :host([hide-title]) .titles > .name, :host([hide-title]) .titles > :is(.ctline, .tline) > .name, :host([hide-subtitle]) .titles > .sub { display: none; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sub { font-size: 12px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .warning { padding: 16px; color: color-mix(in srgb, var(--bk-warn) 50%, var(--primary-text-color)); }
@@ -1440,9 +1449,11 @@ const BASE_STYLE = `
   .pill .icon { width: 14px; height: 14px; color: var(--c, var(--bk-idle)); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   @container bk-card (max-width: 230px) {
+    .header { gap: 6px; }
+  }
+  @container bk-card (max-width: 200px) {
     .chip { padding: 4px; flex: none; }
     .chip-text { display: none; }
-    .header { gap: 6px; }
   }
 `;
 
@@ -1939,16 +1950,15 @@ class CardBase extends HTMLElement {
       <div class="header">
         <div class="type-icon ${cls}">${extra}${svgIcon(icon)}</div>
         <div class="titles">
-          <div class="name">${esc(title)}</div>
+          <div class="ctline"><div class="name">${esc(title)}</div>${
+            chip
+              ? `<span class="chip ${chip.cls}${chip.entity ? " clickable" : ""}"${moreInfo(chip.entity)} title="${esc(chip.text)}" aria-label="${esc(
+                  chip.text,
+                )}"><span class="dot"></span><span class="chip-text">${esc(chip.text)}</span></span>`
+              : ""
+          }</div>
           ${sub ? `<div class="sub">${esc(sub)}</div>` : ""}
         </div>
-        ${
-          chip
-            ? `<span class="chip ${chip.cls}${chip.entity ? " clickable" : ""}"${moreInfo(chip.entity)} title="${esc(chip.text)}" aria-label="${esc(
-                chip.text,
-              )}"><span class="dot"></span><span class="chip-text">${esc(chip.text)}</span></span>`
-            : ""
-        }
         ${this._zoomButton()}
       </div>`;
   }
