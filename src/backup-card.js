@@ -1347,17 +1347,22 @@ const BASE_STYLE = `
           flex: 0 1 auto; min-width: 0; max-width: 50%; overflow: hidden; box-sizing: border-box; }
   .chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 0; }
-  /* The chip sits right after the title, centred on it; the title ellipsises first and keeps 4 characters. Short of
-     room, the chip drops under the subtitle, whole. */
   .header .zoom { align-self: flex-start; margin-top: 10px; }
-  .header > .titles { container: bk-ctitles / inline-size; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .header > .titles { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  /* The status pill right after the title, its whole label on one line, while the title stays whole beside it
+     (measured by the card, see _fitPill); otherwise on its own line under a one-line subtitle, and with its dot alone
+     when even that does not fit the header. */
   .ctline { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .ctline .name { flex: 0 1 auto; min-width: 4ch; }
-  .ctline .chip { flex: none; max-width: 100%; }
-  @container bk-ctitles (max-width: 190px) {
-    .ctline { display: contents; }
-    .ctline .chip { grid-row: 3; justify-self: start; margin-top: 2px; }
-  }
+  .ctline > .name { flex: 0 1 auto; min-width: 0; }
+  .ctline > .chip { flex: none; max-width: none; }
+  .ctline > .chip .chip-text { white-space: nowrap; overflow: visible; }
+  .header > .titles.below { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .header > .titles.below > .ctline { display: contents; }
+  .header > .titles.below > .ctline > .chip { order: 3; justify-self: start; align-self: start; margin-top: 3px; }
+  .header > .titles.below > .sub { order: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header > .titles.dot-only > .ctline { display: flex; }
+  .header > .titles.dot-only > .ctline > .chip { order: 0; margin-top: 0; align-self: center; padding: 4px; }
+  .header > .titles.dot-only > .ctline > .chip .chip-text { display: none; }
   .type-icon { position: relative; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
                --bk-tint: var(--c, var(--bk-accent)); background: color-mix(in srgb, var(--bk-tint) 16%, transparent); transition: background-color .3s ease; }
   .type-icon .icon { width: 24px; height: 24px; fill: color-mix(in srgb, var(--bk-tint) 60%, var(--primary-text-color)); transition: fill .3s ease; }
@@ -1494,6 +1499,13 @@ const MINI_STYLE = `
 
 // Element names of Home Assistant dialogs (a more-info opened from the card): a click there is not "elsewhere".
 const DIALOG_TAGS = new Set(["HA-MORE-INFO-DIALOG", "HA-DIALOG", "DIALOG"]);
+// The width of an element's whole text in fractional pixels, even while an ellipsis cuts it.
+const textWidth = (el) => {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  return range.getBoundingClientRect().width || el.scrollWidth;
+};
+
 const isOutside = (card, ev) => {
   const path = ev.composedPath();
   return !path.includes(card) && !path.some((n) => DIALOG_TAGS.has(n.tagName));
@@ -1681,6 +1693,46 @@ class CardBase extends HTMLElement {
     return this._model;
   }
 
+  // The header's status pill goes right after the title, on its row, only while the title stays whole and the
+  // pill's whole label fits beside it; otherwise it takes a line of its own under the subtitle (.below), the title
+  // whole on its row (cut only when it does not fit alone). There, in the banner, the subtitle keeps one line; if the
+  // text still does not fit above the ground strip, the pill keeps its dot alone (.dot-only, its label in its tooltip
+  // and for screen readers). Measured after each render and on each new width, whatever the language: no fixed
+  // width threshold.
+  _fitPill() {
+    if (!this.isConnected) return;
+    for (const t of this.shadowRoot?.querySelectorAll?.(".titles") || []) {
+      const row = t.querySelector(".tline, .ctline");
+      const pills = row ? [...row.children].filter((n) => n.matches(".chip")) : [];
+      if (!pills.length || !pills[0].getBoundingClientRect) continue;
+      t.classList.remove("below", "dot-only");
+      const name = row.querySelector(".name");
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+      const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
+      const need = pills.reduce((w, p) => w + p.getBoundingClientRect().width + gap, title - gap);
+      if (need > t.getBoundingClientRect().width - 0.5) {
+        t.classList.add("below");
+        const banner = t.closest(".banner");
+        if (banner) {
+          const b = banner.getBoundingClientRect();
+          const out = [...t.querySelectorAll("*")].some((n) => {
+            const r = n.getBoundingClientRect();
+            return r.height > 0 && (r.top < b.top - 0.5 || r.bottom > b.bottom - (parseFloat(getComputedStyle(banner).getPropertyValue("--g")) || 10) + 0.5);
+          });
+          if (out) t.classList.add("dot-only");
+        }
+      }
+      // A subtitle cut by its ellipsis keeps its whole text in its tooltip.
+      const s = t.querySelector(".sub");
+      if (s && (!s.hasAttribute("title") || s.dataset.fit)) {
+        const cut = s.scrollWidth > s.clientWidth + 1;
+        s.toggleAttribute("data-fit", cut);
+        if (cut) s.title = s.textContent.trim();
+        else s.removeAttribute("title");
+      }
+    }
+  }
+
   connectedCallback() {
     // A click elsewhere on the page folds the sections back to their defaults and closes the popup.
     this._outside ??= watchOutside(
@@ -1693,6 +1745,18 @@ class CardBase extends HTMLElement {
       },
     );
     this._outside.on();
+    // A new width (or the web font loaded): the status pill is fitted again, in the next frame.
+    if (typeof ResizeObserver === "function") {
+      this._resize ??= new ResizeObserver((entries) => {
+        const w = Math.round(entries.at(-1).contentRect.width);
+        if (w === this._fitWidth) return;
+        this._fitWidth = w;
+        cancelAnimationFrame(this._fitFrame);
+        this._fitFrame = requestAnimationFrame(() => this._fitPill());
+      });
+      this._resize.observe(this);
+    }
+    document.fonts?.ready?.then(() => this._fitPill());
     if (this._dialog) window.addEventListener("keydown", this._onKey);
     clearInterval(this._tick);
     this._tick = setInterval(() => {
@@ -1704,6 +1768,8 @@ class CardBase extends HTMLElement {
 
   disconnectedCallback() {
     this._pressing = this._dirty = false;
+    this._resize?.disconnect();
+    this._fitWidth = null;
     window.removeEventListener("pointerup", this._onPressEnd, true);
     window.removeEventListener("pointercancel", this._onPressEnd, true);
     clearInterval(this._tick);
@@ -1772,6 +1838,7 @@ class CardBase extends HTMLElement {
       const kept = this._dialog || this._byPointer ? null : this._focusedSpot();
       this._html = html;
       this.shadowRoot.innerHTML = html;
+      this._fitPill();
       // Fields get back what was typed, and the caret when one had the focus.
       for (const el of this.shadowRoot.querySelectorAll?.("[data-keep]") || []) {
         const v = this._inputs[el.dataset.keep];
@@ -2500,22 +2567,27 @@ const BK_BANNER_STYLE = `
   .bk-ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--g); background: #9aa1a9; box-shadow: inset 0 2px 0 #b5bbc2; }
   .night .bk-ground { background: #2c323b; box-shadow: inset 0 2px 0 #3a414c; }
   .htext { position: absolute; z-index: 1; left: 12px; top: 0; bottom: var(--g); right: calc(var(--sw) + 4px); display: flex; align-items: center; gap: 10px; min-width: 0; }
-  /* The titles are their own container: when the title row runs out of room, the pill drops under the subtitle. */
-  .htext .titles { container: bk-titles / inline-size; flex: 1 1 0; align-self: stretch; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr);
+  .htext .titles { flex: 1 1 0; align-self: stretch; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr);
                    align-content: center; row-gap: 2px; }
-  /* The status pill right after the title, centred on it, in the icon's color; the title ellipsises first and keeps
-     4 characters. */
-  .htext .tline { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .htext .tline .name { flex: 0 1 auto; min-width: 4ch; }
-  .banner .chip { flex: 0 0 auto; margin: 0; max-width: 100%; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px;
+  /* The status pill right after the title, centred on it, in the icon's color. */
+  /* The status pill right after the title, its whole label on one line, while the title stays whole beside it
+     (measured by the card, see _fitPill); otherwise on its own line under a one-line subtitle, and with its dot alone
+     when even that does not fit the header. */
+  .tline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .tline > .name { flex: 0 1 auto; min-width: 0; }
+  .tline > .chip { flex: none; max-width: none; }
+  .tline > .chip .chip-text { white-space: nowrap; overflow: visible; }
+  .htext .titles.below { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; }
+  .htext .titles.below > .tline { display: contents; }
+  .htext .titles.below > .tline > .chip { order: 3; justify-self: start; align-self: start; margin-top: 3px; }
+  .htext .titles.below > .sub { order: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .htext .titles.dot-only > .tline { display: flex; }
+  .htext .titles.dot-only > .tline > .chip { order: 0; margin-top: 0; align-self: center; padding: 4px; }
+  .htext .titles.dot-only > .tline > .chip .chip-text { display: none; }
+  .banner .chip { margin: 0; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px;
                   background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
   .banner.night .chip { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
   .banner .chip .dot { width: 7px; height: 7px; }
-  @container bk-titles (max-width: 190px) {
-    .htext .tline { display: contents; }
-    .banner .chip { grid-row: 3; justify-self: start; margin-top: 1px; }
-  }
-  @container bk-card (max-width: 230px) { .banner .chip { padding: 1px 8px; } .banner .chip .chip-text { display: inline; } }
   @container bk-card (max-width: 200px) { .banner .chip { padding: 4px; } .banner .chip .chip-text { display: none; } }
   .htext .name { font-size: 16px; font-weight: 500; }
   .htext .sub { font-size: 13px; color: #3b5b78; }
