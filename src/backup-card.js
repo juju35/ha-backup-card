@@ -2159,6 +2159,10 @@ class EditorBase extends HTMLElement {
     return [];
   }
 
+  _schemaKey() {
+    return "";
+  }
+
   _schema() {
     const tr = (k) => t(this._hass, this._config, k);
     const toggles = this.constructor.toggles;
@@ -2198,7 +2202,8 @@ class EditorBase extends HTMLElement {
       this._formConfig = this._config;
       this._form.data = { ...defaults, ...this._config };
     }
-    const l = lang(this._hass, this._config);
+    // The schema follows the language and, for a card whose fields depend on the configuration, its _schemaKey().
+    const l = `${lang(this._hass, this._config)}|${this._schemaKey()}`;
     if (this._schemaLang !== l) {
       this._schemaLang = l;
       this._form.schema = this._schema();
@@ -2901,10 +2906,20 @@ class BackupCardEditor extends EditorBase {
     return { illustration_theme: "auto" };
   }
 
+  // A list of sources with their own options (`{ entity, name, max_age, button, addon }`) is YAML only: the entity
+  // picker would show them as unknown entities and drop their options on the next change.
+  _yamlBackups() {
+    return asList(this._config.backups).some((b) => b && typeof b === "object");
+  }
+
+  _schemaKey() {
+    return this._yamlBackups() ? "yaml" : "";
+  }
+
   _fields() {
     const tr = (k) => t(this._hass, this._config, k);
     return [
-      { name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } },
+      ...(this._yamlBackups() ? [] : [{ name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } }]),
       { name: "max_age", selector: { number: { min: 1, max: 24 * 60, mode: "box", unit_of_measurement: "h" } } },
       { name: "illustration_theme", selector: { select: { mode: "dropdown", options: ["auto", "day", "night"].map((value) => ({ value, label: tr(`theme_${value}`) })) } } },
     ];

@@ -316,6 +316,12 @@ test("visual editor: fields labelled apart from the sections, defaults left out 
     assert.match(form.computeHelper({ name: "max_age" }), /In hours/);
     form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { type: "custom:backup-card", show_run: true, show_size: false, backups: [] } } });
     same(out, { type: "custom:backup-card", show_size: false });
+    assert.ok(form.schema.some((f) => f.name === "backups"));
+    // Sources with their own options are YAML only: the entity picker would drop them.
+    ed.setConfig({ type: "custom:backup-card", backups: [{ entity: "sensor.nas_last_backup", max_age: 48 }] });
+    assert.ok(!form.schema.some((f) => f.name === "backups"));
+    ed.setConfig({ type: "custom:backup-card", backups: ["sensor.nas_last_backup"] });
+    assert.ok(form.schema.some((f) => f.name === "backups"));
   } finally {
     doc.createElement = create;
   }
