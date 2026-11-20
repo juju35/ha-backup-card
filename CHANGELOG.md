@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.2 - 2026-11-20
+
+### Fixes
+- Visual editor: a `backups` list whose sources carry their own options (`{ entity, name, max_age, button, addon }`) is no longer shown in the entity picker, which listed them as unknown entities and dropped their options on the next change; such a list stays YAML only (README says so).
+- README: `show_subtitle` applies to both cards (the mini card's detail view uses it).
+
+### Maintenance
+- The unit tests report the card's own coverage.
+
 ## 1.2.1 - 2026-11-18
 
 ### Fixes
