@@ -2443,16 +2443,18 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   return out;
 };
 
-// Bytes in the largest unit that fits: "1.4 GB", "820 MB" (unit names from Intl).
+// Bytes in the largest binary unit that fits (base 1024, the ha-* charter): up to 2 decimals under 10, 1 under 100,
+// none above, trailing zeros dropped ("1.33 GiB", "782 MiB", "23.3 GiB").
+const SIZE_UNITS = ["B", "KiB", "MiB", "GiB", "TiB"];
 const fmtSize = (bytes, locale) => {
-  const units = ["byte", "kilobyte", "megabyte", "gigabyte", "terabyte"];
   let i = 0;
   let v = bytes;
-  while (v >= 1000 && i < units.length - 1) {
-    v /= 1000;
+  while (v >= 1024 && i < SIZE_UNITS.length - 1) {
+    v /= 1024;
     i++;
   }
-  return new Intl.NumberFormat(locale, { style: "unit", unit: units[i], unitDisplay: "short", maximumFractionDigits: v < 10 && i ? 1 : 0 }).format(v);
+  const digits = i === 0 || v >= 100 ? 0 : v >= 10 ? 1 : 2;
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: digits }).format(v)} ${SIZE_UNITS[i]}`;
 };
 
 const RANK = { failed: 0, late: 1, unknown: 2, running: 3, ok: 4 };

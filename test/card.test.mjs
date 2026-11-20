@@ -40,8 +40,12 @@ test("sizes: value and unit to bytes, and back in the largest unit", () => {
   assert.equal(bk.toBytes("2", "GiB"), 2 * 1024 ** 3);
   assert.equal(bk.toBytes("12,5", "kB"), 12500);
   assert.equal(bk.toBytes("n/a"), null);
-  assert.equal(bk.fmtSize(1432.6e6, "en").replace(/\s/g, " "), "1.4 GB");
-  assert.equal(bk.fmtSize(820e6, "en").replace(/\s/g, " "), "820 MB");
+  assert.equal(bk.fmtSize(1432.6e6, "en"), "1.33 GiB");
+  assert.equal(bk.fmtSize(820e6, "en"), "782 MiB");
+  assert.equal(bk.fmtSize(25e9, "en"), "23.3 GiB");
+  assert.equal(bk.fmtSize(1536, "en"), "1.5 KiB");
+  assert.equal(bk.fmtSize(512, "en"), "512 B");
+  assert.equal(bk.fmtSize(1.5 * 1024 ** 3, "fr"), "1,5 GiB");
 });
 
 test("every source is discovered from the registries, whatever the entity ids", () => {
@@ -161,7 +165,7 @@ test("illustrated header: night by illustration_theme or the dark theme alone, a
 test("rows: the last backup, the size and the next one, and the age", async () => {
   const { html } = await mount();
   assert.match(html(), /Last today 4:52 AM/);
-  assert.match(html(), /1.4 GB · Next tomorrow 4:45 AM/);
+  assert.match(html(), /1.33 GiB · Next tomorrow 4:45 AM/);
   assert.match(html(), /Failed today 2:00 AM/);
   assert.match(html(), /Older than 26h/);
   assert.match(html(), /Proxmox VE/);
@@ -173,9 +177,9 @@ test("summary: time since the newest good backup, the failed and late ones, the 
   assert.match(html(), /<b>3h<\/b><span>since the last good backup<\/span>/);
   assert.match(html(), /class="line crit">.*?<span>Documents failed today 2:00 AM<\/span>/s);
   assert.match(html(), /class="line warn">.*?<span>Node pve older than 26h<\/span>/s);
-  assert.match(html(), /<span>Next tomorrow 4:45 AM · 25 GB<\/span>/);
+  assert.match(html(), /<span>Next tomorrow 4:45 AM · 23.3 GiB<\/span>/);
   const off = await mount({ show_stats: false, show_size: false, show_next: false });
-  assert.doesNotMatch(off.html(), /class="hero"|GB|Next tomorrow/);
+  assert.doesNotMatch(off.html(), /class="hero"|GiB|Next tomorrow/);
 });
 
 test("back up now: Home Assistant's service, Backrest's button; then shown running", async () => {
@@ -284,7 +288,7 @@ test("French: texts, times and sizes in the card's language", async () => {
   const { html } = await mount({ language: "fr" });
   assert.match(html(), /1 en échec · 1 en retard/);
   assert.match(html(), /Dernière aujourd&#39;hui 4:52/);
-  assert.match(html(), /1,4 Go/);
+  assert.match(html(), /1,33 GiB/);
 });
 
 test("every language has every text, with the same placeholders as English", () => {
