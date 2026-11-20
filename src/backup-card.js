@@ -1682,11 +1682,16 @@ class CardBase extends HTMLElement {
     return [];
   }
 
-  // The model is rebuilt when the registries or the set of entities change (a new entity, a device renamed).
+  _modelExtra() {
+    return null;
+  }
+
+  // The model is rebuilt when the registries or the set of entities change (a new entity, a device renamed), and
+  // by the subclass's own extra key (_modelExtra).
   _resolve() {
     const h = this._hass;
     if (!h?.entities || !h?.devices) return null;
-    const key = [h.entities, h.devices, h.areas, Object.keys(h.states).length];
+    const key = [h.entities, h.devices, h.areas, Object.keys(h.states).length, this._modelExtra()];
     if (this._model && this._modelKey?.every((k, i) => k === key[i])) return this._model;
     this._modelKey = key;
     this._model = this._build();
@@ -2159,6 +2164,10 @@ class EditorBase extends HTMLElement {
     return [];
   }
 
+  _schemaKey() {
+    return "";
+  }
+
   _schema() {
     const tr = (k) => t(this._hass, this._config, k);
     const toggles = this.constructor.toggles;
@@ -2198,7 +2207,8 @@ class EditorBase extends HTMLElement {
       this._formConfig = this._config;
       this._form.data = { ...defaults, ...this._config };
     }
-    const l = lang(this._hass, this._config);
+    // The schema follows the language and, for a card whose fields depend on the configuration, its _schemaKey().
+    const l = `${lang(this._hass, this._config)}|${this._schemaKey()}`;
     if (this._schemaLang !== l) {
       this._schemaLang = l;
       this._form.schema = this._schema();
@@ -2307,6 +2317,19 @@ const addonOf = (s) => (s?.entity_id?.startsWith("sensor.") ? Object.keys(ADDONS
 
 const _cache = new WeakMap();
 
+// Whether Home Assistant's own backups have a last successful one (its entity looked up once per registry).
+const _ownCache = new WeakMap();
+const ownBackupDated = (hass) => {
+  const ents = hass?.entities;
+  if (!ents) return false;
+  if (!_ownCache.has(ents)) {
+    const own = Object.values(ents).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
+    _ownCache.set(ents, own?.entity_id ?? null);
+  }
+  const id = _ownCache.get(ents);
+  return id ? parseTime(hass.states[id]?.state) !== null : false;
+};
+
 // A source: { key, platform, name, sub, parts (entity ids), drive (entity id of an add-on's sensor), maxAge (ms),
 // button, run }.
 const source = (hass, platform, list, extra = {}) => {
@@ -2333,8 +2356,7 @@ const resolve = (hass, config) => {
   let per = _cache.get(hass.entities);
   if (!per) _cache.set(hass.entities, (per = new Map()));
   // Home Assistant's own last backup is in the key: Auto Backup is listed only until it has one.
-  const own = Object.values(hass.entities || {}).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
-  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${parseTime(hass.states[own?.entity_id]?.state) !== null}`;
+  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${ownBackupDated(hass)}`;
   if (per.has(sig)) return per.get(sig);
   const entries = Object.values(hass.entities || {}).filter((e) => hass.states[e.entity_id]);
   const deviceList = (e) => (e.device_id ? byDevice(hass).get(e.device_id) || [e] : [e]);
@@ -2438,16 +2460,18 @@ const sourceState = (hass, src, { now = Date.now(), maxAge = MAX_AGE_H * 3.6e6, 
   return out;
 };
 
-// Bytes in the largest unit that fits: "1.4 GB", "820 MB" (unit names from Intl).
+// Bytes in the largest binary unit that fits (base 1024, the ha-* charter): up to 2 decimals under 10, 1 under 100,
+// none above, trailing zeros dropped ("1.33 GiB", "782 MiB", "23.3 GiB").
+const SIZE_UNITS = ["B", "KiB", "MiB", "GiB", "TiB"];
 const fmtSize = (bytes, locale) => {
-  const units = ["byte", "kilobyte", "megabyte", "gigabyte", "terabyte"];
   let i = 0;
   let v = bytes;
-  while (v >= 1000 && i < units.length - 1) {
-    v /= 1000;
+  while (v >= 1024 && i < SIZE_UNITS.length - 1) {
+    v /= 1024;
     i++;
   }
-  return new Intl.NumberFormat(locale, { style: "unit", unit: units[i], unitDisplay: "short", maximumFractionDigits: v < 10 && i ? 1 : 0 }).format(v);
+  const digits = i === 0 || v >= 100 ? 0 : v >= 10 ? 1 : 2;
+  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: digits }).format(v)} ${SIZE_UNITS[i]}`;
 };
 
 const RANK = { failed: 0, late: 1, unknown: 2, running: 3, ok: 4 };
@@ -2656,6 +2680,11 @@ class BackupCard extends CardBase {
 
   _build() {
     return resolve(this._hass, this._config);
+  }
+
+  // Auto Backup is dropped once Home Assistant's own backups have one: the model follows without a registry change.
+  _modelExtra() {
+    return ownBackupDated(this._hass);
   }
 
   _entityIds(m) {
@@ -2901,10 +2930,20 @@ class BackupCardEditor extends EditorBase {
     return { illustration_theme: "auto" };
   }
 
+  // A list of sources with their own options (`{ entity, name, max_age, button, addon }`) is YAML only: the entity
+  // picker would show them as unknown entities and drop their options on the next change.
+  _yamlBackups() {
+    return asList(this._config.backups).some((b) => b && typeof b === "object");
+  }
+
+  _schemaKey() {
+    return this._yamlBackups() ? "yaml" : "";
+  }
+
   _fields() {
     const tr = (k) => t(this._hass, this._config, k);
     return [
-      { name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } },
+      ...(this._yamlBackups() ? [] : [{ name: "backups", selector: { entity: { multiple: true, domain: "sensor" } } }]),
       { name: "max_age", selector: { number: { min: 1, max: 24 * 60, mode: "box", unit_of_measurement: "h" } } },
       { name: "illustration_theme", selector: { select: { mode: "dropdown", options: ["auto", "day", "night"].map((value) => ({ value, label: tr(`theme_${value}`) })) } } },
     ];

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.2 - 2026-11-20
+
+### Fixes
+- Visual editor: a `backups` list whose sources carry their own options (`{ entity, name, max_age, button, addon }`) is no longer shown in the entity picker, which listed them as unknown entities and dropped their options on the next change; such a list stays YAML only (README says so).
+- Sizes are shown in base 1024 with binary units (KiB, MiB, GiB; 2 decimals under 10, 1 under 100, none above), as on the other ha-* cards: a 1432.6 MB backup reads 1.33 GiB.
+- Auto Backup leaves the card as soon as Home Assistant's own backups report a last backup, without waiting for a registry change.
+- README: `show_subtitle` applies to both cards (the mini card's detail view uses it).
+
+### Maintenance
+- The unit tests report the card's own coverage.
+- CI caches npm downloads in the build job.
+
 ## 1.2.1 - 2026-11-18
 
 ### Fixes

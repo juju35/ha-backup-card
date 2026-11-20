@@ -160,11 +160,11 @@ zoom: true
 | `illustration` | both | `true` | Illustrated header (server, link and cloud in the worst status); `false`: classic header with the status chip |
 | `illustration_theme` | both | `auto` | Day or night picture: `auto` (follows the Home Assistant theme: night with a dark theme, day with a light theme), `day` or `night` |
 | `show_title` | both | `true` | Show the title in the header |
-| `show_subtitle` | full | `true` | Show the subtitle (the failed, late and running counts) |
-| `backups` | both | Automatic | Sources: their "last backup" sensor (or an add-on's sensor: `sensor.backup_state`, `sensor.samba_backup`, `sensor.onedrivebackup`), or `{ entity, name, max_age, button, addon }` (`addon`: the slug of the Samba Backup add-on, such as `15d21743_samba_backup`, to back up through its input); the other parts are found on its device |
+| `show_subtitle` | both | `true` | Show the subtitle (the failed, late and running counts) |
+| `backups` | both | Automatic | Sources: their "last backup" sensor (or an add-on's sensor: `sensor.backup_state`, `sensor.samba_backup`, `sensor.onedrivebackup`), or `{ entity, name, max_age, button, addon }` (such a list is **YAML only**; `addon`: the slug of the Samba Backup add-on, such as `15d21743_samba_backup`, to back up through its input); the other parts are found on its device |
 | `max_age` | both | `26` | Maximum age of the last good backup, in hours: older, a source is late |
 | `show_stats` | both | `true` | Summary: time since the newest good backup, failed and late sources, next backup and total size |
-| `show_size` | both | `true` | Size of each backup |
+| `show_size` | both | `true` | Size of each backup (base 1024: KiB, MiB, GiB) |
 | `show_next` | both | `true` | Next scheduled backup |
 | `show_run` | both | `true` | Back up now buttons |
 | `collapsed` | both | `[]` | Sections folded by default: `backups`. Click its title (or Tab to it and press Enter or Space) to fold or unfold it |
