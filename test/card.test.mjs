@@ -40,8 +40,12 @@ test("sizes: value and unit to bytes, and back in the largest unit", () => {
   assert.equal(bk.toBytes("2", "GiB"), 2 * 1024 ** 3);
   assert.equal(bk.toBytes("12,5", "kB"), 12500);
   assert.equal(bk.toBytes("n/a"), null);
-  assert.equal(bk.fmtSize(1432.6e6, "en").replace(/\s/g, " "), "1.4 GB");
-  assert.equal(bk.fmtSize(820e6, "en").replace(/\s/g, " "), "820 MB");
+  assert.equal(bk.fmtSize(1432.6e6, "en"), "1.33 GiB");
+  assert.equal(bk.fmtSize(820e6, "en"), "782 MiB");
+  assert.equal(bk.fmtSize(25e9, "en"), "23.3 GiB");
+  assert.equal(bk.fmtSize(1536, "en"), "1.5 KiB");
+  assert.equal(bk.fmtSize(512, "en"), "512 B");
+  assert.equal(bk.fmtSize(1.5 * 1024 ** 3, "fr"), "1,5 GiB");
 });
 
 test("every source is discovered from the registries, whatever the entity ids", () => {
@@ -161,7 +165,7 @@ test("illustrated header: night by illustration_theme or the dark theme alone, a
 test("rows: the last backup, the size and the next one, and the age", async () => {
   const { html } = await mount();
   assert.match(html(), /Last today 4:52 AM/);
-  assert.match(html(), /1.4 GB · Next tomorrow 4:45 AM/);
+  assert.match(html(), /1.33 GiB · Next tomorrow 4:45 AM/);
   assert.match(html(), /Failed today 2:00 AM/);
   assert.match(html(), /Older than 26h/);
   assert.match(html(), /Proxmox VE/);
@@ -173,9 +177,9 @@ test("summary: time since the newest good backup, the failed and late ones, the 
   assert.match(html(), /<b>3h<\/b><span>since the last good backup<\/span>/);
   assert.match(html(), /class="line crit">.*?<span>Documents failed today 2:00 AM<\/span>/s);
   assert.match(html(), /class="line warn">.*?<span>Node pve older than 26h<\/span>/s);
-  assert.match(html(), /<span>Next tomorrow 4:45 AM · 25 GB<\/span>/);
+  assert.match(html(), /<span>Next tomorrow 4:45 AM · 23.3 GiB<\/span>/);
   const off = await mount({ show_stats: false, show_size: false, show_next: false });
-  assert.doesNotMatch(off.html(), /class="hero"|GB|Next tomorrow/);
+  assert.doesNotMatch(off.html(), /class="hero"|GiB|Next tomorrow/);
 });
 
 test("back up now: Home Assistant's service, Backrest's button; then shown running", async () => {
@@ -284,7 +288,7 @@ test("French: texts, times and sizes in the card's language", async () => {
   const { html } = await mount({ language: "fr" });
   assert.match(html(), /1 en échec · 1 en retard/);
   assert.match(html(), /Dernière aujourd&#39;hui 4:52/);
-  assert.match(html(), /1,4 Go/);
+  assert.match(html(), /1,33 GiB/);
 });
 
 test("every language has every text, with the same placeholders as English", () => {
@@ -316,6 +320,12 @@ test("visual editor: fields labelled apart from the sections, defaults left out 
     assert.match(form.computeHelper({ name: "max_age" }), /In hours/);
     form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { type: "custom:backup-card", show_run: true, show_size: false, backups: [] } } });
     same(out, { type: "custom:backup-card", show_size: false });
+    assert.ok(form.schema.some((f) => f.name === "backups"));
+    // Sources with their own options are YAML only: the entity picker would drop them.
+    ed.setConfig({ type: "custom:backup-card", backups: [{ entity: "sensor.nas_last_backup", max_age: 48 }] });
+    assert.ok(!form.schema.some((f) => f.name === "backups"));
+    ed.setConfig({ type: "custom:backup-card", backups: ["sensor.nas_last_backup"] });
+    assert.ok(form.schema.some((f) => f.name === "backups"));
   } finally {
     doc.createElement = create;
   }
@@ -500,6 +510,27 @@ test("the hero's shield is green only when every backup is up to date; an unavai
   card.hass = hass;
   const btn = /<button[^>]*data-action="run"[^>]*aria-label="[^"]*Photos"[^>]*>/.exec(card.shadowRoot.innerHTML)?.[0] || "";
   assert.match(btn, / disabled/);
+});
+
+test("the card drops Auto Backup once Home Assistant's own backups have a last backup, same registries", async () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const hass = hassOf([
+    ["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ]);
+  const card = new BackupCard();
+  card._connected = true;
+  card.setConfig({});
+  card.hass = hass;
+  card.connectedCallback();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(card._model.length, 2);
+  card.hass = { ...hass, states: { ...hass.states, "sensor.backup_last": { ...hass.states["sensor.backup_last"], state: iso(NOW - H) } } };
+  same(
+    card._model.map((x) => x.platform),
+    ["backup"],
+  );
 });
 
 test("Auto Backup is dropped once Home Assistant's own backups have a last backup, without a reload", () => {
