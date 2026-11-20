@@ -512,6 +512,27 @@ test("the hero's shield is green only when every backup is up to date; an unavai
   assert.match(btn, / disabled/);
 });
 
+test("the card drops Auto Backup once Home Assistant's own backups have a last backup, same registries", async () => {
+  const ha = { platform: "backup", device_id: null };
+  const ab = { platform: "auto_backup", device_id: null };
+  const hass = hassOf([
+    ["sensor.backup_last", "unknown", { device_class: "timestamp" }, { ...ha, translation_key: "last_successful_automatic_backup" }],
+    ["sensor.auto_backup_last_success", iso(NOW - 3 * H), { device_class: "timestamp" }, { ...ab, translation_key: "last_success" }],
+  ]);
+  const card = new BackupCard();
+  card._connected = true;
+  card.setConfig({});
+  card.hass = hass;
+  card.connectedCallback();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(card._model.length, 2);
+  card.hass = { ...hass, states: { ...hass.states, "sensor.backup_last": { ...hass.states["sensor.backup_last"], state: iso(NOW - H) } } };
+  same(
+    card._model.map((x) => x.platform),
+    ["backup"],
+  );
+});
+
 test("Auto Backup is dropped once Home Assistant's own backups have a last backup, without a reload", () => {
   const ha = { platform: "backup", device_id: null };
   const ab = { platform: "auto_backup", device_id: null };

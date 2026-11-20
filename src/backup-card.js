@@ -1682,11 +1682,16 @@ class CardBase extends HTMLElement {
     return [];
   }
 
-  // The model is rebuilt when the registries or the set of entities change (a new entity, a device renamed).
+  _modelExtra() {
+    return null;
+  }
+
+  // The model is rebuilt when the registries or the set of entities change (a new entity, a device renamed), and
+  // by the subclass's own extra key (_modelExtra).
   _resolve() {
     const h = this._hass;
     if (!h?.entities || !h?.devices) return null;
-    const key = [h.entities, h.devices, h.areas, Object.keys(h.states).length];
+    const key = [h.entities, h.devices, h.areas, Object.keys(h.states).length, this._modelExtra()];
     if (this._model && this._modelKey?.every((k, i) => k === key[i])) return this._model;
     this._modelKey = key;
     this._model = this._build();
@@ -2312,6 +2317,19 @@ const addonOf = (s) => (s?.entity_id?.startsWith("sensor.") ? Object.keys(ADDONS
 
 const _cache = new WeakMap();
 
+// Whether Home Assistant's own backups have a last successful one (its entity looked up once per registry).
+const _ownCache = new WeakMap();
+const ownBackupDated = (hass) => {
+  const ents = hass?.entities;
+  if (!ents) return false;
+  if (!_ownCache.has(ents)) {
+    const own = Object.values(ents).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
+    _ownCache.set(ents, own?.entity_id ?? null);
+  }
+  const id = _ownCache.get(ents);
+  return id ? parseTime(hass.states[id]?.state) !== null : false;
+};
+
 // A source: { key, platform, name, sub, parts (entity ids), drive (entity id of an add-on's sensor), maxAge (ms),
 // button, run }.
 const source = (hass, platform, list, extra = {}) => {
@@ -2338,8 +2356,7 @@ const resolve = (hass, config) => {
   let per = _cache.get(hass.entities);
   if (!per) _cache.set(hass.entities, (per = new Map()));
   // Home Assistant's own last backup is in the key: Auto Backup is listed only until it has one.
-  const own = Object.values(hass.entities || {}).find((e) => e.platform === "backup" && /last_successful/.test(e.translation_key || e.entity_id));
-  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${parseTime(hass.states[own?.entity_id]?.state) !== null}`;
+  const sig = `${JSON.stringify(config.backups)}|${Object.keys(hass.states).length}|${ownBackupDated(hass)}`;
   if (per.has(sig)) return per.get(sig);
   const entries = Object.values(hass.entities || {}).filter((e) => hass.states[e.entity_id]);
   const deviceList = (e) => (e.device_id ? byDevice(hass).get(e.device_id) || [e] : [e]);
@@ -2663,6 +2680,11 @@ class BackupCard extends CardBase {
 
   _build() {
     return resolve(this._hass, this._config);
+  }
+
+  // Auto Backup is dropped once Home Assistant's own backups have one: the model follows without a registry change.
+  _modelExtra() {
+    return ownBackupDated(this._hass);
   }
 
   _entityIds(m) {
