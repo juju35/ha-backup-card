@@ -102,12 +102,16 @@ const PLATFORMS = {
   samba_backup: { name: "Samba Backup", icon: "server", run: null },
   onedrive_backup: { name: "OneDrive Backup", icon: "cloud", run: null },
   proxmoxve: { name: "Proxmox VE", icon: "server", run: null },
+  // The Proxmox VE Custom fork (proxmox-homeassistant/proxmoxve-custom) registers its entities under its own domain.
+  proxmoxve_custom: { name: "Proxmox VE", icon: "server", run: null },
   auto_backup: { name: "Auto Backup", icon: "home", run: ["auto_backup", "backup_full", {}] },
   duplicati: { name: "Duplicati", icon: "archive", run: "button" },
   duplicati_monitor: { name: "Duplicati", icon: "archive", run: null },
   backrest: { name: "Backrest", icon: "database", run: "button" },
   veeam_br: { name: "Veeam", icon: "server", run: "button" },
 };
+// The Proxmox VE platforms, whose nodes and guests carry status, health and power entities next to the backup ones.
+const PROXMOX = new Set(["proxmoxve", "proxmoxve_custom"]);
 const MAX_AGE_H = 26;
 // How long the card says a backup runs after it was started from the card, unless the source says it is done.
 const RUN_MS = 120e3;
@@ -2402,7 +2406,7 @@ const ownBackupDated = (hass) => {
 // button, run }.
 const source = (hass, platform, list, extra = {}) => {
   const p = PLATFORMS[platform];
-  const parts = findParts(hass, list, platform === "proxmoxve");
+  const parts = findParts(hass, list, PROXMOX.has(platform));
   const dev = list[0]?.device_id ? hass.devices?.[list[0].device_id] : null;
   const devLabel = devName(dev);
   const own = platform === "backup" || platform === "auto_backup";
