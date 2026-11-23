@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.5 - 2026-11-23
+
+### Fixes
+- Proxmox VE: the Proxmox VE Custom fork (`proxmoxve_custom` platform) is recognised like the core integration, so only its backup entities are read: a node that is up is no longer shown as a backup *Running* (#13).
+
 ## 1.2.4 - 2026-11-22
 
 ### Performance

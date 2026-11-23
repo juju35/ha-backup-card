@@ -400,6 +400,32 @@ test("Proxmox VE: only the node's backup entities count, never its status, healt
   assert.equal(bk.sourceState(hass, bk.resolve(hass, {})[0], { now: NOW }).status, "failed");
 });
 
+test("Proxmox VE Custom fork (proxmoxve_custom): the node's status is not a running backup (#13)", () => {
+  const node = { platform: "proxmoxve_custom", device_id: "node" };
+  const hass = hassOf(
+    [
+      // The node is up: its status comes first, with the same device class as the backup running sensor.
+      ["binary_sensor.node_pve_stato", "on", { device_class: "running", friendly_name: "Node pve Stato" }, { ...node, translation_key: "status" }],
+      ["binary_sensor.ced_node_pve_backup_status", "off", { device_class: "problem", friendly_name: "Node pve Backup status" }, { ...node, translation_key: "backup_status" }],
+      ["binary_sensor.ced_node_pve_backup_running", "off", { device_class: "running", friendly_name: "Node pve Backup running" }, { ...node, translation_key: "backup_running" }],
+      ["sensor.pve_last_backup", iso(NOW - 3 * H), { device_class: "timestamp", friendly_name: "Node pve Last backup" }, { ...node, translation_key: "backup_last" }],
+    ],
+    { node: { id: "node", name: "Node pve" } },
+  );
+  // Set in `backups` as in the report, and found on its own.
+  for (const config of [{ backups: ["sensor.pve_last_backup"] }, {}]) {
+    const [src] = bk.resolve(hass, config);
+    assert.equal(src.platform, "proxmoxve_custom");
+    assert.equal(src.parts.running, "binary_sensor.ced_node_pve_backup_running");
+    const st = bk.sourceState(hass, src, { now: NOW });
+    assert.equal(st.running, false);
+    assert.equal(st.status, "ok");
+  }
+  // A backup that does run is still shown as running.
+  hass.states["binary_sensor.ced_node_pve_backup_running"].state = "on";
+  assert.equal(bk.sourceState(hass, bk.resolve(hass, {})[0], { now: NOW }).status, "running");
+});
+
 test("Proxmox VE: a node or a guest named after backups is still not a backup", () => {
   const node = { platform: "proxmoxve", device_id: "node" };
   const vm = { platform: "proxmoxve", device_id: "vm" };
