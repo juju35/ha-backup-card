@@ -5,7 +5,7 @@ import { clamp } from "./helpers.js";
 
 export const BASE_STYLE = `
   :host { --bk-accent: #546e7a; --bk-ok: var(--success-color, #43a047); --bk-warn: var(--warning-color, #ffa600);
-          --bk-crit: var(--error-color, #db4437); --bk-idle: var(--disabled-text-color, #9e9e9e); --bk-active: var(--info-color, #039be5);
+          --bk-crit: var(--error-color, #db4437); --bk-idle: var(--secondary-text-color, #9e9e9e); --bk-active: var(--info-color, #039be5);
           /* Text in a state color is mixed with the text color so that it reads at 4.5:1 at least. */
           --bk-accent-text: color-mix(in srgb, var(--bk-accent) 50%, var(--primary-text-color)); }
   ha-card { overflow: hidden; container: bk-card / inline-size; }
